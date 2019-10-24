@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="LRTRApp\ImGui\imgui_impl_win32.cpp">
+      <Filter>LRTRApp\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="LRTRApp\LRTRApp.cpp">
+      <Filter>LRTRApp</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="LRTRApp">
+      <UniqueIdentifier>{301cb2e2-c203-4f9a-b435-6297dcd59349}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LRTRApp\ImGui">
+      <UniqueIdentifier>{e24e1ed8-f8e1-4eb0-8ae0-8733ad3473bd}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="LRTRApp\ImGui\imgui_impl_win32.hpp">
+      <Filter>LRTRApp\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="LRTRApp\LRTRApp.hpp">
+      <Filter>LRTRApp</Filter>
+    </ClInclude>
+    <ClInclude Include="Logging.hpp" />
+  </ItemGroup>
+</Project>
