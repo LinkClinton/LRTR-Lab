@@ -1,0 +1,3 @@
+[submodule "References/Code-Red"]
+	path = References/Code-Red
+	url = https://github.com/LinkClinton/Code-Red.git
