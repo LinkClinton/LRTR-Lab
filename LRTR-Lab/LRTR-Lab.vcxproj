@@ -72,25 +72,25 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(ProjectDir)Bin\$(PlatformTarget)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)Bin\$(PlatformTarget)\$(Configuration)\</IntDir>
-    <IncludePath>$(VULKAN_SDK)\Include;$(SolutionDir)\References;$(IncludePath)</IncludePath>
+    <IncludePath>$(VULKAN_SDK)\Include;$(SolutionDir)\References\Code-Red;$(IncludePath)</IncludePath>
     <LibraryPath>$(VULKAN_SDK)\Lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(ProjectDir)Bin\$(PlatformTarget)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)Bin\$(PlatformTarget)\$(Configuration)\</IntDir>
-    <IncludePath>$(VULKAN_SDK)\Include;$(SolutionDir)\References;$(IncludePath)</IncludePath>
+    <IncludePath>$(VULKAN_SDK)\Include;$(SolutionDir)\References\Code-Red;$(IncludePath)</IncludePath>
     <LibraryPath>$(VULKAN_SDK)\Lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(ProjectDir)Bin\$(PlatformTarget)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)Bin\$(PlatformTarget)\$(Configuration)\</IntDir>
-    <IncludePath>$(VULKAN_SDK)\Include;$(SolutionDir)\References;$(IncludePath)</IncludePath>
+    <IncludePath>$(VULKAN_SDK)\Include;$(SolutionDir)\References\Code-Red;$(IncludePath)</IncludePath>
     <LibraryPath>$(VULKAN_SDK)\Lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(ProjectDir)Bin\$(PlatformTarget)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)Bin\$(PlatformTarget)\$(Configuration)\</IntDir>
-    <IncludePath>$(VULKAN_SDK)\Include;$(SolutionDir)\References;$(IncludePath)</IncludePath>
+    <IncludePath>$(VULKAN_SDK)\Include;$(SolutionDir)\References\Code-Red;$(IncludePath)</IncludePath>
     <LibraryPath>$(VULKAN_SDK)\Lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -170,9 +170,12 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="LRTRApp\ImGui\imgui_impl_win32.cpp" />
-    <ClCompile Include="LRTRApp\LRTRApp.cpp" />
+    <ClCompile Include="Extensions\ImGui\imgui_impl_win32.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Runtimes\LabApp.cpp" />
+    <ClCompile Include="Runtimes\Layers\UILayer\UIComponents\MainMenuUIComponent.cpp" />
+    <ClCompile Include="Runtimes\Layers\UILayer\UILayer.cpp" />
+    <ClCompile Include="Scenes\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\References\Code-Red\CodeRed\CodeRed.vcxproj">
@@ -183,9 +186,18 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Logging.hpp" />
-    <ClInclude Include="LRTRApp\ImGui\imgui_impl_win32.hpp" />
-    <ClInclude Include="LRTRApp\LRTRApp.hpp" />
+    <ClInclude Include="Core\Logging.hpp" />
+    <ClInclude Include="Core\Noncopyable.hpp" />
+    <ClInclude Include="Extensions\ImGui\imgui_impl_win32.hpp" />
+    <ClInclude Include="Math\Math.hpp" />
+    <ClInclude Include="Math\Matrix.hpp" />
+    <ClInclude Include="Math\Vector.hpp" />
+    <ClInclude Include="Runtimes\LabApp.hpp" />
+    <ClInclude Include="Runtimes\Layers\Layer.hpp" />
+    <ClInclude Include="Runtimes\Layers\UILayer\UIComponents\MainMenuUIComponent.hpp" />
+    <ClInclude Include="Runtimes\Layers\UILayer\UIComponents\UIComponent.hpp" />
+    <ClInclude Include="Runtimes\Layers\UILayer\UILayer.hpp" />
+    <ClInclude Include="Scenes\Transform.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

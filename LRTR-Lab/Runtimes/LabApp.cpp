@@ -1,8 +1,13 @@
-#include "LRTRApp.hpp"
+#include "LabApp.hpp"
 
-#include "ImGui/imgui_impl_win32.hpp"
+#include "../Extensions/ImGui/imgui_impl_win32.hpp"
+#include "../Core/Logging.hpp"
 
-#include "../Logging.hpp"
+#include "Layers/UILayer/UILayer.hpp"
+
+#include <chrono>
+
+using Time = std::chrono::high_resolution_clock;
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -23,7 +28,7 @@ LRESULT DefaultWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
-LRTR::LRTRApp::LRTRApp(const std::string& name, size_t width, size_t height)
+LRTR::LabApp::LabApp(const std::string& name, size_t width, size_t height)
 	: mName(name), mWidth(width), mHeight(height), mHwnd(nullptr), mExisted(false)
 {
 	LRTR_DEBUG_INFO("Initialize LRTRApp with [{0}, {1}].", mWidth, mHeight);
@@ -63,25 +68,29 @@ LRTR::LRTRApp::LRTRApp(const std::string& name, size_t width, size_t height)
 
 	ImGui::CreateContext();
 	ImGui_ImplWin32_Init(mHwnd);
+
+	initialize();
 }
 
-LRTR::LRTRApp::~LRTRApp()
+LRTR::LabApp::~LabApp()
 {
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
+
+	mCommandQueue->waitIdle();
 }
 
-void LRTR::LRTRApp::show() const
+void LRTR::LabApp::show() const
 {
 	ShowWindow(mHwnd, SW_SHOW);
 }
 
-void LRTR::LRTRApp::hide() const
+void LRTR::LabApp::hide() const
 {
 	ShowWindow(mHwnd, SW_HIDE);
 }
 
-void LRTR::LRTRApp::runLoop()
+void LRTR::LabApp::runLoop()
 {
 	auto currentTime = Time::now();
 
@@ -113,15 +122,93 @@ void LRTR::LRTRApp::runLoop()
 	}
 }
 
-void LRTR::LRTRApp::update(float delta)
+void LRTR::LabApp::initialize()
 {
+	//initialize Code-Red interface
+	LRTR_DEBUG_INFO("Initialize Code Red Objects.");
+
+	initializeDevice();
+	initializeCommand();
+	initializeSwapChain();
+
+	LRTR_DEBUG_INFO("Finish intialize Code Red Objects.");
+
+	//initialize Layers
+	LRTR_DEBUG_INFO("Initialize layers.");
+
+	initializeUILayer();
+
+	LRTR_DEBUG_INFO("Finish initialize layers.");
 }
 
-void LRTR::LRTRApp::render(float delta)
+void LRTR::LabApp::update(float delta)
 {
+	mUILayer->update(delta);
 }
 
-void LRTR::LRTRApp::processMessage(LRTRApp* app, const MSG& message)
+void LRTR::LabApp::render(float delta)
+{
+	mCommandQueue->waitIdle();
+	mCommandAllocator->reset();
+
+	mUILayer->render(mFrameBuffers[mCurrentFrameIndex], delta);
+
+	mSwapChain->present();
+
+	mCurrentFrameIndex = (mCurrentFrameIndex + 1) % mSwapChain->bufferCount();
+}
+
+void LRTR::LabApp::initializeDevice()
+{
+	auto systemInfo = std::make_shared<CodeRed::DirectX12SystemInfo>();
+	auto adapters = systemInfo->selectDisplayAdapter();
+
+	mDevice = std::make_shared<CodeRed::DirectX12LogicalDevice>(adapters[0]);
+}
+
+void LRTR::LabApp::initializeCommand()
+{
+	mCommandAllocator = mDevice->createCommandAllocator();
+	mCommandQueue = mDevice->createCommandQueue();
+}
+
+void LRTR::LabApp::initializeSwapChain()
+{
+	mSwapChain = mDevice->createSwapChain(
+		mCommandQueue,
+		{ mWidth, mHeight, mHwnd },
+		CodeRed::PixelFormat::BlueGreenRedAlpha8BitUnknown,
+		2
+	);
+
+	for (size_t index = 0; index < mSwapChain->bufferCount(); index++) {
+		mFrameBuffers.push_back(
+			mDevice->createFrameBuffer(
+				mSwapChain->buffer(index)
+			)
+		);
+	}
+
+	mRenderPass = mDevice->createRenderPass(
+		CodeRed::Attachment::RenderTarget(mSwapChain->format())
+	);
+
+	LRTR_DEBUG_INFO("Initialize Swap Chain with [{0}, {1}].",
+		mSwapChain->width(), mSwapChain->height());
+}
+
+void LRTR::LabApp::initializeUILayer()
+{
+	LRTR_DEBUG_INFO("Initialize UI layer.");
+
+	mUILayer = std::make_shared<UILayer>(
+		mDevice,
+		mRenderPass,
+		mCommandAllocator,
+		mCommandQueue);
+}
+
+void LRTR::LabApp::processMessage(LabApp* app, const MSG& message)
 {
 
 }

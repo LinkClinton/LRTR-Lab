@@ -2,28 +2,87 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="LRTRApp\ImGui\imgui_impl_win32.cpp">
-      <Filter>LRTRApp\ImGui</Filter>
+    <ClCompile Include="Scenes\Transform.cpp">
+      <Filter>Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="LRTRApp\LRTRApp.cpp">
-      <Filter>LRTRApp</Filter>
+    <ClCompile Include="Runtimes\LabApp.cpp">
+      <Filter>Runtimes</Filter>
+    </ClCompile>
+    <ClCompile Include="Extensions\ImGui\imgui_impl_win32.cpp">
+      <Filter>Extensions\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Runtimes\Layers\UILayer\UILayer.cpp">
+      <Filter>Runtimes\Layers\UILayer</Filter>
+    </ClCompile>
+    <ClCompile Include="Runtimes\Layers\UILayer\UIComponents\MainMenuUIComponent.cpp">
+      <Filter>Runtimes\Layers\UILayer\UIComponents</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="LRTRApp">
-      <UniqueIdentifier>{301cb2e2-c203-4f9a-b435-6297dcd59349}</UniqueIdentifier>
+    <Filter Include="Scenes">
+      <UniqueIdentifier>{020e96fb-f836-4fa5-9af2-0b4fb0d85e2f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="LRTRApp\ImGui">
-      <UniqueIdentifier>{e24e1ed8-f8e1-4eb0-8ae0-8733ad3473bd}</UniqueIdentifier>
+    <Filter Include="Math">
+      <UniqueIdentifier>{0f1863e8-491d-485a-85e7-03fb599523b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Runtimes">
+      <UniqueIdentifier>{8e25853f-f732-4072-a92a-09e19aff1c93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Runtimes\Layers">
+      <UniqueIdentifier>{71f6b9ea-a1e2-4f6f-a008-9c2696c906c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{778160cd-9f7a-4c4a-9241-a6306b954abe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Extensions">
+      <UniqueIdentifier>{b50e18f3-e3bf-4279-9133-fe63bf3c4fc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Extensions\ImGui">
+      <UniqueIdentifier>{6f1e6afb-9696-45b0-ba45-c2d429aeb5ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Runtimes\Layers\UILayer">
+      <UniqueIdentifier>{2442677b-6f9e-4e8a-b193-e4e8fc1b980c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Runtimes\Layers\UILayer\UIComponents">
+      <UniqueIdentifier>{da3dff88-da83-4fd4-b2ee-b557b672b853}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="LRTRApp\ImGui\imgui_impl_win32.hpp">
-      <Filter>LRTRApp\ImGui</Filter>
+    <ClInclude Include="Scenes\Transform.hpp">
+      <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="LRTRApp\LRTRApp.hpp">
-      <Filter>LRTRApp</Filter>
+    <ClInclude Include="Math\Math.hpp">
+      <Filter>Math</Filter>
     </ClInclude>
-    <ClInclude Include="Logging.hpp" />
+    <ClInclude Include="Math\Vector.hpp">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Matrix.hpp">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Runtimes\LabApp.hpp">
+      <Filter>Runtimes</Filter>
+    </ClInclude>
+    <ClInclude Include="Extensions\ImGui\imgui_impl_win32.hpp">
+      <Filter>Extensions\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Logging.hpp">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Runtimes\Layers\Layer.hpp">
+      <Filter>Runtimes\Layers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Noncopyable.hpp">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Runtimes\Layers\UILayer\UILayer.hpp">
+      <Filter>Runtimes\Layers\UILayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Runtimes\Layers\UILayer\UIComponents\MainMenuUIComponent.hpp">
+      <Filter>Runtimes\Layers\UILayer\UIComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="Runtimes\Layers\UILayer\UIComponents\UIComponent.hpp">
+      <Filter>Runtimes\Layers\UILayer\UIComponents</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
