@@ -22,9 +22,6 @@
     <Filter Include="Scenes">
       <UniqueIdentifier>{020e96fb-f836-4fa5-9af2-0b4fb0d85e2f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Math">
-      <UniqueIdentifier>{0f1863e8-491d-485a-85e7-03fb599523b7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Runtimes">
       <UniqueIdentifier>{8e25853f-f732-4072-a92a-09e19aff1c93}</UniqueIdentifier>
     </Filter>
@@ -46,19 +43,25 @@
     <Filter Include="Runtimes\Layers\UILayer\UIComponents">
       <UniqueIdentifier>{da3dff88-da83-4fd4-b2ee-b557b672b853}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scenes\Cameras">
+      <UniqueIdentifier>{1260d6db-af74-48ff-b42d-226ec593fd03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes\Shapes">
+      <UniqueIdentifier>{79028bfc-97a0-4288-befb-c4c592cbf04d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shared">
+      <UniqueIdentifier>{a21ae1f7-e693-4649-ab5b-256eab2bacb1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shared\Math">
+      <UniqueIdentifier>{f5055718-d529-43c0-b46c-f8dc05430f2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shared\Accelerators">
+      <UniqueIdentifier>{311d8622-5359-4978-ba39-7293434fe2f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scenes\Transform.hpp">
       <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="Math\Math.hpp">
-      <Filter>Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Math\Vector.hpp">
-      <Filter>Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Math\Matrix.hpp">
-      <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="Runtimes\LabApp.hpp">
       <Filter>Runtimes</Filter>
@@ -83,6 +86,21 @@
     </ClInclude>
     <ClInclude Include="Runtimes\Layers\UILayer\UIComponents\UIComponent.hpp">
       <Filter>Runtimes\Layers\UILayer\UIComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Cameras\Camera.hpp">
+      <Filter>Scenes\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Scene.hpp">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Shared\Math\Math.hpp">
+      <Filter>Shared\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Shared\Math\Matrix.hpp">
+      <Filter>Shared\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Shared\Math\Vector.hpp">
+      <Filter>Shared\Math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

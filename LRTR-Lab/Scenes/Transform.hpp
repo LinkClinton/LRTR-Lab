@@ -1,4 +1,4 @@
-#include "../Math/Math.hpp"
+#include "../Shared/Math/Math.hpp"
 
 namespace LRTR {
 

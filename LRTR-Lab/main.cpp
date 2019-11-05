@@ -1,6 +1,6 @@
 #include "Runtimes/LabApp.hpp"
 
-#include "Scenes/Transform.hpp"
+#include <iostream>
 
 int main() {
 	LRTR::LabApp app = LRTR::LabApp("LRTR-Lab", 1920, 1080);

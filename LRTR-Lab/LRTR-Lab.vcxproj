@@ -189,15 +189,17 @@
     <ClInclude Include="Core\Logging.hpp" />
     <ClInclude Include="Core\Noncopyable.hpp" />
     <ClInclude Include="Extensions\ImGui\imgui_impl_win32.hpp" />
-    <ClInclude Include="Math\Math.hpp" />
-    <ClInclude Include="Math\Matrix.hpp" />
-    <ClInclude Include="Math\Vector.hpp" />
     <ClInclude Include="Runtimes\LabApp.hpp" />
     <ClInclude Include="Runtimes\Layers\Layer.hpp" />
     <ClInclude Include="Runtimes\Layers\UILayer\UIComponents\MainMenuUIComponent.hpp" />
     <ClInclude Include="Runtimes\Layers\UILayer\UIComponents\UIComponent.hpp" />
     <ClInclude Include="Runtimes\Layers\UILayer\UILayer.hpp" />
+    <ClInclude Include="Scenes\Cameras\Camera.hpp" />
+    <ClInclude Include="Scenes\Scene.hpp" />
     <ClInclude Include="Scenes\Transform.hpp" />
+    <ClInclude Include="Shared\Math\Math.hpp" />
+    <ClInclude Include="Shared\Math\Matrix.hpp" />
+    <ClInclude Include="Shared\Math\Vector.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
