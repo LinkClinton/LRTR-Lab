@@ -173,6 +173,8 @@
     <ClCompile Include="Extensions\ImGui\imgui_impl_win32.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Runtimes\LabApp.cpp" />
+    <ClCompile Include="Runtimes\Layers\UILayer\UIComponents\ConsoleUIComponent.cpp" />
+    <ClCompile Include="Runtimes\Layers\UILayer\UIComponents\LoggingUIComponent.cpp" />
     <ClCompile Include="Runtimes\Layers\UILayer\UIComponents\MainMenuUIComponent.cpp" />
     <ClCompile Include="Runtimes\Layers\UILayer\UILayer.cpp" />
     <ClCompile Include="Scenes\Transform.cpp" />
@@ -189,17 +191,25 @@
     <ClInclude Include="Core\Logging.hpp" />
     <ClInclude Include="Core\Noncopyable.hpp" />
     <ClInclude Include="Extensions\ImGui\imgui_impl_win32.hpp" />
+    <ClInclude Include="Extensions\SpdLog\SinkStorage.hpp" />
     <ClInclude Include="Runtimes\LabApp.hpp" />
     <ClInclude Include="Runtimes\Layers\Layer.hpp" />
+    <ClInclude Include="Runtimes\Layers\UILayer\UIComponents\ConsoleUIComponent.hpp" />
+    <ClInclude Include="Runtimes\Layers\UILayer\UIComponents\LoggingUIComponent.hpp" />
     <ClInclude Include="Runtimes\Layers\UILayer\UIComponents\MainMenuUIComponent.hpp" />
     <ClInclude Include="Runtimes\Layers\UILayer\UIComponents\UIComponent.hpp" />
     <ClInclude Include="Runtimes\Layers\UILayer\UILayer.hpp" />
     <ClInclude Include="Scenes\Cameras\Camera.hpp" />
     <ClInclude Include="Scenes\Scene.hpp" />
     <ClInclude Include="Scenes\Transform.hpp" />
+    <ClInclude Include="Shared\Accelerators\Group.hpp" />
+    <ClInclude Include="Shared\Color.hpp" />
     <ClInclude Include="Shared\Math\Math.hpp" />
     <ClInclude Include="Shared\Math\Matrix.hpp" />
     <ClInclude Include="Shared\Math\Vector.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Resources\Fonts\Consola.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

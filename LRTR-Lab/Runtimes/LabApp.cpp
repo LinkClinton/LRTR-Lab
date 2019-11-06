@@ -1,6 +1,8 @@
 #include "LabApp.hpp"
 
 #include "../Extensions/ImGui/imgui_impl_win32.hpp"
+#include "../Extensions/SpdLog/SinkStorage.hpp"
+
 #include "../Core/Logging.hpp"
 
 #include "Layers/UILayer/UILayer.hpp"
@@ -31,8 +33,6 @@ LRESULT DefaultWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 LRTR::LabApp::LabApp(const std::string& name, size_t width, size_t height)
 	: mName(name), mWidth(width), mHeight(height), mHwnd(nullptr), mExisted(false)
 {
-	LRTR_DEBUG_INFO("Initialize LRTRApp with [{0}, {1}].", mWidth, mHeight);
-
 	const auto hInstance = GetModuleHandle(nullptr);
 	const auto class_name = this->name();
 
@@ -66,6 +66,13 @@ LRTR::LabApp::LabApp(const std::string& name, size_t width, size_t height)
 
 	mExisted = true;
 
+	//initialize spd-log interface
+	spdlog::default_logger()->sinks().clear();
+	spdlog::default_logger()->sinks().push_back(
+		std::make_shared<SinkStorageSingleThread>());
+
+	LRTR_DEBUG_INFO("Initialize LRTRApp with [{0}, {1}].", mWidth, mHeight);
+	
 	ImGui::CreateContext();
 	ImGui_ImplWin32_Init(mHwnd);
 

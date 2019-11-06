@@ -17,6 +17,12 @@
     <ClCompile Include="Runtimes\Layers\UILayer\UIComponents\MainMenuUIComponent.cpp">
       <Filter>Runtimes\Layers\UILayer\UIComponents</Filter>
     </ClCompile>
+    <ClCompile Include="Runtimes\Layers\UILayer\UIComponents\ConsoleUIComponent.cpp">
+      <Filter>Runtimes\Layers\UILayer\UIComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="Runtimes\Layers\UILayer\UIComponents\LoggingUIComponent.cpp">
+      <Filter>Runtimes\Layers\UILayer\UIComponents</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scenes">
@@ -57,6 +63,15 @@
     </Filter>
     <Filter Include="Shared\Accelerators">
       <UniqueIdentifier>{311d8622-5359-4978-ba39-7293434fe2f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{f4830229-0828-4536-80db-9d5c35efb027}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Fonts">
+      <UniqueIdentifier>{9b529abf-5833-49e8-9a26-2d840968b60d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Extensions\SpdLog">
+      <UniqueIdentifier>{74ce6168-d1d4-434d-94ed-11568c2e3d59}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -102,5 +117,25 @@
     <ClInclude Include="Shared\Math\Vector.hpp">
       <Filter>Shared\Math</Filter>
     </ClInclude>
+    <ClInclude Include="Shared\Accelerators\Group.hpp">
+      <Filter>Shared\Accelerators</Filter>
+    </ClInclude>
+    <ClInclude Include="Runtimes\Layers\UILayer\UIComponents\ConsoleUIComponent.hpp">
+      <Filter>Runtimes\Layers\UILayer\UIComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="Runtimes\Layers\UILayer\UIComponents\LoggingUIComponent.hpp">
+      <Filter>Runtimes\Layers\UILayer\UIComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="Extensions\SpdLog\SinkStorage.hpp">
+      <Filter>Extensions\SpdLog</Filter>
+    </ClInclude>
+    <ClInclude Include="Shared\Color.hpp">
+      <Filter>Shared</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Resources\Fonts\Consola.ttf">
+      <Filter>Resources\Fonts</Filter>
+    </Font>
   </ItemGroup>
 </Project>

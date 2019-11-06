@@ -1,19 +1,35 @@
 #include "MainMenuUIComponent.hpp"
 
-LRTR::MainMenuUIComponent::MainMenuUIComponent()
+#include "../UILayer.hpp"
+
+LRTR::MainMenuUIComponent::MainMenuUIComponent(const std::shared_ptr<UILayerSharing>& sharing) :
+	UIComponent(sharing)
 {
 	mImGuiView = std::make_shared<CodeRed::ImGuiView>(
-		std::bind(&MainMenuUIComponent::updateUI, this));
+		std::bind(&MainMenuUIComponent::update, this));
 }
 
-void LRTR::MainMenuUIComponent::updateUI()
+void LRTR::MainMenuUIComponent::update()
 {
+	if (mShow == false) return;
+	
 	ImGui::BeginMainMenuBar();
-
+	
 	if (ImGui::BeginMenu("File")) {
 		
 		ImGui::MenuItem("New");
 		ImGui::MenuItem("Open");
+		
+		ImGui::EndMenu();
+	}
+
+	if (ImGui::BeginMenu("View")) {
+
+		if (ImGui::MenuItem("Console")) 
+			mLayerSharing->components().at("View.Console")->show();
+
+		if (ImGui::MenuItem("Logging"))
+			mLayerSharing->components().at("View.Logging")->show();
 		
 		ImGui::EndMenu();
 	}

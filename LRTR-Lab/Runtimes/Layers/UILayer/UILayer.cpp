@@ -1,8 +1,10 @@
 #include "UILayer.hpp"
 
 #include "UIComponents/MainMenuUIComponent.hpp"
+#include "UIComponents/ConsoleUIComponent.hpp"
+#include "UIComponents/LoggingUIComponent.hpp"
 
-#include <CodeRed\Interface\GpuCommandQueue.hpp>
+#include <CodeRed/Interface/GpuCommandQueue.hpp>
 
 LRTR::UILayer::UILayer(
 	const std::shared_ptr<CodeRed::GpuLogicalDevice>& device,
@@ -14,7 +16,7 @@ LRTR::UILayer::UILayer(
 {
 	mCommandList = mDevice->createGraphicsCommandList(mCommandAllocator);
 
-	ImGui::GetIO().FontGlobalScale = 1.5f;
+	ImGui::GetIO().Fonts->AddFontFromFileTTF("./Resources/Fonts/Consola.ttf", 20);
 
 	mImGuiWindows = std::make_shared<CodeRed::ImGuiWindows>(
 		mDevice, 
@@ -22,9 +24,13 @@ LRTR::UILayer::UILayer(
 		mCommandAllocator, 
 		mCommandQueue, 2);
 
-	mUIComponents.insert({ "Main Menu", std::make_shared<MainMenuUIComponent>() });
+	auto layerSharing = std::make_shared<UILayerSharing>(this);
+	
+	mUIComponents.insert({ "MainMenu", std::make_shared<MainMenuUIComponent>(layerSharing) });
+	mUIComponents.insert({ "View.Console", std::make_shared<ConsoleUIComponent>(layerSharing) });
+	mUIComponents.insert({ "View.Logging", std::make_shared<LoggingUIComponent>(layerSharing) });
 
-	for (auto component : mUIComponents) mImGuiWindows->add(component.second->view());
+	for (const auto component : mUIComponents) mImGuiWindows->add(component.second->view());
 }
 
 void LRTR::UILayer::update(float delta)
@@ -43,4 +49,18 @@ void LRTR::UILayer::render(const std::shared_ptr<CodeRed::GpuFrameBuffer>& frame
 	mCommandList->endRecording();
 
 	mCommandQueue->execute({ mCommandList });
+}
+
+auto LRTR::UILayer::components() const noexcept -> const StringGroup<std::shared_ptr<UIComponent>>& 
+{
+	return mUIComponents;
+}
+
+LRTR::UILayerSharing::UILayerSharing(UILayer* layer) : mLayer(layer)
+{	
+}
+
+auto LRTR::UILayerSharing::components() const noexcept -> const StringGroup<std::shared_ptr<UIComponent>>& 
+{
+	return mLayer->components();
 }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../../../Shared/Accelerators/Group.hpp"
 #include "UIComponents/UIComponent.hpp"
 #include "../Layer.hpp"
 
@@ -22,6 +23,8 @@ namespace LRTR {
 		void render(
 			const std::shared_ptr<CodeRed::GpuFrameBuffer>& frameBuffer,
 			float delta);
+
+		auto components() const noexcept -> const StringGroup<std::shared_ptr<UIComponent>>&;
 	private:
 		std::shared_ptr<CodeRed::GpuLogicalDevice> mDevice;
 		std::shared_ptr<CodeRed::GpuRenderPass> mRenderPass;
@@ -32,7 +35,15 @@ namespace LRTR {
 
 		std::shared_ptr<CodeRed::ImGuiWindows> mImGuiWindows;
 
-		std::unordered_map<std::string, std::shared_ptr<UIComponent>> mUIComponents;
+		StringGroup<std::shared_ptr<UIComponent>> mUIComponents;
 	};
 
+	class UILayerSharing final : public Noncopyable {
+	public:
+		explicit UILayerSharing(UILayer* layer);
+
+		auto components() const noexcept -> const StringGroup<std::shared_ptr<UIComponent>>&;
+	private:
+		UILayer* mLayer = nullptr;
+	};
 }

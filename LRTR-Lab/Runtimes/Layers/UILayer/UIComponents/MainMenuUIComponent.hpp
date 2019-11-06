@@ -6,11 +6,11 @@ namespace LRTR {
 
 	class MainMenuUIComponent : public UIComponent {
 	public:
-		MainMenuUIComponent();
+		explicit MainMenuUIComponent(const std::shared_ptr<UILayerSharing>& sharing);
 
 		~MainMenuUIComponent() = default;
 	private:
-		void updateUI();
+		void update();
 	};
 
 }

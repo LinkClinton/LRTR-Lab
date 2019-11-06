@@ -2,7 +2,7 @@
 
 #pragma warning(disable : 4275)
 
-#include <spdlog\spdlog.h>
+#include <spdlog/spdlog.h>
 
 #define __ENABLE__CODE__LOCATION__
 
