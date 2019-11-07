@@ -36,8 +36,12 @@ namespace LRTR {
 
 		auto handle() const noexcept -> void* { return mHwnd; }
 	private:
-		void initialize();
+		void initializeLogComponents();
 
+		void initializeCodeRedComponents();
+
+		void initializeLayerComponents();
+		
 		void update(float delta);
 		void render(float delta);
 	private:

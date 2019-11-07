@@ -33,6 +33,8 @@ LRESULT DefaultWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 LRTR::LabApp::LabApp(const std::string& name, size_t width, size_t height)
 	: mName(name), mWidth(width), mHeight(height), mHwnd(nullptr), mExisted(false)
 {
+	initializeLogComponents();
+	
 	const auto hInstance = GetModuleHandle(nullptr);
 	const auto class_name = this->name();
 
@@ -66,17 +68,13 @@ LRTR::LabApp::LabApp(const std::string& name, size_t width, size_t height)
 
 	mExisted = true;
 
-	//initialize spd-log interface
-	spdlog::default_logger()->sinks().clear();
-	spdlog::default_logger()->sinks().push_back(
-		std::make_shared<SinkStorageSingleThread>());
-
 	LRTR_DEBUG_INFO("Initialize LRTRApp with [{0}, {1}].", mWidth, mHeight);
 	
 	ImGui::CreateContext();
 	ImGui_ImplWin32_Init(mHwnd);
 
-	initialize();
+	initializeCodeRedComponents();
+	initializeLayerComponents();
 }
 
 LRTR::LabApp::~LabApp()
@@ -129,17 +127,32 @@ void LRTR::LabApp::runLoop()
 	}
 }
 
-void LRTR::LabApp::initialize()
+void LRTR::LabApp::initializeLogComponents()
+{
+	const auto sink = std::make_shared<SinkStorageSingleThread>();
+
+	//initialize spd-log interface
+	spdlog::default_logger()->sinks().clear();
+	CodeRed::DebugReport::listeners().clear();
+
+	spdlog::default_logger()->sinks().push_back(sink);
+	CodeRed::DebugReport::listeners().push_back(sink);
+}
+
+void LRTR::LabApp::initializeCodeRedComponents()
 {
 	//initialize Code-Red interface
-	LRTR_DEBUG_INFO("Initialize Code Red Objects.");
+	LRTR_DEBUG_INFO("Initialize Code Red Components.");
 
 	initializeDevice();
 	initializeCommand();
 	initializeSwapChain();
 
-	LRTR_DEBUG_INFO("Finish intialize Code Red Objects.");
+	LRTR_DEBUG_INFO("Finish intialize Code Red Components.");
+}
 
+void LRTR::LabApp::initializeLayerComponents()
+{
 	//initialize Layers
 	LRTR_DEBUG_INFO("Initialize layers.");
 
