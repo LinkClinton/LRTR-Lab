@@ -23,6 +23,12 @@
     <ClCompile Include="Runtimes\Layers\UILayer\UIComponents\LoggingUIComponent.cpp">
       <Filter>Runtimes\Layers\UILayer\UIComponents</Filter>
     </ClCompile>
+    <ClCompile Include="Runtimes\Layers\UILayer\UIComponents\SceneViewUIComponent.cpp">
+      <Filter>Runtimes\Layers\UILayer\UIComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Scene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scenes">
@@ -131,6 +137,9 @@
     </ClInclude>
     <ClInclude Include="Shared\Color.hpp">
       <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="Runtimes\Layers\UILayer\UIComponents\SceneViewUIComponent.hpp">
+      <Filter>Runtimes\Layers\UILayer\UIComponents</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

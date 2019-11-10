@@ -30,6 +30,9 @@ void LRTR::MainMenuUIComponent::update()
 
 		if (ImGui::MenuItem("Logging"))
 			mLayerSharing->components().at("View.Logging")->show();
+
+		if (ImGui::MenuItem("Scene"))
+			mLayerSharing->components().at("View.Scene")->show();
 		
 		ImGui::EndMenu();
 	}

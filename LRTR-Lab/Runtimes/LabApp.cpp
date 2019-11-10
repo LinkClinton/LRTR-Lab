@@ -225,7 +225,8 @@ void LRTR::LabApp::initializeUILayer()
 		mDevice,
 		mRenderPass,
 		mCommandAllocator,
-		mCommandQueue);
+		mCommandQueue,
+		width(), height());
 }
 
 void LRTR::LabApp::processMessage(LabApp* app, const MSG& message)

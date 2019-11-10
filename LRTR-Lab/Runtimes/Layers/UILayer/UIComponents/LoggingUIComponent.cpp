@@ -17,9 +17,19 @@ void LRTR::LoggingUIComponent::update()
 
 	static const auto messageStorage =
 		std::static_pointer_cast<SinkStorageSingleThread>(spdlog::default_logger()->sinks()[0]);
-	
-	ImGui::Begin("Logging", &mShow);
 
+	static auto imGuiWindowFlags = 
+		ImGuiWindowFlags_NoMove |
+		ImGuiWindowFlags_NoResize | 
+		ImGuiWindowFlags_NoCollapse;
+	
+	ImGui::Begin("Logging", &mShow, imGuiWindowFlags);
+
+	//current version of logging window, we do not save the position and the size
+	//when we run the program, the size and position of logging window will be reset.
+	ImGui::SetWindowSize(ImVec2(mLayerSharing->width() * 1.0f, mLayerSharing->height() * 0.25f));
+	ImGui::SetWindowPos(ImVec2(0, mLayerSharing->height() * (1.0f - 0.25f)));
+	
 	ImGui::BeginChild("View.Logging.Scroll");
 
 	for (const auto message : messageStorage->messages()) {

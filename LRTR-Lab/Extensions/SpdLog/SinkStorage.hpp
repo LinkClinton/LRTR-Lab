@@ -2,7 +2,6 @@
 
 #pragma warning(disable : 4275)
 
-#include "../../Core/Noncopyable.hpp"
 #include "../../Shared/Color.hpp"
 
 #include <CodeRed/Shared/DebugReport.hpp>
