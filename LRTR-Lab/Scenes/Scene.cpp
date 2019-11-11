@@ -11,28 +11,11 @@ LRTR::Scene::Scene(
 	mCommandList = mDevice->createGraphicsCommandList(mCommandAllocator);
 }
 
-void LRTR::Scene::setTarget(const std::shared_ptr<CodeRed::GpuTexture>& texture)
+auto LRTR::Scene::generate(
+	const std::shared_ptr<CodeRed::GpuTexture>& texture,
+	const std::shared_ptr<SceneCamera>& camera) -> std::shared_ptr<CodeRed::GpuTexture>
 {
-	if (mFrameBuffer != nullptr && mFrameBuffer->renderTarget(0) == texture)
-		return;
-
-	//when we change the render target, we need reset the frame buffer
-	//and render pass.
-	mFrameBuffer = mDevice->createFrameBuffer(texture);
-	mRenderPass = mDevice->createRenderPass(
-		CodeRed::Attachment::RenderTarget(
-			texture->format(),
-			CodeRed::ResourceLayout::RenderTarget,
-			CodeRed::ResourceLayout::GeneralRead));
-
-}
-
-auto LRTR::Scene::generate(const std::shared_ptr<SceneCamera>& camera) -> std::shared_ptr<CodeRed::GpuTexture>
-{
-	LRTR_ERROR_IF(
-		mFrameBuffer == nullptr || 
-		mFrameBuffer->renderTarget(0) == nullptr, 
-		"the [frame buffer/render target] can not be nullptr.");
+	setTarget(texture);
 
 	mCommandList->beginRecording();
 
@@ -54,4 +37,26 @@ auto LRTR::Scene::cameras() noexcept -> StringGroup<std::shared_ptr<SceneCamera>
 
 void LRTR::Scene::update(float delta)
 {
+}
+
+void LRTR::Scene::setTarget(const std::shared_ptr<CodeRed::GpuTexture>& texture)
+{
+	if (mFrameBuffer != nullptr && mFrameBuffer->renderTarget(0) == texture)
+		return;
+
+	LRTR_ERROR_IF(
+		texture == nullptr,
+		"texture can not be nullptr."
+	);
+	
+	//when we change the render target, we need reset the frame buffer
+	//and render pass.
+	mFrameBuffer = mDevice->createFrameBuffer(texture);
+	mRenderPass = mDevice->createRenderPass(
+		CodeRed::Attachment::RenderTarget(
+			texture->format(),
+			CodeRed::ResourceLayout::RenderTarget,
+			CodeRed::ResourceLayout::GeneralRead));
+
+	mRenderPass->setClear(texture->clearValue());
 }

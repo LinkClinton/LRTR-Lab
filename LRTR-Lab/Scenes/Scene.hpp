@@ -22,13 +22,15 @@ namespace LRTR {
 
 		virtual ~Scene() = default;
 
-		void setTarget(const std::shared_ptr<CodeRed::GpuTexture>& texture);
-		
-		auto generate(const std::shared_ptr<SceneCamera>& camera) -> std::shared_ptr<CodeRed::GpuTexture>;
+		auto generate(
+			const std::shared_ptr<CodeRed::GpuTexture>& texture,
+			const std::shared_ptr<SceneCamera>& camera) -> std::shared_ptr<CodeRed::GpuTexture>;
 		
 		auto cameras() noexcept -> StringGroup<std::shared_ptr<SceneCamera>>&;
 	private:
 		virtual void update(float delta);
+		
+		void setTarget(const std::shared_ptr<CodeRed::GpuTexture>& texture);
 	private:
 		std::shared_ptr<CodeRed::GpuLogicalDevice> mDevice;
 		

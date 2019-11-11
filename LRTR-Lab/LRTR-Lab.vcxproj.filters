@@ -143,6 +143,8 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="Resources\Fonts\Consola.ttf" />
+    <CopyFileToFolders Include="Resources\Fonts\Consola.ttf">
+      <Filter>Resources\Fonts</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>

@@ -16,7 +16,7 @@ void LRTR::LoggingUIComponent::update()
 	if (mShow == false) return;
 
 	static const auto messageStorage =
-		std::static_pointer_cast<SinkStorageSingleThread>(spdlog::default_logger()->sinks()[0]);
+		std::static_pointer_cast<SinkStorageSingleThread>(spdlog::default_logger()->sinks()[1]);
 
 	static auto imGuiWindowFlags = 
 		ImGuiWindowFlags_NoMove |

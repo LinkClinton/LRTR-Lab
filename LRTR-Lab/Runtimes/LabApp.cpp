@@ -132,9 +132,6 @@ void LRTR::LabApp::initializeLogComponents()
 	const auto sink = std::make_shared<SinkStorageSingleThread>();
 
 	//initialize spd-log interface
-	spdlog::default_logger()->sinks().clear();
-	CodeRed::DebugReport::listeners().clear();
-
 	spdlog::default_logger()->sinks().push_back(sink);
 	CodeRed::DebugReport::listeners().push_back(sink);
 }
