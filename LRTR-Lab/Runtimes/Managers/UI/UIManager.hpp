@@ -1,0 +1,50 @@
+#pragma once
+
+#include "../../../Shared/Accelerators/Group.hpp"
+#include "Components/UIComponent.hpp"
+#include "../Manager.hpp"
+
+#include <Extensions/ImGui/ImGuiWindows.hpp>
+
+#include <memory>
+
+namespace LRTR {
+
+	class UIManager : public Manager {
+	public:
+		explicit UIManager(
+			const std::shared_ptr<RuntimeSharing>& sharing,
+			const std::shared_ptr<CodeRed::GpuLogicalDevice>& device,
+			const std::shared_ptr<CodeRed::GpuRenderPass>& renderPass,
+			const std::shared_ptr<CodeRed::GpuCommandAllocator>& allocator,
+			const std::shared_ptr<CodeRed::GpuCommandQueue>& queue,
+			const size_t width, const size_t height);
+
+		void update(float delta) override;
+
+		auto render(
+			const std::shared_ptr<CodeRed::GpuFrameBuffer>& frameBuffer, float delta)
+			->std::shared_ptr<CodeRed::GpuGraphicsCommandList>;
+
+		void resize(const size_t width, const size_t height);
+
+		auto width() const noexcept->size_t;
+
+		auto height() const noexcept->size_t;
+
+		auto components() const noexcept -> const StringGroup<std::shared_ptr<UIComponent>>&;
+	private:
+		std::shared_ptr<CodeRed::GpuLogicalDevice> mDevice;
+		std::shared_ptr<CodeRed::GpuRenderPass> mRenderPass;
+
+		std::shared_ptr<CodeRed::GpuGraphicsCommandList> mCommandList;
+		std::shared_ptr<CodeRed::GpuCommandAllocator> mCommandAllocator;
+		std::shared_ptr<CodeRed::GpuCommandQueue> mCommandQueue;
+
+		std::shared_ptr<CodeRed::ImGuiWindows> mImGuiWindows;
+
+		StringGroup<std::shared_ptr<UIComponent>> mUIComponents;
+
+		size_t mWidth, mHeight;
+	};
+}

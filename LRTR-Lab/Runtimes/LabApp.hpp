@@ -11,8 +11,9 @@
 
 namespace LRTR {
 
-	class UILayer;
-
+	class RuntimeSharing;
+	class UIManager;
+	
 	class LabApp final : public Noncopyable {
 	public:
 		explicit LabApp(
@@ -40,7 +41,7 @@ namespace LRTR {
 
 		void initializeCodeRedComponents();
 
-		void initializeLayerComponents();
+		void initializeManagerComponents();
 		
 		void update(float delta);
 		void render(float delta);
@@ -63,10 +64,14 @@ namespace LRTR {
 
 		void initializeSwapChain();
 	private:
-		std::shared_ptr<UILayer> mUILayer;
+		std::shared_ptr<UIManager> mUIManager;
 
-		void initializeUILayer();
+		void initializeUIManager();
 	private:
+		friend class RuntimeSharing;
+		
+		std::shared_ptr<RuntimeSharing> mRuntimeSharing;
+		
 		std::string mName;
 
 		size_t mWidth;

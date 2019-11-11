@@ -1,8 +1,8 @@
 #include "MainMenuUIComponent.hpp"
 
-#include "../UILayer.hpp"
+#include "../UIManager.hpp"
 
-LRTR::MainMenuUIComponent::MainMenuUIComponent(const std::shared_ptr<UILayerSharing>& sharing) :
+LRTR::MainMenuUIComponent::MainMenuUIComponent(const std::shared_ptr<RuntimeSharing>& sharing) :
 	UIComponent(sharing)
 {
 	mImGuiView = std::make_shared<CodeRed::ImGuiView>(
@@ -26,13 +26,13 @@ void LRTR::MainMenuUIComponent::update()
 	if (ImGui::BeginMenu("View")) {
 
 		if (ImGui::MenuItem("Console")) 
-			mLayerSharing->components().at("View.Console")->show();
+			mRuntimeSharing->uiManager()->components().at("View.Console")->show();
 
 		if (ImGui::MenuItem("Logging"))
-			mLayerSharing->components().at("View.Logging")->show();
+			mRuntimeSharing->uiManager()->components().at("View.Logging")->show();
 
 		if (ImGui::MenuItem("Scene"))
-			mLayerSharing->components().at("View.Scene")->show();
+			mRuntimeSharing->uiManager()->components().at("View.Scene")->show();
 		
 		ImGui::EndMenu();
 	}

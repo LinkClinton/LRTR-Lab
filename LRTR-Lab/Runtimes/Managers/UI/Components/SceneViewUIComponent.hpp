@@ -6,7 +6,7 @@ namespace LRTR {
 
 	class SceneViewUIComponent : public UIComponent {
 	public:
-		explicit SceneViewUIComponent(const std::shared_ptr<UILayerSharing>& sharing);
+		explicit SceneViewUIComponent(const std::shared_ptr<RuntimeSharing>& sharing);
 
 		~SceneViewUIComponent() = default;
 	private:

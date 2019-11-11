@@ -1,9 +1,8 @@
 #include "SceneViewUIComponent.hpp"
 
-#include "../../../../Scenes/Scene.hpp"
-#include "../UILayer.hpp"
+#include "../UIManager.hpp"
 
-LRTR::SceneViewUIComponent::SceneViewUIComponent(const std::shared_ptr<UILayerSharing>& sharing) :
+LRTR::SceneViewUIComponent::SceneViewUIComponent(const std::shared_ptr<RuntimeSharing>& sharing) :
 	UIComponent(sharing)
 {
 	mImGuiView = std::make_shared<CodeRed::ImGuiView>(
@@ -19,12 +18,6 @@ void LRTR::SceneViewUIComponent::update()
 
 	static std::shared_ptr<CodeRed::GpuTexture> texture = nullptr;
 
-	//the scene is only used for test for current version
-	static auto scene = std::make_shared<Scene>(
-		mLayerSharing->device(),
-		mLayerSharing->commandAllocator(),
-		mLayerSharing->commandQueue());
-
 	ImGui::Begin("Scene", &mShow, imGuiWindowFlags);
 
 	const auto contentSize = ImVec2(
@@ -36,16 +29,15 @@ void LRTR::SceneViewUIComponent::update()
 		texture->width() != static_cast<size_t>(contentSize.x) ||
 		texture->height() != static_cast<size_t>(contentSize.y)) {
 
-		texture = mLayerSharing->device()->createTexture(
+		texture = mRuntimeSharing->device()->createTexture(
 			CodeRed::ResourceInfo::RenderTarget(
 				static_cast<size_t>(contentSize.x),
 				static_cast<size_t>(contentSize.y),
 				CodeRed::PixelFormat::RedGreenBlueAlpha8BitUnknown,
-				CodeRed::ClearValue(1, 0, 0, 1))
-		);
+				CodeRed::ClearValue(1, 0, 0, 1)));
 	}
-	
-	ImGui::Image(scene->generate(texture, nullptr).get(), contentSize);
+
+	ImGui::Image(texture.get(), contentSize);
 	
 	ImGui::End();
 }

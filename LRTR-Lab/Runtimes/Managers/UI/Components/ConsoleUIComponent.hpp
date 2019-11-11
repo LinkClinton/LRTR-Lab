@@ -6,7 +6,7 @@ namespace LRTR {
 
 	class ConsoleUIComponent : public UIComponent {
 	public:
-		explicit ConsoleUIComponent(const std::shared_ptr<UILayerSharing>& sharing);
+		explicit ConsoleUIComponent(const std::shared_ptr<RuntimeSharing>& sharing);
 
 		~ConsoleUIComponent() = default;
 	private:

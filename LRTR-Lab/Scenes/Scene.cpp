@@ -3,20 +3,21 @@
 #include "../Core/Logging.hpp"
 
 LRTR::Scene::Scene(
-	const std::shared_ptr<CodeRed::GpuLogicalDevice>& device,
-	const std::shared_ptr<CodeRed::GpuCommandAllocator>& allocator,
-	const std::shared_ptr<CodeRed::GpuCommandQueue>& queue) :
-	mDevice(device), mCommandAllocator(allocator), mCommandQueue(queue)
+	const std::shared_ptr<CodeRed::GpuLogicalDevice>& device) :
+	mDevice(device)
 {
+	mCommandAllocator = mDevice->createCommandAllocator();
 	mCommandList = mDevice->createGraphicsCommandList(mCommandAllocator);
 }
 
 auto LRTR::Scene::generate(
 	const std::shared_ptr<CodeRed::GpuTexture>& texture,
-	const std::shared_ptr<SceneCamera>& camera) -> std::shared_ptr<CodeRed::GpuTexture>
+	const std::shared_ptr<SceneCamera>& camera)
+	-> std::shared_ptr<CodeRed::GpuGraphicsCommandList>
 {
 	setTarget(texture);
 
+	mCommandAllocator->reset();
 	mCommandList->beginRecording();
 
 	mCommandList->beginRenderPass(mRenderPass, mFrameBuffer);
@@ -24,10 +25,8 @@ auto LRTR::Scene::generate(
 	mCommandList->endRenderPass();
 	
 	mCommandList->endRecording();
-	
-	mCommandQueue->execute({ mCommandList });
-	
-	return mFrameBuffer->renderTarget(0);
+
+	return mCommandList;
 }
 
 auto LRTR::Scene::cameras() noexcept -> StringGroup<std::shared_ptr<SceneCamera>>& 

@@ -1,8 +1,8 @@
 #include "ConsoleUIComponent.hpp"
 
-#include "../UILayer.hpp"
+#include "../UIManager.hpp"
 
-LRTR::ConsoleUIComponent::ConsoleUIComponent(const std::shared_ptr<UILayerSharing>& sharing)
+LRTR::ConsoleUIComponent::ConsoleUIComponent(const std::shared_ptr<RuntimeSharing>& sharing)
 	: UIComponent(sharing)
 {
 	mShow = false;
@@ -16,8 +16,6 @@ void LRTR::ConsoleUIComponent::update()
 	if (mShow == false) return;
 	
 	ImGui::Begin("Console", &mShow);
-
-
 	
 	ImGui::End();
 }

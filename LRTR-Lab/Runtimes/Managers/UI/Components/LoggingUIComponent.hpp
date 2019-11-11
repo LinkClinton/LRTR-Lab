@@ -6,7 +6,7 @@ namespace LRTR {
 
 	class LoggingUIComponent : public UIComponent {
 	public:
-		explicit LoggingUIComponent(const std::shared_ptr<UILayerSharing>& sharing);
+		explicit LoggingUIComponent(const std::shared_ptr<RuntimeSharing>& sharing);
 
 		~LoggingUIComponent() = default;
 	private:

@@ -16,15 +16,14 @@ namespace LRTR {
 	class Scene : public Noncopyable {
 	public:
 		explicit Scene(
-			const std::shared_ptr<CodeRed::GpuLogicalDevice>& device,
-			const std::shared_ptr<CodeRed::GpuCommandAllocator>& allocator,
-			const std::shared_ptr<CodeRed::GpuCommandQueue>& queue);
+			const std::shared_ptr<CodeRed::GpuLogicalDevice>& device);
 
 		virtual ~Scene() = default;
 
 		auto generate(
 			const std::shared_ptr<CodeRed::GpuTexture>& texture,
-			const std::shared_ptr<SceneCamera>& camera) -> std::shared_ptr<CodeRed::GpuTexture>;
+			const std::shared_ptr<SceneCamera>& camera)
+			-> std::shared_ptr<CodeRed::GpuGraphicsCommandList>;
 		
 		auto cameras() noexcept -> StringGroup<std::shared_ptr<SceneCamera>>&;
 	private:
@@ -36,8 +35,7 @@ namespace LRTR {
 		
 		std::shared_ptr<CodeRed::GpuGraphicsCommandList> mCommandList;
 		std::shared_ptr<CodeRed::GpuCommandAllocator> mCommandAllocator;
-		std::shared_ptr<CodeRed::GpuCommandQueue> mCommandQueue;
-
+		
 		std::shared_ptr<CodeRed::GpuFrameBuffer> mFrameBuffer;
 		std::shared_ptr<CodeRed::GpuRenderPass> mRenderPass;
 		

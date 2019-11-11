@@ -11,23 +11,26 @@
     <ClCompile Include="Extensions\ImGui\imgui_impl_win32.cpp">
       <Filter>Extensions\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="Runtimes\Layers\UILayer\UILayer.cpp">
-      <Filter>Runtimes\Layers\UILayer</Filter>
-    </ClCompile>
-    <ClCompile Include="Runtimes\Layers\UILayer\UIComponents\MainMenuUIComponent.cpp">
-      <Filter>Runtimes\Layers\UILayer\UIComponents</Filter>
-    </ClCompile>
-    <ClCompile Include="Runtimes\Layers\UILayer\UIComponents\ConsoleUIComponent.cpp">
-      <Filter>Runtimes\Layers\UILayer\UIComponents</Filter>
-    </ClCompile>
-    <ClCompile Include="Runtimes\Layers\UILayer\UIComponents\LoggingUIComponent.cpp">
-      <Filter>Runtimes\Layers\UILayer\UIComponents</Filter>
-    </ClCompile>
-    <ClCompile Include="Runtimes\Layers\UILayer\UIComponents\SceneViewUIComponent.cpp">
-      <Filter>Runtimes\Layers\UILayer\UIComponents</Filter>
-    </ClCompile>
     <ClCompile Include="Scenes\Scene.cpp">
       <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Runtimes\Managers\UI\Components\ConsoleUIComponent.cpp">
+      <Filter>Runtimes\Managers\UI\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Runtimes\Managers\UI\Components\LoggingUIComponent.cpp">
+      <Filter>Runtimes\Managers\UI\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Runtimes\Managers\UI\Components\MainMenuUIComponent.cpp">
+      <Filter>Runtimes\Managers\UI\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Runtimes\Managers\UI\Components\SceneViewUIComponent.cpp">
+      <Filter>Runtimes\Managers\UI\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Runtimes\Managers\UI\UIManager.cpp">
+      <Filter>Runtimes\Managers\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Runtimes\RuntimeSharing.cpp">
+      <Filter>Runtimes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -37,9 +40,6 @@
     <Filter Include="Runtimes">
       <UniqueIdentifier>{8e25853f-f732-4072-a92a-09e19aff1c93}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Runtimes\Layers">
-      <UniqueIdentifier>{71f6b9ea-a1e2-4f6f-a008-9c2696c906c3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Core">
       <UniqueIdentifier>{778160cd-9f7a-4c4a-9241-a6306b954abe}</UniqueIdentifier>
     </Filter>
@@ -48,12 +48,6 @@
     </Filter>
     <Filter Include="Extensions\ImGui">
       <UniqueIdentifier>{6f1e6afb-9696-45b0-ba45-c2d429aeb5ff}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Runtimes\Layers\UILayer">
-      <UniqueIdentifier>{2442677b-6f9e-4e8a-b193-e4e8fc1b980c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Runtimes\Layers\UILayer\UIComponents">
-      <UniqueIdentifier>{da3dff88-da83-4fd4-b2ee-b557b672b853}</UniqueIdentifier>
     </Filter>
     <Filter Include="Scenes\Cameras">
       <UniqueIdentifier>{1260d6db-af74-48ff-b42d-226ec593fd03}</UniqueIdentifier>
@@ -79,6 +73,18 @@
     <Filter Include="Extensions\SpdLog">
       <UniqueIdentifier>{74ce6168-d1d4-434d-94ed-11568c2e3d59}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Runtimes\Managers">
+      <UniqueIdentifier>{538481b2-81e5-4d81-afcf-970de411d804}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Runtimes\Managers\Scene">
+      <UniqueIdentifier>{03b51832-836d-48ac-b349-215c619e2a6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Runtimes\Managers\UI">
+      <UniqueIdentifier>{440ccce0-aa0f-4470-a96f-b6d9591894e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Runtimes\Managers\UI\Components">
+      <UniqueIdentifier>{349797bb-8d3f-4582-8a7e-5abda60b5121}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scenes\Transform.hpp">
@@ -93,20 +99,8 @@
     <ClInclude Include="Core\Logging.hpp">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Runtimes\Layers\Layer.hpp">
-      <Filter>Runtimes\Layers</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Noncopyable.hpp">
       <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Runtimes\Layers\UILayer\UILayer.hpp">
-      <Filter>Runtimes\Layers\UILayer</Filter>
-    </ClInclude>
-    <ClInclude Include="Runtimes\Layers\UILayer\UIComponents\MainMenuUIComponent.hpp">
-      <Filter>Runtimes\Layers\UILayer\UIComponents</Filter>
-    </ClInclude>
-    <ClInclude Include="Runtimes\Layers\UILayer\UIComponents\UIComponent.hpp">
-      <Filter>Runtimes\Layers\UILayer\UIComponents</Filter>
     </ClInclude>
     <ClInclude Include="Scenes\Cameras\Camera.hpp">
       <Filter>Scenes\Cameras</Filter>
@@ -126,20 +120,35 @@
     <ClInclude Include="Shared\Accelerators\Group.hpp">
       <Filter>Shared\Accelerators</Filter>
     </ClInclude>
-    <ClInclude Include="Runtimes\Layers\UILayer\UIComponents\ConsoleUIComponent.hpp">
-      <Filter>Runtimes\Layers\UILayer\UIComponents</Filter>
-    </ClInclude>
-    <ClInclude Include="Runtimes\Layers\UILayer\UIComponents\LoggingUIComponent.hpp">
-      <Filter>Runtimes\Layers\UILayer\UIComponents</Filter>
-    </ClInclude>
     <ClInclude Include="Extensions\SpdLog\SinkStorage.hpp">
       <Filter>Extensions\SpdLog</Filter>
     </ClInclude>
     <ClInclude Include="Shared\Color.hpp">
       <Filter>Shared</Filter>
     </ClInclude>
-    <ClInclude Include="Runtimes\Layers\UILayer\UIComponents\SceneViewUIComponent.hpp">
-      <Filter>Runtimes\Layers\UILayer\UIComponents</Filter>
+    <ClInclude Include="Runtimes\Managers\Manager.hpp">
+      <Filter>Runtimes\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Runtimes\Managers\UI\UIManager.hpp">
+      <Filter>Runtimes\Managers\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Runtimes\Managers\UI\Components\UIComponent.hpp">
+      <Filter>Runtimes\Managers\UI\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Runtimes\Managers\UI\Components\ConsoleUIComponent.hpp">
+      <Filter>Runtimes\Managers\UI\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Runtimes\Managers\UI\Components\LoggingUIComponent.hpp">
+      <Filter>Runtimes\Managers\UI\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Runtimes\Managers\UI\Components\MainMenuUIComponent.hpp">
+      <Filter>Runtimes\Managers\UI\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Runtimes\Managers\UI\Components\SceneViewUIComponent.hpp">
+      <Filter>Runtimes\Managers\UI\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Runtimes\RuntimeSharing.hpp">
+      <Filter>Runtimes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

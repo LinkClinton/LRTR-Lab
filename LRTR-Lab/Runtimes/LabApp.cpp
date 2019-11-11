@@ -5,7 +5,8 @@
 
 #include "../Core/Logging.hpp"
 
-#include "Layers/UILayer/UILayer.hpp"
+#include "Managers/UI/UIManager.hpp"
+#include "RuntimeSharing.hpp"
 
 #include <chrono>
 
@@ -33,6 +34,8 @@ LRESULT DefaultWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 LRTR::LabApp::LabApp(const std::string& name, size_t width, size_t height)
 	: mName(name), mWidth(width), mHeight(height), mHwnd(nullptr), mExisted(false)
 {
+	mRuntimeSharing = std::make_shared<RuntimeSharing>(this);
+	
 	initializeLogComponents();
 	
 	const auto hInstance = GetModuleHandle(nullptr);
@@ -74,7 +77,7 @@ LRTR::LabApp::LabApp(const std::string& name, size_t width, size_t height)
 	ImGui_ImplWin32_Init(mHwnd);
 
 	initializeCodeRedComponents();
-	initializeLayerComponents();
+	initializeManagerComponents();
 }
 
 LRTR::LabApp::~LabApp()
@@ -148,19 +151,19 @@ void LRTR::LabApp::initializeCodeRedComponents()
 	LRTR_DEBUG_INFO("Finish intialize Code Red Components.");
 }
 
-void LRTR::LabApp::initializeLayerComponents()
+void LRTR::LabApp::initializeManagerComponents()
 {
 	//initialize Layers
-	LRTR_DEBUG_INFO("Initialize layers.");
+	LRTR_DEBUG_INFO("Initialize Managers.");
 
-	initializeUILayer();
+	initializeUIManager();
 
-	LRTR_DEBUG_INFO("Finish initialize layers.");
+	LRTR_DEBUG_INFO("Finish initialize Managers.");
 }
 
 void LRTR::LabApp::update(float delta)
 {
-	mUILayer->update(delta);
+	mUIManager->update(delta);
 }
 
 void LRTR::LabApp::render(float delta)
@@ -168,10 +171,14 @@ void LRTR::LabApp::render(float delta)
 	mCommandQueue->waitIdle();
 	mCommandAllocator->reset();
 
-	mUILayer->render(mFrameBuffers[mCurrentFrameIndex], delta);
+	auto commandLists = std::vector<std::shared_ptr<CodeRed::GpuGraphicsCommandList>>();
+	
+	commandLists.push_back(mUIManager->render(mFrameBuffers[mCurrentFrameIndex], delta));
+
+	mCommandQueue->execute(commandLists);
 
 	mSwapChain->present();
-
+	
 	mCurrentFrameIndex = (mCurrentFrameIndex + 1) % mSwapChain->bufferCount();
 }
 
@@ -214,11 +221,12 @@ void LRTR::LabApp::initializeSwapChain()
 		mSwapChain->width(), mSwapChain->height());
 }
 
-void LRTR::LabApp::initializeUILayer()
+void LRTR::LabApp::initializeUIManager()
 {
-	LRTR_DEBUG_INFO("Initialize UI layer.");
+	LRTR_DEBUG_INFO("Initialize UI Manager.");
 
-	mUILayer = std::make_shared<UILayer>(
+	mUIManager = std::make_shared<UIManager>(
+		mRuntimeSharing,
 		mDevice,
 		mRenderPass,
 		mCommandAllocator,
