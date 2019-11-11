@@ -35,7 +35,7 @@ void LRTR::SceneViewUIComponent::update()
 	if (texture == nullptr || 
 		texture->width() != static_cast<size_t>(contentSize.x) ||
 		texture->height() != static_cast<size_t>(contentSize.y)) {
-		
+
 		texture = mLayerSharing->device()->createTexture(
 			CodeRed::ResourceInfo::Texture2D(
 				static_cast<size_t>(contentSize.x),
@@ -46,7 +46,7 @@ void LRTR::SceneViewUIComponent::update()
 
 		scene->setTarget(texture);
 	}
-
+	
 	ImGui::Image(scene->generate(nullptr).get(), contentSize);
 	
 	ImGui::End();
