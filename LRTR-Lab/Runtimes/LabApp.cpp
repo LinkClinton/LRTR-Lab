@@ -5,10 +5,16 @@
 
 #include "../Core/Logging.hpp"
 
+#include "Managers/Scene/SceneManager.hpp"
 #include "Managers/UI/UIManager.hpp"
 #include "RuntimeSharing.hpp"
 
 #include <chrono>
+
+#define __DIRECTX12__MODE__
+#ifndef __DIRECTX12__MODE__
+#define __VULKAN__MODE__
+#endif
 
 using Time = std::chrono::high_resolution_clock;
 
@@ -156,6 +162,7 @@ void LRTR::LabApp::initializeManagerComponents()
 	//initialize Layers
 	LRTR_DEBUG_INFO("Initialize Managers.");
 
+	initializeSceneManager();
 	initializeUIManager();
 
 	LRTR_DEBUG_INFO("Finish initialize Managers.");
@@ -163,6 +170,7 @@ void LRTR::LabApp::initializeManagerComponents()
 
 void LRTR::LabApp::update(float delta)
 {
+	mSceneManager->update(delta);
 	mUIManager->update(delta);
 }
 
@@ -172,11 +180,12 @@ void LRTR::LabApp::render(float delta)
 	mCommandAllocator->reset();
 
 	auto commandLists = std::vector<std::shared_ptr<CodeRed::GpuGraphicsCommandList>>();
-	
+
+	commandLists.push_back(mSceneManager->render(delta));
 	commandLists.push_back(mUIManager->render(mFrameBuffers[mCurrentFrameIndex], delta));
 
 	mCommandQueue->execute(commandLists);
-
+	
 	mSwapChain->present();
 	
 	mCurrentFrameIndex = (mCurrentFrameIndex + 1) % mSwapChain->bufferCount();
@@ -184,10 +193,17 @@ void LRTR::LabApp::render(float delta)
 
 void LRTR::LabApp::initializeDevice()
 {
+#ifdef __DIRECTX12__MODE__
 	auto systemInfo = std::make_shared<CodeRed::DirectX12SystemInfo>();
 	auto adapters = systemInfo->selectDisplayAdapter();
 
 	mDevice = std::make_shared<CodeRed::DirectX12LogicalDevice>(adapters[0]);
+#else
+	auto systemInfo = std::make_shared<CodeRed::VulkanSystemInfo>();
+	auto adapters = systemInfo->selectDisplayAdapter();
+
+	mDevice = std::make_shared<CodeRed::VulkanLogicalDevice>(adapters[0]);
+#endif
 }
 
 void LRTR::LabApp::initializeCommand()
@@ -219,6 +235,16 @@ void LRTR::LabApp::initializeSwapChain()
 
 	LRTR_DEBUG_INFO("Initialize Swap Chain with [{0}, {1}].",
 		mSwapChain->width(), mSwapChain->height());
+}
+
+void LRTR::LabApp::initializeSceneManager()
+{
+	LRTR_DEBUG_INFO("Initialize Scene Manager.");
+
+	mSceneManager = std::make_shared<SceneManager>(
+		mRuntimeSharing,
+		mDevice,
+		mCommandAllocator);
 }
 
 void LRTR::LabApp::initializeUIManager()

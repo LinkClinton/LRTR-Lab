@@ -16,6 +16,7 @@ namespace LRTR {
 	class Scene : public Noncopyable {
 	public:
 		explicit Scene(
+			const std::string& name,
 			const std::shared_ptr<CodeRed::GpuLogicalDevice>& device);
 
 		virtual ~Scene() = default;
@@ -26,11 +27,15 @@ namespace LRTR {
 			-> std::shared_ptr<CodeRed::GpuGraphicsCommandList>;
 		
 		auto cameras() noexcept -> StringGroup<std::shared_ptr<SceneCamera>>&;
+
+		auto name() const noexcept -> std::string;
 	private:
 		virtual void update(float delta);
 		
 		void setTarget(const std::shared_ptr<CodeRed::GpuTexture>& texture);
 	private:
+		std::string mName;
+		
 		std::shared_ptr<CodeRed::GpuLogicalDevice> mDevice;
 		
 		std::shared_ptr<CodeRed::GpuGraphicsCommandList> mCommandList;

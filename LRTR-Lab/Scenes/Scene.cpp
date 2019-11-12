@@ -3,8 +3,9 @@
 #include "../Core/Logging.hpp"
 
 LRTR::Scene::Scene(
+	const std::string& name,
 	const std::shared_ptr<CodeRed::GpuLogicalDevice>& device) :
-	mDevice(device)
+	mName(name), mDevice(device)
 {
 	mCommandAllocator = mDevice->createCommandAllocator();
 	mCommandList = mDevice->createGraphicsCommandList(mCommandAllocator);
@@ -32,6 +33,11 @@ auto LRTR::Scene::generate(
 auto LRTR::Scene::cameras() noexcept -> StringGroup<std::shared_ptr<SceneCamera>>& 
 {
 	return mCameras;
+}
+
+auto LRTR::Scene::name() const noexcept -> std::string
+{
+	return mName;
 }
 
 void LRTR::Scene::update(float delta)

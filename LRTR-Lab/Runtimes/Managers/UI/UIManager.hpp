@@ -21,18 +21,24 @@ namespace LRTR {
 			const size_t width, const size_t height);
 
 		void update(float delta) override;
-
+		
 		auto render(
 			const std::shared_ptr<CodeRed::GpuFrameBuffer>& frameBuffer, float delta)
-			->std::shared_ptr<CodeRed::GpuGraphicsCommandList>;
+			-> std::shared_ptr<CodeRed::GpuGraphicsCommandList>;
 
+		void add(
+			const std::string& name,
+			const std::shared_ptr<UIComponent>& component);
+
+		void remove(const std::string& name);
+		
 		void resize(const size_t width, const size_t height);
 
 		auto width() const noexcept->size_t;
 
 		auto height() const noexcept->size_t;
 
-		auto components() const noexcept -> const StringGroup<std::shared_ptr<UIComponent>>&;
+		auto components() const noexcept -> const StringOrderGroup<std::shared_ptr<UIComponent>>&;
 	private:
 		std::shared_ptr<CodeRed::GpuLogicalDevice> mDevice;
 		std::shared_ptr<CodeRed::GpuRenderPass> mRenderPass;
@@ -43,7 +49,7 @@ namespace LRTR {
 
 		std::shared_ptr<CodeRed::ImGuiWindows> mImGuiWindows;
 
-		StringGroup<std::shared_ptr<UIComponent>> mUIComponents;
+		StringOrderGroup<std::shared_ptr<UIComponent>> mUIComponents;
 
 		size_t mWidth, mHeight;
 	};

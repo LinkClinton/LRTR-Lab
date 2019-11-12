@@ -1,5 +1,8 @@
 #include "UIManager.hpp"
 
+#include "Components/Managers/SceneManagerUIComponent.hpp"
+#include "Components/Managers/UIManagerUIComponent.hpp"
+#include "Components/Managers/ManagerUIComponent.hpp"
 #include "Components/SceneViewUIComponent.hpp"
 #include "Components/MainMenuUIComponent.hpp"
 #include "Components/ConsoleUIComponent.hpp"
@@ -26,12 +29,14 @@ LRTR::UIManager::UIManager(
 		mCommandAllocator,
 		mCommandQueue, 2);
 
-	mUIComponents.insert({ "MainMenu", std::make_shared<MainMenuUIComponent>(mRuntimeSharing) });
-	mUIComponents.insert({ "View.Console", std::make_shared<ConsoleUIComponent>(mRuntimeSharing) });
-	mUIComponents.insert({ "View.Logging", std::make_shared<LoggingUIComponent>(mRuntimeSharing) });
-	mUIComponents.insert({ "View.Scene", std::make_shared<SceneViewUIComponent>(mRuntimeSharing) });
+	add("MainMenu", std::make_shared<MainMenuUIComponent>(mRuntimeSharing));
+	
+	add("View.Logging", std::make_shared<LoggingUIComponent>(mRuntimeSharing));
+	add("View.Manager", std::make_shared<ManagerUIComponent>(mRuntimeSharing));
+	add("View.Scene", std::make_shared<SceneViewUIComponent>(mRuntimeSharing));
 
-	for (const auto component : mUIComponents) mImGuiWindows->add(component.second->view());
+	add("Manager.SceneManager", std::make_shared<SceneManagerUIComponent>(mRuntimeSharing));
+	add("Manager.UIManager", std::make_shared<UIManagerUIComponent>(mRuntimeSharing));
 }
 
 void LRTR::UIManager::update(float delta)
@@ -53,6 +58,20 @@ auto LRTR::UIManager::render(const std::shared_ptr<CodeRed::GpuFrameBuffer>& fra
 	return mCommandList;
 }
 
+void LRTR::UIManager::add(const std::string& name, const std::shared_ptr<UIComponent>& component)
+{
+	mUIComponents.insert({ name, component });
+
+	mImGuiWindows->add(name, component->view());
+}
+
+void LRTR::UIManager::remove(const std::string& name)
+{
+	mUIComponents.erase(name);
+	
+	mImGuiWindows->remove(name);
+}
+
 void LRTR::UIManager::resize(const size_t width, const size_t height)
 {
 	mWidth = width;
@@ -69,7 +88,7 @@ auto LRTR::UIManager::height() const noexcept -> size_t
 	return mHeight;
 }
 
-auto LRTR::UIManager::components() const noexcept -> const StringGroup<std::shared_ptr<UIComponent>>&
+auto LRTR::UIManager::components() const noexcept -> const StringOrderGroup<std::shared_ptr<UIComponent>>&
 {
 	return mUIComponents;
 }

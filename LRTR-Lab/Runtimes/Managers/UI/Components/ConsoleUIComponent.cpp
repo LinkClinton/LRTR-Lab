@@ -16,6 +16,8 @@ void LRTR::ConsoleUIComponent::update()
 	if (mShow == false) return;
 	
 	ImGui::Begin("Console", &mShow);
+
+	mSize = ImGui::GetWindowSize();
 	
 	ImGui::End();
 }

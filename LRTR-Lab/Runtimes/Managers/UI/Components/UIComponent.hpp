@@ -20,13 +20,26 @@ namespace LRTR {
 
 		virtual void hide() noexcept { mShow = false; }
 
+		auto status() const noexcept -> bool { return mShow; }
+		
 		auto view() const noexcept -> std::shared_ptr<CodeRed::ImGuiView> { return mImGuiView; }
+
+		auto size() const noexcept -> ImVec2 { return mSize; }
 	protected:
 		bool mShow = true;
 
+		ImVec2 mSize;
+		
 		std::shared_ptr<CodeRed::ImGuiView> mImGuiView;
 
 		std::shared_ptr<RuntimeSharing> mRuntimeSharing;
 	};
 
+	class ContentUIComponent : public UIComponent {
+	public:
+		explicit ContentUIComponent(
+			const std::shared_ptr<RuntimeSharing>& sharing) : UIComponent(sharing) {}
+
+		virtual void content() {}
+	};
 }

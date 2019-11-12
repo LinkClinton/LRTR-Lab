@@ -9,6 +9,7 @@
 namespace LRTR {
 
 	class UIManager;
+	class SceneManager;
 	class LabApp;
 	
 	class RuntimeSharing : public Noncopyable {
@@ -17,6 +18,8 @@ namespace LRTR {
 
 		auto uiManager() const noexcept -> std::shared_ptr<UIManager>;
 
+		auto sceneManager() const noexcept -> std::shared_ptr<SceneManager>;
+		
 		auto device() const noexcept -> std::shared_ptr<CodeRed::GpuLogicalDevice>;
 	private:
 		LabApp* mLabApp;
