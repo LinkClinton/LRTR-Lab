@@ -25,7 +25,7 @@ void LRTR::LoggingUIComponent::update()
 	
 	ImGui::Begin("Logging", &mShow, imGuiWindowFlags);
 
-	const auto managerWidth = mRuntimeSharing->uiManager()->components().at("View.Manager")->size().x;
+	const auto managerWidth = mRuntimeSharing->uiManager()->components().at("View.Shape")->size().x;
 	
 	//current version of logging window, we do not save the position and the size
 	//when we run the program, the size and position of logging window will be reset.

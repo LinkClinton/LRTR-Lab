@@ -25,7 +25,7 @@ void LRTR::SceneViewUIComponent::update()
 
 	ImGui::Begin("Scene", &mShow, imGuiWindowFlags);
 
-	const auto managerWidth = mRuntimeSharing->uiManager()->components().at("View.Manager")->size().x;
+	const auto managerWidth = mRuntimeSharing->uiManager()->components().at("View.Shape")->size().x;
 	const auto mainMenuHeight = mRuntimeSharing->uiManager()->components().at("MainMenu")->size().y;
 	const auto loggingHeight = mRuntimeSharing->uiManager()->components().at("View.Logging")->size().y;
 	

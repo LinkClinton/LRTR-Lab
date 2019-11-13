@@ -13,7 +13,7 @@ namespace LRTR {
 	private:
 		void update();
 	private:
-		using Menu = StringGroup<std::string>;
+		using Menu = StringOrderGroup<std::string>;
 
 		StringGroup<Menu> mWindowMenus;
 	};

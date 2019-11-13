@@ -14,7 +14,7 @@ LRTR::Scene::Scene(
 auto LRTR::Scene::generate(
 	const std::shared_ptr<CodeRed::GpuTexture>& texture,
 	const std::shared_ptr<SceneCamera>& camera)
-	-> std::shared_ptr<CodeRed::GpuGraphicsCommandList>
+	-> std::vector<std::shared_ptr<CodeRed::GpuGraphicsCommandList>>
 {
 	setTarget(texture);
 
@@ -27,7 +27,7 @@ auto LRTR::Scene::generate(
 	
 	mCommandList->endRecording();
 
-	return mCommandList;
+	return { mCommandList };
 }
 
 auto LRTR::Scene::cameras() noexcept -> StringGroup<std::shared_ptr<SceneCamera>>& 

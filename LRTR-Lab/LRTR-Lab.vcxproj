@@ -180,6 +180,7 @@
     <ClCompile Include="Runtimes\Managers\UI\Components\Managers\ManagerUIComponent.cpp" />
     <ClCompile Include="Runtimes\Managers\UI\Components\Managers\SceneManagerUIComponent.cpp" />
     <ClCompile Include="Runtimes\Managers\UI\Components\Managers\UIManagerUIComponent.cpp" />
+    <ClCompile Include="Runtimes\Managers\UI\Components\SceneShapeUIComponent.cpp" />
     <ClCompile Include="Runtimes\Managers\UI\Components\SceneViewUIComponent.cpp" />
     <ClCompile Include="Runtimes\Managers\UI\UIManager.cpp" />
     <ClCompile Include="Runtimes\RuntimeSharing.cpp" />
@@ -208,6 +209,7 @@
     <ClInclude Include="Runtimes\Managers\UI\Components\Managers\ManagerUIComponent.hpp" />
     <ClInclude Include="Runtimes\Managers\UI\Components\Managers\SceneManagerUIComponent.hpp" />
     <ClInclude Include="Runtimes\Managers\UI\Components\Managers\UIManagerUIComponent.hpp" />
+    <ClInclude Include="Runtimes\Managers\UI\Components\SceneShapeUIComponent.hpp" />
     <ClInclude Include="Runtimes\Managers\UI\Components\SceneViewUIComponent.hpp" />
     <ClInclude Include="Runtimes\Managers\UI\Components\UIComponent.hpp" />
     <ClInclude Include="Runtimes\Managers\UI\UIManager.hpp" />

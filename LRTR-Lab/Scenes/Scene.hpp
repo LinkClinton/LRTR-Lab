@@ -24,7 +24,7 @@ namespace LRTR {
 		auto generate(
 			const std::shared_ptr<CodeRed::GpuTexture>& texture,
 			const std::shared_ptr<SceneCamera>& camera)
-			-> std::shared_ptr<CodeRed::GpuGraphicsCommandList>;
+			-> std::vector<std::shared_ptr<CodeRed::GpuGraphicsCommandList>>;
 		
 		auto cameras() noexcept -> StringGroup<std::shared_ptr<SceneCamera>>&;
 

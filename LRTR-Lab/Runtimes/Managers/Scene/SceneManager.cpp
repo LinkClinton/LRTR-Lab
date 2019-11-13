@@ -13,35 +13,19 @@ LRTR::SceneManager::SceneManager(
 	Manager(sharing), mDevice(device), mCommandAllocator(allocator)
 {
 	mCommandList = mDevice->createGraphicsCommandList(mCommandAllocator);
-	
-	add(std::make_shared<Scene>("scene0", mRuntimeSharing->device()));
-	add(std::make_shared<Scene>("scene1", mRuntimeSharing->device()));
-	add(std::make_shared<Scene>("scene2", mRuntimeSharing->device()));
-	add(std::make_shared<Scene>("scene3", mRuntimeSharing->device()));
-	add(std::make_shared<Scene>("scene4", mRuntimeSharing->device()));
 }
 
 void LRTR::SceneManager::update(float delta)
 {
 }
 
-auto LRTR::SceneManager::render(float delta) -> std::shared_ptr<CodeRed::GpuGraphicsCommandList>
+auto LRTR::SceneManager::render(float delta) ->
+	std::vector<std::shared_ptr<CodeRed::GpuGraphicsCommandList>>
 {
-	const auto sceneName = std::static_pointer_cast<SceneManagerUIComponent>(
-		mRuntimeSharing->uiManager()->components().at("Manager.SceneManager"))->selected();
-
 	const auto sceneTexture = std::static_pointer_cast<SceneViewUIComponent>(
 		mRuntimeSharing->uiManager()->components().at("View.Scene"))->sceneTexture();
 
-	if (sceneTexture == nullptr || mScenes.find(sceneName) == mScenes.end()) {
-		mCommandList->beginRecording();
-
-		mCommandList->endRecording();
-
-		return mCommandList;
-	}
-	
-	return mScenes[sceneName]->generate(sceneTexture, nullptr);
+	return {};
 }
 
 void LRTR::SceneManager::add(const std::shared_ptr<Scene>& scene)

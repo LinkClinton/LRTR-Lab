@@ -9,14 +9,15 @@ LRTR::MainMenuUIComponent::MainMenuUIComponent(const std::shared_ptr<RuntimeShar
 		std::bind(&MainMenuUIComponent::update, this));
 
 	mWindowMenus.insert({ "View", Menu() });
-	mWindowMenus.insert({ "Manager",Menu() });
+	//mWindowMenus.insert({ "Manager",Menu() });
 
 	mWindowMenus["View"].insert({ "Logging", "View.Logging" });
-	mWindowMenus["View"].insert({ "Manager", "View.Manager" });
 	mWindowMenus["View"].insert({ "Scene", "View.Scene" });
+	mWindowMenus["View"].insert({ "Shape", "View.Shape" });
+	//mWindowMenus["View"].insert({ "Manager", "View.Manager" });
 
-	mWindowMenus["Manager"].insert({ "Scene", "Manager.SceneManager" });
-	mWindowMenus["Manager"].insert({ "UI","Manager.UIManager" });
+	//mWindowMenus["Manager"].insert({ "Scene", "Manager.SceneManager" });
+	//mWindowMenus["Manager"].insert({ "UI","Manager.UIManager" });
 }
 
 void LRTR::MainMenuUIComponent::update()

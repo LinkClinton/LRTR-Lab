@@ -3,6 +3,7 @@
 #include "Components/Managers/SceneManagerUIComponent.hpp"
 #include "Components/Managers/UIManagerUIComponent.hpp"
 #include "Components/Managers/ManagerUIComponent.hpp"
+#include "Components/SceneShapeUIComponent.hpp"
 #include "Components/SceneViewUIComponent.hpp"
 #include "Components/MainMenuUIComponent.hpp"
 #include "Components/ConsoleUIComponent.hpp"
@@ -32,11 +33,12 @@ LRTR::UIManager::UIManager(
 	add("MainMenu", std::make_shared<MainMenuUIComponent>(mRuntimeSharing));
 	
 	add("View.Logging", std::make_shared<LoggingUIComponent>(mRuntimeSharing));
-	add("View.Manager", std::make_shared<ManagerUIComponent>(mRuntimeSharing));
 	add("View.Scene", std::make_shared<SceneViewUIComponent>(mRuntimeSharing));
-
-	add("Manager.SceneManager", std::make_shared<SceneManagerUIComponent>(mRuntimeSharing));
-	add("Manager.UIManager", std::make_shared<UIManagerUIComponent>(mRuntimeSharing));
+	add("View.Shape", std::make_shared<SceneShapeUIComponent>(mRuntimeSharing));
+	
+	//add("View.Manager", std::make_shared<ManagerUIComponent>(mRuntimeSharing));
+	//add("Manager.SceneManager", std::make_shared<SceneManagerUIComponent>(mRuntimeSharing));
+	//add("Manager.UIManager", std::make_shared<UIManagerUIComponent>(mRuntimeSharing));
 }
 
 void LRTR::UIManager::update(float delta)

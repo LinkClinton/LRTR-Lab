@@ -18,7 +18,8 @@ namespace LRTR {
 
 		void update(float delta) override;
 
-		auto render(float delta) -> std::shared_ptr<CodeRed::GpuGraphicsCommandList>;
+		auto render(float delta) ->
+			std::vector<std::shared_ptr<CodeRed::GpuGraphicsCommandList>>;
 			
 		void add(
 			const std::shared_ptr<Scene>& scene);

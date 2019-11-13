@@ -179,9 +179,8 @@ void LRTR::LabApp::render(float delta)
 	mCommandQueue->waitIdle();
 	mCommandAllocator->reset();
 
-	auto commandLists = std::vector<std::shared_ptr<CodeRed::GpuGraphicsCommandList>>();
+	auto commandLists = mSceneManager->render(delta);
 
-	commandLists.push_back(mSceneManager->render(delta));
 	commandLists.push_back(mUIManager->render(mFrameBuffers[mCurrentFrameIndex], delta));
 
 	mCommandQueue->execute(commandLists);
