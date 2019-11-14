@@ -58,7 +58,7 @@ void LRTR::SceneViewUIComponent::update()
 
 	ImGui::Image(mSceneTexture.get(), contentSize);
 
-	mSize = ImGui::GetWindowSize();
+	updateProperties();
 	
 	ImGui::End();
 }

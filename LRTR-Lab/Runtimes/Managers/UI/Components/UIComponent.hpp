@@ -25,9 +25,18 @@ namespace LRTR {
 		auto view() const noexcept -> std::shared_ptr<CodeRed::ImGuiView> { return mImGuiView; }
 
 		auto size() const noexcept -> ImVec2 { return mSize; }
+
+		auto position() const noexcept -> ImVec2 { return mPosition; }
+	protected:
+		virtual void updateProperties()
+		{
+			mPosition = ImGui::GetWindowPos();
+			mSize = ImGui::GetWindowSize();
+		}
 	protected:
 		bool mShow = true;
 
+		ImVec2 mPosition;
 		ImVec2 mSize;
 		
 		std::shared_ptr<CodeRed::ImGuiView> mImGuiView;

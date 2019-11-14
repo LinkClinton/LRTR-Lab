@@ -69,7 +69,7 @@ void LRTR::ManagerUIComponent::update()
 		ImGui::EndTabBar();
 	}
 	
-	mSize = ImGui::GetWindowSize();
+	updateProperties();
 	
 	ImGui::End();
 }

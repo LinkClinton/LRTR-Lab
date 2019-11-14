@@ -1,10 +1,8 @@
 #include "UIManager.hpp"
 
-#include "Components/Managers/SceneManagerUIComponent.hpp"
-#include "Components/Managers/UIManagerUIComponent.hpp"
-#include "Components/Managers/ManagerUIComponent.hpp"
 #include "Components/SceneShapeUIComponent.hpp"
 #include "Components/SceneViewUIComponent.hpp"
+#include "Components/PropertyUIComponent.hpp"
 #include "Components/MainMenuUIComponent.hpp"
 #include "Components/ConsoleUIComponent.hpp"
 #include "Components/LoggingUIComponent.hpp"
@@ -31,7 +29,8 @@ LRTR::UIManager::UIManager(
 		mCommandQueue, 2);
 
 	add("MainMenu", std::make_shared<MainMenuUIComponent>(mRuntimeSharing));
-	
+
+	add("View.Property", std::make_shared<PropertyUIComponent>(mRuntimeSharing));
 	add("View.Logging", std::make_shared<LoggingUIComponent>(mRuntimeSharing));
 	add("View.Scene", std::make_shared<SceneViewUIComponent>(mRuntimeSharing));
 	add("View.Shape", std::make_shared<SceneShapeUIComponent>(mRuntimeSharing));

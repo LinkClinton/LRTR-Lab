@@ -12,10 +12,18 @@ namespace LRTR {
 		~MainMenuUIComponent() = default;
 	private:
 		void update();
-	private:
-		using Menu = StringOrderGroup<std::string>;
 
-		StringGroup<Menu> mWindowMenus;
+		auto nameIndex(const std::string& name) const -> size_t;
+
+		void initializeWindowsMenus();
+	private:
+		using Component = std::pair<std::string, std::string>;
+		using Components = std::vector<Component>;
+		using Menu = std::pair<std::string, Components>;
+
+		StringGroup<size_t> mNameIndices;
+		
+		std::vector<Menu> mWindowMenus;
 	};
 
 }

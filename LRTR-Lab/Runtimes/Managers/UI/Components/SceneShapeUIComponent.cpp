@@ -23,16 +23,16 @@ void LRTR::SceneShapeUIComponent::update()
 	const auto mainMenuHeight = mRuntimeSharing->uiManager()->components().at("MainMenu")->size().y;
 
 	ImGui::SetWindowSize(ImVec2(
-		mRuntimeSharing->uiManager()->width() * 0.2f,
-		mRuntimeSharing->uiManager()->height() * 1.0f - mainMenuHeight
+		mRuntimeSharing->uiManager()->width() * 0.20f,
+		mRuntimeSharing->uiManager()->height() * (1.0f - 0.6f) - mainMenuHeight
 	));
 
 	ImGui::SetWindowPos(ImVec2(
-		mRuntimeSharing->uiManager()->width() * (1.0f - 0.2f),
+		mRuntimeSharing->uiManager()->width() * (1.0f - 0.20f),
 		mainMenuHeight
 	));
-	
-	mSize = ImGui::GetWindowSize();
+
+	updateProperties();
 	
 	ImGui::End();
 }

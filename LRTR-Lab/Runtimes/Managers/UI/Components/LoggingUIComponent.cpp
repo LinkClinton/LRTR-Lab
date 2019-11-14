@@ -51,7 +51,7 @@ void LRTR::LoggingUIComponent::update()
 	
 	ImGui::EndChild();
 
-	mSize = ImGui::GetWindowSize();
+	updateProperties();
 	
 	ImGui::End();
 }

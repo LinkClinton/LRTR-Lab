@@ -47,6 +47,9 @@
     <ClCompile Include="Runtimes\Managers\UI\Components\SceneShapeUIComponent.cpp">
       <Filter>Runtimes\Managers\UI\Components</Filter>
     </ClCompile>
+    <ClCompile Include="Runtimes\Managers\UI\Components\PropertyUIComponent.cpp">
+      <Filter>Runtimes\Managers\UI\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scenes">
@@ -181,6 +184,9 @@
       <Filter>Runtimes\Managers\UI\Components\Managers</Filter>
     </ClInclude>
     <ClInclude Include="Runtimes\Managers\UI\Components\SceneShapeUIComponent.hpp">
+      <Filter>Runtimes\Managers\UI\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Runtimes\Managers\UI\Components\PropertyUIComponent.hpp">
       <Filter>Runtimes\Managers\UI\Components</Filter>
     </ClInclude>
   </ItemGroup>
