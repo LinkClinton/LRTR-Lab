@@ -5,7 +5,7 @@
 LRTR::Transform::Transform(const Matrix4x4f& transform) :
 	mTransform(transform), mInverse(glm::inverse(mTransform))
 {
-	
+
 }
 
 LRTR::Transform::Transform(const Matrix4x4f& transform, const Matrix4x4f& inverse) :
@@ -63,4 +63,9 @@ auto LRTR::Transform::lookAt(const Vector3f& eye, const Vector3f& at, const Vect
 auto LRTR::Transform::perspectiveFov(Real fovy, Real width, Real height, Real zNear, Real zFar) -> Transform
 {
 	return Transform(glm::perspectiveFovLH(fovy, width, height, zNear, zFar));
+}
+
+void LRTR::Transform::onProperty()
+{
+	//ImGui Property
 }

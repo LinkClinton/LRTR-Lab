@@ -5,6 +5,7 @@
 #include "../Shared/Accelerators/Group.hpp"
 #include "../Core/Noncopyable.hpp"
 #include "Cameras/Camera.hpp"
+#include "Shape.hpp"
 
 #include <unordered_map>
 #include <memory>
@@ -21,14 +22,21 @@ namespace LRTR {
 
 		virtual ~Scene() = default;
 
+		void add(
+			const std::string& name,
+			const std::shared_ptr<Shape>& shape);
+
+		void remove(
+			const std::string& name);
+		
 		auto generate(
 			const std::shared_ptr<CodeRed::GpuTexture>& texture,
 			const std::shared_ptr<SceneCamera>& camera)
 			-> std::vector<std::shared_ptr<CodeRed::GpuGraphicsCommandList>>;
-		
-		auto cameras() noexcept -> StringGroup<std::shared_ptr<SceneCamera>>&;
-
+	
 		auto name() const noexcept -> std::string;
+
+		auto shapes() const noexcept -> const StringGroup<std::shared_ptr<Shape>>&;
 	private:
 		virtual void update(float delta);
 		
@@ -43,8 +51,8 @@ namespace LRTR {
 		
 		std::shared_ptr<CodeRed::GpuFrameBuffer> mFrameBuffer;
 		std::shared_ptr<CodeRed::GpuRenderPass> mRenderPass;
-		
-		StringGroup<std::shared_ptr<SceneCamera>> mCameras;
+
+		StringGroup<std::shared_ptr<Shape>> mShapes;
 	};
 	
 }

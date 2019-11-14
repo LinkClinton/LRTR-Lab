@@ -13,8 +13,7 @@ namespace LRTR {
 	public:
 		explicit SceneManager(
 			const std::shared_ptr<RuntimeSharing>& sharing,
-			const std::shared_ptr<CodeRed::GpuLogicalDevice>& device,
-			const std::shared_ptr<CodeRed::GpuCommandAllocator>& allocator);
+			const std::shared_ptr<CodeRed::GpuLogicalDevice>& device);
 
 		void update(float delta) override;
 
@@ -29,9 +28,6 @@ namespace LRTR {
 		auto scenes() const noexcept -> const StringGroup<std::shared_ptr<Scene>>&;
 	private:
 		std::shared_ptr<CodeRed::GpuLogicalDevice> mDevice;
-
-		std::shared_ptr<CodeRed::GpuCommandAllocator> mCommandAllocator;
-		std::shared_ptr<CodeRed::GpuGraphicsCommandList> mCommandList;
 		
 		StringGroup<std::shared_ptr<Scene>> mScenes;
 	};

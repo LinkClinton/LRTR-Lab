@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../../../../Core/Propertyable.hpp"
+
 #include "UIComponent.hpp"
 
 namespace LRTR {
@@ -9,8 +11,12 @@ namespace LRTR {
 		explicit PropertyUIComponent(const std::shared_ptr<RuntimeSharing>& sharing);
 
 		~PropertyUIComponent() = default;
+
+		void showProperty(const std::shared_ptr<Propertyable>& property);
 	private:
 		void update();
+	private:
+		std::weak_ptr<Propertyable> mProperty;
 	};
 	
 }

@@ -25,17 +25,18 @@ void LRTR::LoggingUIComponent::update()
 	
 	ImGui::Begin("Logging", &mShow, imGuiWindowFlags);
 
-	const auto managerWidth = mRuntimeSharing->uiManager()->components().at("View.Shape")->size().x;
+	const auto sceneViewPosition = mRuntimeSharing->uiManager()->components().at("View.Scene")->position();
+	const auto sceneViewSize = mRuntimeSharing->uiManager()->components().at("View.Scene")->size();
 	
 	//current version of logging window, we do not save the position and the size
 	//when we run the program, the size and position of logging window will be reset.
 	ImGui::SetWindowSize(ImVec2(
-		mRuntimeSharing->uiManager()->width() * 1.0f - managerWidth,
-		mRuntimeSharing->uiManager()->height() * 0.25f));
+		sceneViewSize.x,
+		mRuntimeSharing->uiManager()->height() - sceneViewPosition.y - sceneViewSize.y));
 
 	ImGui::SetWindowPos(ImVec2(
-		0, 
-		mRuntimeSharing->uiManager()->height() * (1.0f - 0.25f)));
+		0,
+		sceneViewPosition.y + sceneViewSize.y));
 	
 	ImGui::BeginChild("View.Logging.Scroll");
 

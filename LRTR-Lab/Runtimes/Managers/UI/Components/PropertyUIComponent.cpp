@@ -9,10 +9,13 @@ LRTR::PropertyUIComponent::PropertyUIComponent(const std::shared_ptr<RuntimeShar
 		std::bind(&PropertyUIComponent::update, this));
 }
 
+void LRTR::PropertyUIComponent::showProperty(const std::shared_ptr<Propertyable>& property)
+{
+	mProperty = property;
+}
+
 void LRTR::PropertyUIComponent::update()
 {
-	if (mShow == false) return;
-
 	if (mShow == false) return;
 
 	static auto imGuiWindowFlags =
@@ -35,6 +38,9 @@ void LRTR::PropertyUIComponent::update()
 		sceneShapePosition.y + sceneShapeSize.y
 	));
 
+	//when the property is not expired, we will show the property
+	if (!mProperty.expired()) mProperty.lock()->onProperty();
+	
 	updateProperties();
 
 	ImGui::End();

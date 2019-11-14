@@ -28,16 +28,16 @@ LRTR::UIManager::UIManager(
 		mCommandAllocator,
 		mCommandQueue, 2);
 
-	add("MainMenu", std::make_shared<MainMenuUIComponent>(mRuntimeSharing));
+	addComponent("MainMenu", std::make_shared<MainMenuUIComponent>(mRuntimeSharing));
 
-	add("View.Property", std::make_shared<PropertyUIComponent>(mRuntimeSharing));
-	add("View.Logging", std::make_shared<LoggingUIComponent>(mRuntimeSharing));
-	add("View.Scene", std::make_shared<SceneViewUIComponent>(mRuntimeSharing));
-	add("View.Shape", std::make_shared<SceneShapeUIComponent>(mRuntimeSharing));
+	addComponent("View.Property", std::make_shared<PropertyUIComponent>(mRuntimeSharing));
+	addComponent("View.Logging", std::make_shared<LoggingUIComponent>(mRuntimeSharing));
+	addComponent("View.Scene", std::make_shared<SceneViewUIComponent>(mRuntimeSharing));
+	addComponent("View.Shape", std::make_shared<SceneShapeUIComponent>(mRuntimeSharing));
 	
-	//add("View.Manager", std::make_shared<ManagerUIComponent>(mRuntimeSharing));
-	//add("Manager.SceneManager", std::make_shared<SceneManagerUIComponent>(mRuntimeSharing));
-	//add("Manager.UIManager", std::make_shared<UIManagerUIComponent>(mRuntimeSharing));
+	//addComponent("View.Manager", std::make_shared<ManagerUIComponent>(mRuntimeSharing));
+	//addComponent("Manager.SceneManager", std::make_shared<SceneManagerUIComponent>(mRuntimeSharing));
+	//addComponent("Manager.UIManager", std::make_shared<UIManagerUIComponent>(mRuntimeSharing));
 }
 
 void LRTR::UIManager::update(float delta)
@@ -59,14 +59,14 @@ auto LRTR::UIManager::render(const std::shared_ptr<CodeRed::GpuFrameBuffer>& fra
 	return mCommandList;
 }
 
-void LRTR::UIManager::add(const std::string& name, const std::shared_ptr<UIComponent>& component)
+void LRTR::UIManager::addComponent(const std::string& name, const std::shared_ptr<UIComponent>& component)
 {
 	mUIComponents.insert({ name, component });
 
 	mImGuiWindows->add(name, component->view());
 }
 
-void LRTR::UIManager::remove(const std::string& name)
+void LRTR::UIManager::removeComponent(const std::string& name)
 {
 	mUIComponents.erase(name);
 	

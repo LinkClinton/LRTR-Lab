@@ -11,6 +11,16 @@ LRTR::Scene::Scene(
 	mCommandList = mDevice->createGraphicsCommandList(mCommandAllocator);
 }
 
+void LRTR::Scene::add(const std::string& name, const std::shared_ptr<Shape>& shape)
+{
+	mShapes.insert({ name, shape });
+}
+
+void LRTR::Scene::remove(const std::string& name)
+{
+	mShapes.erase(name);
+}
+
 auto LRTR::Scene::generate(
 	const std::shared_ptr<CodeRed::GpuTexture>& texture,
 	const std::shared_ptr<SceneCamera>& camera)
@@ -30,14 +40,14 @@ auto LRTR::Scene::generate(
 	return { mCommandList };
 }
 
-auto LRTR::Scene::cameras() noexcept -> StringGroup<std::shared_ptr<SceneCamera>>& 
-{
-	return mCameras;
-}
-
 auto LRTR::Scene::name() const noexcept -> std::string
 {
 	return mName;
+}
+
+auto LRTR::Scene::shapes() const noexcept -> const StringGroup<std::shared_ptr<Shape>>& 
+{
+	return mShapes;
 }
 
 void LRTR::Scene::update(float delta)

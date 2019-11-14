@@ -2,9 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Scenes\Transform.cpp">
-      <Filter>Scenes</Filter>
-    </ClCompile>
     <ClCompile Include="Runtimes\LabApp.cpp">
       <Filter>Runtimes</Filter>
     </ClCompile>
@@ -50,6 +47,18 @@
     <ClCompile Include="Runtimes\Managers\UI\Components\PropertyUIComponent.cpp">
       <Filter>Runtimes\Managers\UI\Components</Filter>
     </ClCompile>
+    <ClCompile Include="Scenes\Shape.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Component.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Runtimes\Runtime.cpp">
+      <Filter>Runtimes</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Components\Transform.cpp">
+      <Filter>Scenes\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scenes">
@@ -69,9 +78,6 @@
     </Filter>
     <Filter Include="Scenes\Cameras">
       <UniqueIdentifier>{1260d6db-af74-48ff-b42d-226ec593fd03}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scenes\Shapes">
-      <UniqueIdentifier>{79028bfc-97a0-4288-befb-c4c592cbf04d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Shared">
       <UniqueIdentifier>{a21ae1f7-e693-4649-ab5b-256eab2bacb1}</UniqueIdentifier>
@@ -106,11 +112,11 @@
     <Filter Include="Runtimes\Managers\UI\Components\Managers">
       <UniqueIdentifier>{36e2ea5c-6793-4389-9307-3230df09e738}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scenes\Components">
+      <UniqueIdentifier>{162c5cd1-620b-4dfe-a598-915ca4f88db0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Scenes\Transform.hpp">
-      <Filter>Scenes</Filter>
-    </ClInclude>
     <ClInclude Include="Runtimes\LabApp.hpp">
       <Filter>Runtimes</Filter>
     </ClInclude>
@@ -122,9 +128,6 @@
     </ClInclude>
     <ClInclude Include="Core\Noncopyable.hpp">
       <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Scenes\Cameras\Camera.hpp">
-      <Filter>Scenes\Cameras</Filter>
     </ClInclude>
     <ClInclude Include="Scenes\Scene.hpp">
       <Filter>Scenes</Filter>
@@ -188,6 +191,27 @@
     </ClInclude>
     <ClInclude Include="Runtimes\Managers\UI\Components\PropertyUIComponent.hpp">
       <Filter>Runtimes\Managers\UI\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Shape.hpp">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Component.hpp">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Propertyable.hpp">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Runtimes\Runtime.hpp">
+      <Filter>Runtimes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Components\Transform.hpp">
+      <Filter>Scenes\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Cameras\Camera.hpp">
+      <Filter>Scenes\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\TypeInfo.hpp">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

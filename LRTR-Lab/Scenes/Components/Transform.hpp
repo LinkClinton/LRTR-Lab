@@ -1,14 +1,17 @@
-#include "../Shared/Math/Math.hpp"
+#pragma once
+
+#include "../../Shared/Math/Math.hpp"
+#include "../Component.hpp"
 
 namespace LRTR {
 
-	class Transform {
+	class Transform : public Component {
 	public:
 		Transform() = default;
 
-		Transform(const Matrix4x4f& transform);
+		explicit Transform(const Matrix4x4f& transform);
 
-		Transform(const Matrix4x4f& transform, const Matrix4x4f& inverse);
+		explicit Transform(const Matrix4x4f& transform, const Matrix4x4f& inverse);
 
 		Transform& operator*(const Transform& right);
 
@@ -21,19 +24,21 @@ namespace LRTR {
 		template<typename T>
 		Vector4<T> operator()(const Vector4<T>& vector) const;
 
-		auto matrix() const noexcept -> Matrix4x4f;
+		auto matrix() const noexcept->Matrix4x4f;
 
-		static auto inverse(const Transform& transform) -> Transform;
+		static auto inverse(const Transform& transform)->Transform;
 
-		static auto translate(const Vector3f& delta) -> Transform;
+		static auto translate(const Vector3f& delta)->Transform;
 
-		static auto rotate(Real angle, const Vector3f& axis) -> Transform;
+		static auto rotate(Real angle, const Vector3f& axis)->Transform;
 
-		static auto scale(const Vector3f& value) -> Transform;
+		static auto scale(const Vector3f& value)->Transform;
 
-		static auto lookAt(const Vector3f& eye, const Vector3f& at, const Vector3f& up) -> Transform;
+		static auto lookAt(const Vector3f& eye, const Vector3f& at, const Vector3f& up)->Transform;
 
-		static auto perspectiveFov(Real fovy, Real width, Real height, Real zNear, Real zFar) -> Transform;
+		static auto perspectiveFov(Real fovy, Real width, Real height, Real zNear, Real zFar)->Transform;
+	protected:
+		void onProperty() override;
 	private:
 		Matrix4x4f mTransform = Matrix4x4f(1);
 		Matrix4x4f mInverse = Matrix4x4f(1);

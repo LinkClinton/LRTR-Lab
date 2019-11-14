@@ -242,8 +242,7 @@ void LRTR::LabApp::initializeSceneManager()
 
 	mSceneManager = std::make_shared<SceneManager>(
 		mRuntimeSharing,
-		mDevice,
-		mCommandAllocator);
+		mDevice);
 }
 
 void LRTR::LabApp::initializeUIManager()

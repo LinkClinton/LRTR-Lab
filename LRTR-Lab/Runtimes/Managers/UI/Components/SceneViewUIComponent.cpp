@@ -25,13 +25,11 @@ void LRTR::SceneViewUIComponent::update()
 
 	ImGui::Begin("Scene", &mShow, imGuiWindowFlags);
 
-	const auto managerWidth = mRuntimeSharing->uiManager()->components().at("View.Shape")->size().x;
 	const auto mainMenuHeight = mRuntimeSharing->uiManager()->components().at("MainMenu")->size().y;
-	const auto loggingHeight = mRuntimeSharing->uiManager()->components().at("View.Logging")->size().y;
 	
 	ImGui::SetWindowSize(ImVec2(
-		mRuntimeSharing->uiManager()->width() - managerWidth,
-		mRuntimeSharing->uiManager()->height() - mainMenuHeight - loggingHeight
+		mRuntimeSharing->uiManager()->width() * 0.8f,
+		mRuntimeSharing->uiManager()->height() * 0.8f
 	));
 
 	ImGui::SetWindowPos(ImVec2(
@@ -53,7 +51,7 @@ void LRTR::SceneViewUIComponent::update()
 				static_cast<size_t>(contentSize.x),
 				static_cast<size_t>(contentSize.y),
 				CodeRed::PixelFormat::RedGreenBlueAlpha8BitUnknown,
-				CodeRed::ClearValue(1, 0, 0, 1)));
+				CodeRed::ClearValue(0.227450f, 0.227450f, 0.227450f, 1)));
 	}
 
 	ImGui::Image(mSceneTexture.get(), contentSize);

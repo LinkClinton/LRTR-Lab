@@ -11,6 +11,8 @@ namespace LRTR {
 		~SceneShapeUIComponent() = default;
 	private:
 		void update();
+	private:
+		std::string mSelected;
 	};
 	
 }

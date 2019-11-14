@@ -184,9 +184,12 @@
     <ClCompile Include="Runtimes\Managers\UI\Components\SceneShapeUIComponent.cpp" />
     <ClCompile Include="Runtimes\Managers\UI\Components\SceneViewUIComponent.cpp" />
     <ClCompile Include="Runtimes\Managers\UI\UIManager.cpp" />
+    <ClCompile Include="Runtimes\Runtime.cpp" />
     <ClCompile Include="Runtimes\RuntimeSharing.cpp" />
+    <ClCompile Include="Scenes\Component.cpp" />
+    <ClCompile Include="Scenes\Components\Transform.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
-    <ClCompile Include="Scenes\Transform.cpp" />
+    <ClCompile Include="Scenes\Shape.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\References\Code-Red\CodeRed\CodeRed.vcxproj">
@@ -199,6 +202,8 @@
   <ItemGroup>
     <ClInclude Include="Core\Logging.hpp" />
     <ClInclude Include="Core\Noncopyable.hpp" />
+    <ClInclude Include="Core\Propertyable.hpp" />
+    <ClInclude Include="Core\TypeInfo.hpp" />
     <ClInclude Include="Extensions\ImGui\imgui_impl_win32.hpp" />
     <ClInclude Include="Extensions\SpdLog\SinkStorage.hpp" />
     <ClInclude Include="Runtimes\LabApp.hpp" />
@@ -215,10 +220,13 @@
     <ClInclude Include="Runtimes\Managers\UI\Components\SceneViewUIComponent.hpp" />
     <ClInclude Include="Runtimes\Managers\UI\Components\UIComponent.hpp" />
     <ClInclude Include="Runtimes\Managers\UI\UIManager.hpp" />
+    <ClInclude Include="Runtimes\Runtime.hpp" />
     <ClInclude Include="Runtimes\RuntimeSharing.hpp" />
     <ClInclude Include="Scenes\Cameras\Camera.hpp" />
+    <ClInclude Include="Scenes\Component.hpp" />
+    <ClInclude Include="Scenes\Components\Transform.hpp" />
     <ClInclude Include="Scenes\Scene.hpp" />
-    <ClInclude Include="Scenes\Transform.hpp" />
+    <ClInclude Include="Scenes\Shape.hpp" />
     <ClInclude Include="Shared\Accelerators\Group.hpp" />
     <ClInclude Include="Shared\Color.hpp" />
     <ClInclude Include="Shared\Math\Math.hpp" />

@@ -26,11 +26,11 @@ namespace LRTR {
 			const std::shared_ptr<CodeRed::GpuFrameBuffer>& frameBuffer, float delta)
 			-> std::shared_ptr<CodeRed::GpuGraphicsCommandList>;
 
-		void add(
+		void addComponent(
 			const std::string& name,
 			const std::shared_ptr<UIComponent>& component);
 
-		void remove(const std::string& name);
+		void removeComponent(const std::string& name);
 		
 		void resize(const size_t width, const size_t height);
 
