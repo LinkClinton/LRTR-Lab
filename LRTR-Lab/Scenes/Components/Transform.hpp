@@ -26,6 +26,10 @@ namespace LRTR {
 
 		auto matrix() const noexcept->Matrix4x4f;
 
+		auto typeName() const noexcept -> std::string override;
+
+		auto typeIndex() const noexcept -> std::type_index override;
+		
 		static auto inverse(const Transform& transform)->Transform;
 
 		static auto translate(const Vector3f& delta)->Transform;

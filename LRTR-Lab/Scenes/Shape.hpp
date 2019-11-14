@@ -8,7 +8,7 @@
 
 namespace LRTR {
 
-	class Shape : public Noncopyable, public Propertyable {
+	class Shape : public Noncopyable, public Propertyable, public TypeInfo {
 	public:
 		Shape() = default;
 
@@ -25,22 +25,12 @@ namespace LRTR {
 
 		auto components() const -> const Group<std::type_index, std::shared_ptr<Component>>&;
 
-		template<typename TShape>
-		static auto name() -> std::string;
+		auto typeName() const noexcept -> std::string override;
 
-		static auto name(const std::type_index& index) -> std::string;
-
-		template<typename TShape>
-		static void rename(const std::string& name);
+		auto typeIndex() const noexcept -> std::type_index override;
 	protected:
 		void onProperty() override;
 	private:
-		friend class Runtime;
-		
-		static inline Group<std::type_index, std::string> mTypeName;
-
-		static void initialize();
-		
 		Group<std::type_index, std::shared_ptr<Component>> mComponents;
 		Group<std::type_index, size_t> mComponentsIndex;
 	};
@@ -74,28 +64,6 @@ namespace LRTR {
 		static_assert(IsComponent<TComponent>::value, "The Component should be based of Component.");
 
 		return mComponents.at(typeid(TComponent));
-	}
-
-	template <typename TShape>
-	auto Shape::name() -> std::string
-	{
-		static_assert(IsShape<TShape>::value, "The Type should be base of Shape.");
-
-		if (mTypeName.find(typeid(TShape)) == mTypeName.end()) {
-			LRTR_WARNING("the name of Shape is not set, we will return Unknown.");
-
-			return "Unknown";
-		}
-
-		return mTypeName.at(typeid(TShape));
-	}
-
-	template <typename TShape>
-	void Shape::rename(const std::string& name)
-	{
-		static_assert(IsShape<TShape>::value, "The Type should be base of Shape.");
-
-		mTypeName[typeid(TShape)] = name;
 	}
 
 }

@@ -27,6 +27,16 @@ auto LRTR::Transform::matrix() const noexcept -> Matrix4x4f
 	return mTransform;
 }
 
+auto LRTR::Transform::typeName() const noexcept -> std::string
+{
+	return "Transform";
+}
+
+auto LRTR::Transform::typeIndex() const noexcept -> std::type_index
+{
+	return typeid(Transform);
+}
+
 auto LRTR::Transform::inverse(const Transform& transform) -> Transform
 {
 	return Transform(transform.mInverse, transform.mTransform);

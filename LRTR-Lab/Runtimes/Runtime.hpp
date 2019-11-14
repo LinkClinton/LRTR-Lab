@@ -3,8 +3,6 @@
 namespace LRTR {
 
 	class Runtime final {
-	public:
-		static void initialize();
 	private:
 		Runtime() = default;
 
