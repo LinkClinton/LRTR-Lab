@@ -14,6 +14,18 @@ LRTR::Transform::Transform(const Matrix4x4f& transform, const Matrix4x4f& invers
 
 }
 
+LRTR::Transform::Transform(const Vector3f& translate, const Vector4f& rotate, const Vector3f& scale)
+{
+	//T * R * S
+	const auto I = Matrix4x4f(1);
+	const auto T = glm::translate(I, translate);
+	const auto R = glm::rotate(I, rotate.w, Vector3f(rotate));
+	const auto S = glm::scale(I, scale);
+
+	mTransform = T * R * S;
+	mInverse = glm::inverse(mTransform);
+}
+
 LRTR::Transform& LRTR::Transform::operator*(const Transform& right)
 {
 	mTransform = mTransform * right.mTransform;
@@ -25,16 +37,6 @@ LRTR::Transform& LRTR::Transform::operator*(const Transform& right)
 auto LRTR::Transform::matrix() const noexcept -> Matrix4x4f
 {
 	return mTransform;
-}
-
-auto LRTR::Transform::typeName() const noexcept -> std::string
-{
-	return "Transform";
-}
-
-auto LRTR::Transform::typeIndex() const noexcept -> std::type_index
-{
-	return typeid(Transform);
 }
 
 auto LRTR::Transform::inverse(const Transform& transform) -> Transform
@@ -52,7 +54,7 @@ auto LRTR::Transform::translate(const Vector3f& delta) -> Transform
 
 auto LRTR::Transform::rotate(Real angle, const Vector3f& axis) -> Transform
 {
-	auto transform = glm::rotate(glm::mat4(1), angle, axis);
+	const auto transform = glm::rotate(glm::mat4(1), angle, axis);
 
 	return Transform(transform, glm::transpose(transform));
 }
@@ -73,9 +75,4 @@ auto LRTR::Transform::lookAt(const Vector3f& eye, const Vector3f& at, const Vect
 auto LRTR::Transform::perspectiveFov(Real fovy, Real width, Real height, Real zNear, Real zFar) -> Transform
 {
 	return Transform(glm::perspectiveFovLH(fovy, width, height, zNear, zFar));
-}
-
-void LRTR::Transform::onProperty()
-{
-	//ImGui Property
 }

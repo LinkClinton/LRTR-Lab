@@ -1,17 +1,21 @@
 #pragma once
 
-#include "../../Shared/Math/Math.hpp"
-#include "../Component.hpp"
+#include "Math/Math.hpp"
 
 namespace LRTR {
 
-	class Transform : public Component {
+	class Transform {
 	public:
 		Transform() = default;
 
 		explicit Transform(const Matrix4x4f& transform);
 
 		explicit Transform(const Matrix4x4f& transform, const Matrix4x4f& inverse);
+
+		explicit Transform(
+			const Vector3f& translate,
+			const Vector4f& rotate,
+			const Vector3f& scale);
 
 		Transform& operator*(const Transform& right);
 
@@ -26,10 +30,6 @@ namespace LRTR {
 
 		auto matrix() const noexcept->Matrix4x4f;
 
-		auto typeName() const noexcept -> std::string override;
-
-		auto typeIndex() const noexcept -> std::type_index override;
-		
 		static auto inverse(const Transform& transform)->Transform;
 
 		static auto translate(const Vector3f& delta)->Transform;
@@ -39,11 +39,11 @@ namespace LRTR {
 		static auto scale(const Vector3f& value)->Transform;
 
 		static auto lookAt(const Vector3f& eye, const Vector3f& at, const Vector3f& up)->Transform;
-
+	
 		static auto perspectiveFov(Real fovy, Real width, Real height, Real zNear, Real zFar)->Transform;
-	protected:
-		void onProperty() override;
 	private:
+		friend class TransformWrap;
+		
 		Matrix4x4f mTransform = Matrix4x4f(1);
 		Matrix4x4f mInverse = Matrix4x4f(1);
 	};

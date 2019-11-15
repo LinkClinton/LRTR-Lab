@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../Components/Transform.hpp"
 
 namespace LRTR {
 

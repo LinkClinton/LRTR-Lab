@@ -249,6 +249,8 @@ void LRTR::LabApp::initializeUIManager()
 {
 	LRTR_DEBUG_INFO("Initialize UI Manager.");
 
+	ImGui::StyleColorsLight();
+	
 	mUIManager = std::make_shared<UIManager>(
 		mRuntimeSharing,
 		mDevice,

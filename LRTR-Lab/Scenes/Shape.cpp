@@ -30,6 +30,19 @@ void LRTR::Shape::onProperty()
 			return  first.second < second.second;
 		});
 
+	if (ImGui::TreeNode("Info")) {
+
+		ImGui::Columns(2, "Info");
+
+		ImGui::Separator();
+		ImGui::Text("TypeInfo"); ImGui::NextColumn();
+		ImGui::Text(typeName().c_str()); ImGui::NextColumn();
+		ImGui::Columns(1);
+		ImGui::Separator();
+
+		ImGui::TreePop();
+	}
+	
 	for (auto component : orderComponents) {
 		if (ImGui::TreeNode(mComponents[component.first]->typeName().c_str())) {
 

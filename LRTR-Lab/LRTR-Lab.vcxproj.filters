@@ -56,7 +56,13 @@
     <ClCompile Include="Runtimes\Runtime.cpp">
       <Filter>Runtimes</Filter>
     </ClCompile>
-    <ClCompile Include="Scenes\Components\Transform.cpp">
+    <ClCompile Include="Shared\Transform.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Cameras\Components\Perspective.cpp">
+      <Filter>Scenes\Cameras\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Components\TransformWrap.cpp">
       <Filter>Scenes\Components</Filter>
     </ClCompile>
   </ItemGroup>
@@ -114,6 +120,9 @@
     </Filter>
     <Filter Include="Scenes\Components">
       <UniqueIdentifier>{162c5cd1-620b-4dfe-a598-915ca4f88db0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes\Cameras\Components">
+      <UniqueIdentifier>{15aacd57-0603-4c0e-b48f-2985da6f74b5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -204,14 +213,23 @@
     <ClInclude Include="Runtimes\Runtime.hpp">
       <Filter>Runtimes</Filter>
     </ClInclude>
-    <ClInclude Include="Scenes\Components\Transform.hpp">
-      <Filter>Scenes\Components</Filter>
-    </ClInclude>
     <ClInclude Include="Scenes\Cameras\Camera.hpp">
       <Filter>Scenes\Cameras</Filter>
     </ClInclude>
     <ClInclude Include="Core\TypeInfo.hpp">
       <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Cameras\Components\Projective.hpp">
+      <Filter>Scenes\Cameras\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Cameras\Components\Perspective.hpp">
+      <Filter>Scenes\Cameras\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Shared\Transform.hpp">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Components\TransformWrap.hpp">
+      <Filter>Scenes\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

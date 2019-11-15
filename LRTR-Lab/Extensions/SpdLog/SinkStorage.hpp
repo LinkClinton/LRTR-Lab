@@ -14,8 +14,10 @@
 namespace LRTR {
 
 	struct LogMessage {
-		std::string Message;
+		std::pair<size_t, size_t> ColorRange;
 
+		std::string Message;
+		
 		ColorF Color;
 	};
 
@@ -40,10 +42,10 @@ namespace LRTR {
 	private:
 		const ColorF Red = ColorF(1, 0, 0, 1);
 		const ColorF Cyan = ColorF(0, 1, 1, 1);
-		const ColorF Green = ColorF(0, 1, 0, 1);
+		const ColorF Green = ColorF(0, 0.7f, 0, 1);
 		const ColorF White = ColorF(1, 1, 1, 1);
 		const ColorF Yellow = ColorF(1, 1, 0, 1);
-		const ColorF CodeRed = ColorF(1, 0, 0, 1);
+		const ColorF CodeRed = ColorF(0.7f, 0, 0, 1);
 		
 		std::vector<LogMessage> mMessages;
 
@@ -86,7 +88,7 @@ namespace LRTR {
 	template <typename Mutex>
 	void SinkStorage<Mutex>::receive(const std::string& message)
 	{
-		mMessages.push_back({ message, CodeRed });
+		mMessages.push_back({ {0, message.size() },message, CodeRed });
 	}
 
 	template <typename Mutex>
@@ -95,7 +97,11 @@ namespace LRTR {
 
 		spdlog::sinks::base_sink<Mutex>::formatter_->format(msg, formatted);
 
-		mMessages.push_back({ fmt::to_string(formatted), mColors[msg.level] });
+		mMessages.push_back({
+			{
+				msg.color_range_start,
+				msg.color_range_end
+			},fmt::to_string(formatted), mColors[msg.level] });
 	}
 
 	template <typename Mutex>

@@ -4,6 +4,8 @@
 #include "../UI/Components/SceneViewUIComponent.hpp"
 #include "../UI/UIManager.hpp"
 
+#include "../../../Scenes/Cameras/Components/Perspective.hpp"
+#include "../../../Scenes/Components/TransformWrap.hpp"
 #include "../../../Scenes/Scene.hpp"
 
 LRTR::SceneManager::SceneManager(
@@ -18,8 +20,8 @@ LRTR::SceneManager::SceneManager(
 	mScenes["Scene"]->add("Shape2", std::make_shared<Shape>());
 	mScenes["Scene"]->add("Shape3", std::make_shared<Shape>());
 
-	mScenes["Scene"]->shapes().at("Shape0")->addComponent(
-		std::make_shared<Transform>());
+	mScenes["Scene"]->shapes().at("Shape0")->addComponent<Projective>(std::make_shared<Perspective>());
+	mScenes["Scene"]->shapes().at("Shape0")->addComponent<TransformWrap>(std::make_shared<TransformWrap>());
 }
 
 void LRTR::SceneManager::update(float delta)

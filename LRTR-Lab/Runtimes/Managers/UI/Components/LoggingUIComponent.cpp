@@ -41,13 +41,24 @@ void LRTR::LoggingUIComponent::update()
 	ImGui::BeginChild("View.Logging.Scroll");
 
 	for (const auto message : messageStorage->messages()) {
+		std::string subMessages[3] = {
+			message.Message.substr(0, message.ColorRange.first - 0),
+			message.Message.substr(message.ColorRange.first, message.ColorRange.second - message.ColorRange.first),
+			message.Message.substr(message.ColorRange.second, message.Message.size() - message.ColorRange.second)
+		};
+
+		ImGui::TextWrapped(subMessages[0].c_str());
 		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(
 			message.Color.Red,
 			message.Color.Green,
 			message.Color.Blue,
-			message.Color.Alpha));
-		ImGui::TextWrapped(message.Message.c_str());
+			message.Color.Alpha
+		));
+		ImGui::SameLine(0, 0);
+		ImGui::TextWrapped(subMessages[1].c_str());
 		ImGui::PopStyleColor();
+		ImGui::SameLine(0, 0);
+		ImGui::TextWrapped(subMessages[2].c_str());
 	}
 	
 	ImGui::EndChild();

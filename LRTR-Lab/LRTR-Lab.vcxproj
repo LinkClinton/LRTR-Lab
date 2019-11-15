@@ -186,10 +186,12 @@
     <ClCompile Include="Runtimes\Managers\UI\UIManager.cpp" />
     <ClCompile Include="Runtimes\Runtime.cpp" />
     <ClCompile Include="Runtimes\RuntimeSharing.cpp" />
+    <ClCompile Include="Scenes\Cameras\Components\Perspective.cpp" />
     <ClCompile Include="Scenes\Component.cpp" />
-    <ClCompile Include="Scenes\Components\Transform.cpp" />
+    <ClCompile Include="Scenes\Components\TransformWrap.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
     <ClCompile Include="Scenes\Shape.cpp" />
+    <ClCompile Include="Shared\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\References\Code-Red\CodeRed\CodeRed.vcxproj">
@@ -223,8 +225,10 @@
     <ClInclude Include="Runtimes\Runtime.hpp" />
     <ClInclude Include="Runtimes\RuntimeSharing.hpp" />
     <ClInclude Include="Scenes\Cameras\Camera.hpp" />
+    <ClInclude Include="Scenes\Cameras\Components\Perspective.hpp" />
+    <ClInclude Include="Scenes\Cameras\Components\Projective.hpp" />
     <ClInclude Include="Scenes\Component.hpp" />
-    <ClInclude Include="Scenes\Components\Transform.hpp" />
+    <ClInclude Include="Scenes\Components\TransformWrap.hpp" />
     <ClInclude Include="Scenes\Scene.hpp" />
     <ClInclude Include="Scenes\Shape.hpp" />
     <ClInclude Include="Shared\Accelerators\Group.hpp" />
@@ -232,6 +236,7 @@
     <ClInclude Include="Shared\Math\Math.hpp" />
     <ClInclude Include="Shared\Math\Matrix.hpp" />
     <ClInclude Include="Shared\Math\Vector.hpp" />
+    <ClInclude Include="Shared\Transform.hpp" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Resources\Fonts\Consola.ttf">
