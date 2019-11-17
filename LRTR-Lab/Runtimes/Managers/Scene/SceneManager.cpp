@@ -19,9 +19,7 @@ LRTR::SceneManager::SceneManager(
 	mScenes["Scene"]->add("Shape1", std::make_shared<Shape>());
 	mScenes["Scene"]->add("Shape2", std::make_shared<Shape>());
 	mScenes["Scene"]->add("Shape3", std::make_shared<Shape>());
-
-	mScenes["Scene"]->shapes().at("Shape0")->addComponent<Projective>(std::make_shared<Perspective>());
-	mScenes["Scene"]->shapes().at("Shape0")->addComponent<TransformWrap>(std::make_shared<TransformWrap>());
+	mScenes["Scene"]->add("Camera0", std::make_shared<PerspectiveCamera>());
 }
 
 void LRTR::SceneManager::update(float delta)

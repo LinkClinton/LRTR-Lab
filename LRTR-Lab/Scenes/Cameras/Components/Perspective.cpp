@@ -32,7 +32,7 @@ auto LRTR::Perspective::typeIndex() const noexcept -> std::type_index
 
 void LRTR::Perspective::onProperty()
 {
-	const auto genColumn = [](const char* text, float* data, int precision = 3)
+	const static auto genColumn = [](const char* text, float* data, int precision = 3)
 	{
 		static std::string head = "##";
 		
@@ -44,10 +44,12 @@ void LRTR::Perspective::onProperty()
 		ImGui::InputFloat((head + text).c_str(), data, 0, 0 , precision); ImGui::NextColumn();
 		ImGui::PopStyleColor();
 	};
+
+	auto degrees = glm::degrees(mFovy);
 	
 	ImGui::Columns(2);
 
-	genColumn("Fovy", &mFovy, 5);
+	genColumn("Fovy", &degrees, 1);
 	genColumn("Width", &mWidth);
 	genColumn("Height", &mHeight);
 	genColumn("ZNear", &mZNear);
@@ -63,6 +65,8 @@ void LRTR::Perspective::onProperty()
 	ImGui::InputFloat("ZNear", &mZNear);
 	ImGui::InputFloat("ZFar", &mZFar);
 	ImGui::PopStyleVar();*/
-	
+
+	mFovy = glm::radians(degrees);
+
 	mCameraToScreen = Transform::perspectiveFov(mFovy, mWidth, mHeight, mZNear, mZFar);
 }

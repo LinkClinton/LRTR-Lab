@@ -74,7 +74,7 @@ void LRTR::TransformWrap::onProperty()
 	
 	ImGui::Columns(2, "Rotate");
 	
-	genColumn("Rotate   W", "1", &degrees, "%.1f°");
+	genColumn("Rotate   W", "1", &degrees, "%.1f");
 	genColumn("         X", "1", &mRotate.x);
 	genColumn("         Y", "1", &mRotate.y);
 	genColumn("         Z", "1", &mRotate.z);

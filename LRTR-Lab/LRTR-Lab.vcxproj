@@ -186,6 +186,7 @@
     <ClCompile Include="Runtimes\Managers\UI\UIManager.cpp" />
     <ClCompile Include="Runtimes\Runtime.cpp" />
     <ClCompile Include="Runtimes\RuntimeSharing.cpp" />
+    <ClCompile Include="Scenes\Cameras\Camera.cpp" />
     <ClCompile Include="Scenes\Cameras\Components\Perspective.cpp" />
     <ClCompile Include="Scenes\Component.cpp" />
     <ClCompile Include="Scenes\Components\TransformWrap.cpp" />

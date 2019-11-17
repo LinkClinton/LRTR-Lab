@@ -65,6 +65,9 @@
     <ClCompile Include="Scenes\Components\TransformWrap.cpp">
       <Filter>Scenes\Components</Filter>
     </ClCompile>
+    <ClCompile Include="Scenes\Cameras\Camera.cpp">
+      <Filter>Scenes\Cameras</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scenes">
