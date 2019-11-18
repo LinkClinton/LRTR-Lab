@@ -3,6 +3,10 @@
 namespace LRTR {
 
 	class Propertyable {
+	public:
+		Propertyable() = default;
+
+		virtual ~Propertyable() = default;
 	protected:
 		friend class PropertyUIComponent;
 		

@@ -23,6 +23,9 @@ namespace LRTR {
 		template<typename TComponent>
 		auto component() const -> std::shared_ptr<TComponent>;
 
+		template<typename TComponent>
+		auto hasComponent() const -> bool;
+		
 		auto components() const -> const Group<std::type_index, std::shared_ptr<Component>>&;
 
 		auto typeName() const noexcept -> std::string override;
@@ -64,6 +67,14 @@ namespace LRTR {
 		static_assert(IsComponent<TComponent>::value, "The Component should be based of Component.");
 
 		return mComponents.at(typeid(TComponent));
+	}
+
+	template <typename TComponent>
+	auto Shape::hasComponent() const -> bool
+	{
+		static_assert(IsComponent<TComponent>::value, "The Component should be based of Component.");
+
+		return mComponents.find(typeid(TComponent)) != mComponents.end();
 	}
 
 }

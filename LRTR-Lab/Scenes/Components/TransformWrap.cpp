@@ -48,7 +48,7 @@ auto LRTR::TransformWrap::typeIndex() const noexcept -> std::type_index
 
 void LRTR::TransformWrap::onProperty()
 {
-	const auto genColumn = [](const char* text, const char* id, float* data, const char* format = "%.3f")
+	const static auto genColumn = [](const char* text, const char* id, float* data, const char* format = "%.3f")
 	{
 		static std::string head = "##";
 
@@ -70,18 +70,16 @@ void LRTR::TransformWrap::onProperty()
 	genColumn("         Y", "0", &mTranslate.y);
 	genColumn("         Z", "0", &mTranslate.z);
 	
-	ImGui::Separator();
-	
 	ImGui::Columns(2, "Rotate");
+	ImGui::Separator();
 	
 	genColumn("Rotate   W", "1", &degrees, "%.1f");
 	genColumn("         X", "1", &mRotate.x);
 	genColumn("         Y", "1", &mRotate.y);
 	genColumn("         Z", "1", &mRotate.z);
 
-	ImGui::Separator();
-	
 	ImGui::Columns(2, "Scale");
+	ImGui::Separator();
 	
 	genColumn("Scale    X", "2", &mScale.x);
 	genColumn("         Y", "2", &mScale.y);

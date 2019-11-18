@@ -189,6 +189,7 @@
     <ClCompile Include="Scenes\Cameras\Camera.cpp" />
     <ClCompile Include="Scenes\Cameras\Components\Perspective.cpp" />
     <ClCompile Include="Scenes\Component.cpp" />
+    <ClCompile Include="Scenes\Components\CoordinateSystem.cpp" />
     <ClCompile Include="Scenes\Components\TransformWrap.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
     <ClCompile Include="Scenes\Shape.cpp" />
@@ -206,6 +207,7 @@
     <ClInclude Include="Core\Logging.hpp" />
     <ClInclude Include="Core\Noncopyable.hpp" />
     <ClInclude Include="Core\Propertyable.hpp" />
+    <ClInclude Include="Core\Renderable.hpp" />
     <ClInclude Include="Core\TypeInfo.hpp" />
     <ClInclude Include="Extensions\ImGui\imgui_impl_win32.hpp" />
     <ClInclude Include="Extensions\SpdLog\SinkStorage.hpp" />
@@ -229,6 +231,7 @@
     <ClInclude Include="Scenes\Cameras\Components\Perspective.hpp" />
     <ClInclude Include="Scenes\Cameras\Components\Projective.hpp" />
     <ClInclude Include="Scenes\Component.hpp" />
+    <ClInclude Include="Scenes\Components\CoordinateSystem.hpp" />
     <ClInclude Include="Scenes\Components\TransformWrap.hpp" />
     <ClInclude Include="Scenes\Scene.hpp" />
     <ClInclude Include="Scenes\Shape.hpp" />

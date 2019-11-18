@@ -68,6 +68,9 @@
     <ClCompile Include="Scenes\Cameras\Camera.cpp">
       <Filter>Scenes\Cameras</Filter>
     </ClCompile>
+    <ClCompile Include="Scenes\Components\CoordinateSystem.cpp">
+      <Filter>Scenes\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scenes">
@@ -233,6 +236,12 @@
     </ClInclude>
     <ClInclude Include="Scenes\Components\TransformWrap.hpp">
       <Filter>Scenes\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Components\CoordinateSystem.hpp">
+      <Filter>Scenes\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Renderable.hpp">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
