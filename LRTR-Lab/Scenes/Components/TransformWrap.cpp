@@ -1,6 +1,6 @@
 #include "TransformWrap.hpp"
 
-#include <Extensions/ImGui/ImGuiWindows.hpp>
+#include "../../Extensions/ImGui/ImGui.hpp"
 
 LRTR::TransformWrap::TransformWrap(const Vector3f& translate, const Vector4f& rotate, const Vector3f& scale)
 {
@@ -48,45 +48,28 @@ auto LRTR::TransformWrap::typeIndex() const noexcept -> std::type_index
 
 void LRTR::TransformWrap::onProperty()
 {
-	const static auto genColumn = [](const char* text, const char* id, float* data, const char* format = "%.3f")
-	{
-		static std::string head = "##";
-
-		ImGui::AlignTextToFramePadding();
-
-		ImGui::Text(text); ImGui::NextColumn();
-		ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0, 0, 0, 0.1f));
-		ImGui::InputFloat((head + id + text).c_str(), data, 0, 0, format); ImGui::NextColumn();
-		ImGui::PopStyleColor();
-	};
-
-
 	auto degrees = glm::degrees(mRotate.w);
 
-	ImGui::Columns(2, "Translate");
-	ImGui::Separator();
+	ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0, 0, 0, 0.1f));
 	
-	genColumn("Location X", "0", &mTranslate.x);
-	genColumn("         Y", "0", &mTranslate.y);
-	genColumn("         Z", "0", &mTranslate.z);
-	
-	ImGui::Columns(2, "Rotate");
-	ImGui::Separator();
-	
-	genColumn("Rotate   W", "1", &degrees, "%.1f");
-	genColumn("         X", "1", &mRotate.x);
-	genColumn("         Y", "1", &mRotate.y);
-	genColumn("         Z", "1", &mRotate.z);
+	ImGui::BeginPropertyTable("Translate");
+	ImGui::Property("Location X", [&]() { ImGui::InputFloat("##X0", &mTranslate.x); });
+	ImGui::Property("         Y", [&]() { ImGui::InputFloat("##Y0", &mTranslate.y); });
+	ImGui::Property("         Z", [&]() { ImGui::InputFloat("##Z0", &mTranslate.z); });
 
-	ImGui::Columns(2, "Scale");
-	ImGui::Separator();
-	
-	genColumn("Scale    X", "2", &mScale.x);
-	genColumn("         Y", "2", &mScale.y);
-	genColumn("         Z", "2", &mScale.z);
+	ImGui::BeginPropertyTable("Rotate");
+	ImGui::Property("Rotate   W", [&]() { ImGui::InputFloat("##W1", &degrees, 0, 0, 1); });
+	ImGui::Property("         X", [&]() { ImGui::InputFloat("##X1", &mRotate.x); });
+	ImGui::Property("         Y", [&]() { ImGui::InputFloat("##Y1", &mRotate.y); });
+	ImGui::Property("         Z", [&]() { ImGui::InputFloat("##Z1", &mRotate.z); });
 
-	ImGui::Columns(1);
-	ImGui::Separator();
+	ImGui::BeginPropertyTable("Scale");
+	ImGui::Property("Scale    X", [&]() { ImGui::InputFloat("##X2", &mScale.x); });
+	ImGui::Property("         Y", [&]() { ImGui::InputFloat("##Y2", &mScale.y); });
+	ImGui::Property("         Z", [&]() { ImGui::InputFloat("##Z2", &mScale.z); });
+	ImGui::EndPropertyTable();
+
+	ImGui::PopStyleColor();
 
 	mRotate.w = glm::radians(degrees);
 	

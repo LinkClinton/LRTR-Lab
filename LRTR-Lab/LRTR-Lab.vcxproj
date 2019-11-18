@@ -170,6 +170,7 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Extensions\ImGui\ImGui.cpp" />
     <ClCompile Include="Extensions\ImGui\imgui_impl_win32.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Runtimes\LabApp.cpp" />
@@ -209,6 +210,7 @@
     <ClInclude Include="Core\Propertyable.hpp" />
     <ClInclude Include="Core\Renderable.hpp" />
     <ClInclude Include="Core\TypeInfo.hpp" />
+    <ClInclude Include="Extensions\ImGui\ImGui.hpp" />
     <ClInclude Include="Extensions\ImGui\imgui_impl_win32.hpp" />
     <ClInclude Include="Extensions\SpdLog\SinkStorage.hpp" />
     <ClInclude Include="Runtimes\LabApp.hpp" />

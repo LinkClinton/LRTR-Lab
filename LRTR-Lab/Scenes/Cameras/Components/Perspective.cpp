@@ -1,6 +1,6 @@
 #include "Perspective.hpp"
 
-#include <Extensions/ImGui/ImGuiWindows.hpp>
+#include "../../../Extensions/ImGui/ImGui.hpp"
 
 LRTR::Perspective::Perspective() :
 	Perspective(MathUtility::pi<float>() * 0.25f, 1920.0f, 1080.0f, 0.0f, 1000.0f)
@@ -32,40 +32,25 @@ auto LRTR::Perspective::typeIndex() const noexcept -> std::type_index
 
 void LRTR::Perspective::onProperty()
 {
-	const static auto genColumn = [](const char* text, float* data, int precision = 3)
-	{
-		static std::string head = "##";
-		
-		ImGui::Separator();
-		ImGui::AlignTextToFramePadding();
-
-		ImGui::Text(text); ImGui::NextColumn();
-		ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0, 0, 0, 0.1f));
-		ImGui::InputFloat((head + text).c_str(), data, 0, 0 , precision); ImGui::NextColumn();
-		ImGui::PopStyleColor();
-	};
-
 	auto degrees = glm::degrees(mFovy);
+
+	ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0, 0, 0, 0.1f));
 	
-	ImGui::Columns(2);
+	ImGui::BeginPropertyTable("Fovy");
+	ImGui::Property("Fovy", [&]() { ImGui::InputFloat("##Fovy", &degrees, 0, 0, 1); });
+	ImGui::BeginPropertyTable("Width");
+	ImGui::Property("Width", [&] {ImGui::InputFloat("##Width", &mWidth); });
+	ImGui::BeginPropertyTable("Height");
+	ImGui::Property("Height", [&] {ImGui::InputFloat("##Height", &mHeight); });
+	ImGui::BeginPropertyTable("ZNear");
+	ImGui::Property("ZNear", [&] {ImGui::InputFloat("##ZNear", &mZNear); });
+	ImGui::BeginPropertyTable("ZFar");
+	ImGui::Property("ZFar", [&] {ImGui::InputFloat("##ZFar", &mZFar); });
 
-	genColumn("Fovy", &degrees, 1);
-	genColumn("Width", &mWidth);
-	genColumn("Height", &mHeight);
-	genColumn("ZNear", &mZNear);
-	genColumn("ZFar", &mZFar);
+	ImGui::EndPropertyTable();
 
-	ImGui::Columns(1);
-	ImGui::Separator();
+	ImGui::PopStyleColor();
 	
-	/*ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 12);
-	ImGui::InputFloat("Fovy", &mFovy);
-	ImGui::InputFloat("Width", &mWidth);
-	ImGui::InputFloat("Height", &mHeight);
-	ImGui::InputFloat("ZNear", &mZNear);
-	ImGui::InputFloat("ZFar", &mZFar);
-	ImGui::PopStyleVar();*/
-
 	mFovy = glm::radians(degrees);
 
 	mCameraToScreen = Transform::perspectiveFov(mFovy, mWidth, mHeight, mZNear, mZFar);

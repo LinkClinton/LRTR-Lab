@@ -1,6 +1,6 @@
 #include "CoordinateSystem.hpp"
 
-#include <Extensions/ImGui/ImGuiWindows.hpp>
+#include "../../Extensions/ImGui/ImGui.hpp"
 
 LRTR::CoordinateSystem::CoordinateSystem() :
 	CoordinateSystem(
@@ -57,16 +57,6 @@ auto LRTR::CoordinateSystem::typeIndex() const noexcept -> std::type_index
 
 void LRTR::CoordinateSystem::onProperty()
 {
-	const static auto GenColumn = [](const char* text, const char* id, float* data, const char* format = "%.3f")
-	{
-		static std::string head = "##";
-
-		ImGui::AlignTextToFramePadding();
-
-		ImGui::Text(text); ImGui::NextColumn();
-		ImGui::InputFloat((head + id + text).c_str(), data, 0, 0, format); ImGui::NextColumn();
-	};
-
 	const static auto EditFlags =
 		ImGuiColorEditFlags_NoInputs |
 		ImGuiColorEditFlags_NoLabel |
@@ -81,56 +71,39 @@ void LRTR::CoordinateSystem::onProperty()
 
 	static auto currentAxis = static_cast<size_t>(Axis::eX);
 
-	ImGui::Columns(2, "Combo");
-	ImGui::Separator();
+	ImGui::BeginPropertyTable("Combo");
+	ImGui::Property("Axis", [&]()
+		{
+			if (ImGui::BeginCombo("##Axis", AxesName[currentAxis])) {
+				for (size_t index = 0; index < mAxes.size(); index++) {
+					const auto selected = (currentAxis == index);
 
-	ImGui::AlignTextToFramePadding();
-	ImGui::Text("Axis");
-	ImGui::NextColumn();
-
-	if (ImGui::BeginCombo("##Axis", AxesName[currentAxis])) {
-		for (size_t index = 0; index < mAxes.size(); index++) {
-			const auto selected = (currentAxis == index);
-			
-			if (ImGui::Selectable(AxesName[index], selected))
-				currentAxis = index;
-			if (selected) ImGui::SetItemDefaultFocus();
-		}
-		ImGui::EndCombo();
-	}
+					if (ImGui::Selectable(AxesName[index], selected))
+						currentAxis = index;
+					if (selected) ImGui::SetItemDefaultFocus();
+				}
+				ImGui::EndCombo();
+			}
+		});
 	
-	ImGui::NextColumn();
-
 	ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0, 0, 0, 0.1f));
+
+	ImGui::BeginPropertyTable(AxesName[currentAxis]);
+	ImGui::Property("Location X", [&]() { ImGui::InputFloat("##X", &mAxes[currentAxis].x); });
+	ImGui::Property("         Y", [&]() { ImGui::InputFloat("##Y", &mAxes[currentAxis].y); });
+	ImGui::Property("         Z", [&]() { ImGui::InputFloat("##Z", &mAxes[currentAxis].z); });
+	ImGui::Property("Color    RGBA", [&]()
+		{
+			ImGui::ColorEdit4("##ColorEdit4", reinterpret_cast<float*>(&mColors[currentAxis]), EditFlags);
+		});
+
+	ImGui::BeginPropertyTable("Length");
+	ImGui::Property("Length", [&]() { ImGui::InputFloat("##Length", &mLength); });
+
+	ImGui::BeginPropertyTable("Visibility");
+	ImGui::Property("Visibility", [&]() {ImGui::Checkbox("##Visibility", &mVisibility); });
 	
-	ImGui::Columns(2, AxesName[currentAxis]);
-	ImGui::Separator();
-
-	GenColumn("Location X", "0", &mAxes[currentAxis].x);
-	GenColumn("         Y", "0", &mAxes[currentAxis].y);
-	GenColumn("         Z", "0", &mAxes[currentAxis].z);
-
-	ImGui::AlignTextToFramePadding();
-	ImGui::Text("Color    RGBA");
-	ImGui::NextColumn();
-	ImGui::ColorEdit4("ColorEdit4",reinterpret_cast<float*>(&mColors[currentAxis]), EditFlags);
-	ImGui::NextColumn();
-
-	ImGui::Columns(2, "Length");
-	ImGui::Separator();
-	GenColumn("Length", "0", &mLength);
-
-	ImGui::Columns(2, "Visibility");
-	ImGui::Separator();
-
-	ImGui::AlignTextToFramePadding();
-	ImGui::Text("Visibility");
-	ImGui::NextColumn();
-	ImGui::Checkbox("##Visibility", &mVisibility);
-	ImGui::NextColumn();
-	
-	ImGui::Columns(1);
-	ImGui::Separator();
-
 	ImGui::PopStyleColor();
+	
+	ImGui::EndPropertyTable();
 }

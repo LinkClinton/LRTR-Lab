@@ -1,6 +1,6 @@
 #include "Shape.hpp"
 
-#include <Extensions/ImGui/ImGuiWindows.hpp>
+#include "../Extensions/ImGui/ImGui.hpp"
 
 auto LRTR::Shape::components() const -> const Group<std::type_index, std::shared_ptr<Component>>& 
 {
@@ -30,21 +30,18 @@ void LRTR::Shape::onProperty()
 			return  first.second < second.second;
 		});
 
-	if (ImGui::TreeNode("Info")) {
-
-		ImGui::Columns(2, "Info");
-
-		ImGui::Separator();
-		ImGui::Text("TypeInfo"); ImGui::NextColumn();
-		ImGui::Text(typeName().c_str()); ImGui::NextColumn();
-		ImGui::Columns(1);
-		ImGui::Separator();
+	static auto treeNodeFlags = ImGuiTreeNodeFlags_Framed;
+	
+	if (ImGui::TreeNodeEx("Info", treeNodeFlags)) {
+		ImGui::BeginPropertyTable("Info");
+		ImGui::Property("TypeInfo", [&]() {ImGui::Text(typeName().c_str()); });
+		ImGui::EndPropertyTable();
 
 		ImGui::TreePop();
 	}
 	
 	for (auto component : orderComponents) {
-		if (ImGui::TreeNode(mComponents[component.first]->typeName().c_str())) {
+		if (ImGui::TreeNodeEx(mComponents[component.first]->typeName().c_str(), treeNodeFlags)) {
 
 			mComponents[component.first]->onProperty();
 			

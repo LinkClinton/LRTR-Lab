@@ -71,6 +71,9 @@
     <ClCompile Include="Scenes\Components\CoordinateSystem.cpp">
       <Filter>Scenes\Components</Filter>
     </ClCompile>
+    <ClCompile Include="Extensions\ImGui\ImGui.cpp">
+      <Filter>Extensions\ImGui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scenes">
@@ -242,6 +245,9 @@
     </ClInclude>
     <ClInclude Include="Core\Renderable.hpp">
       <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Extensions\ImGui\ImGui.hpp">
+      <Filter>Extensions\ImGui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
