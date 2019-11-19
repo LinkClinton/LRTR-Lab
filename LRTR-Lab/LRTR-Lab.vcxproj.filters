@@ -83,6 +83,18 @@
     <ClCompile Include="Scenes\System.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="Scenes\Systems\CoordinateRenderSystem.cpp">
+      <Filter>Scenes\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Shared\FrameResources.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="Shared\Graphics\PipelineInfo.cpp">
+      <Filter>Shared\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Shared\Graphics\ResourceHelper.cpp">
+      <Filter>Shared\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scenes">
@@ -147,6 +159,12 @@
     </Filter>
     <Filter Include="Scenes\Systems">
       <UniqueIdentifier>{c3196cc2-7432-4d64-8913-5e6df6e2469d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Shaders">
+      <UniqueIdentifier>{0f4fb0a8-513c-4f10-8cee-110b0ceb3955}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shared\Graphics">
+      <UniqueIdentifier>{56390578-8bbf-4596-b907-f2286bdee8f8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -272,6 +290,18 @@
     </ClInclude>
     <ClInclude Include="Scenes\System.hpp">
       <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Systems\CoordinateRenderSystem.hpp">
+      <Filter>Scenes\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Shared\FrameResources.hpp">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="Shared\Graphics\PipelineInfo.hpp">
+      <Filter>Shared\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Shared\Graphics\ResourceHelper.hpp">
+      <Filter>Shared\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -197,6 +197,10 @@
     <ClCompile Include="Scenes\Shape.cpp" />
     <ClCompile Include="Scenes\Shapes\SceneProperty.cpp" />
     <ClCompile Include="Scenes\System.cpp" />
+    <ClCompile Include="Scenes\Systems\CoordinateRenderSystem.cpp" />
+    <ClCompile Include="Shared\FrameResources.cpp" />
+    <ClCompile Include="Shared\Graphics\PipelineInfo.cpp" />
+    <ClCompile Include="Shared\Graphics\ResourceHelper.cpp" />
     <ClCompile Include="Shared\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -243,8 +247,12 @@
     <ClInclude Include="Scenes\Shape.hpp" />
     <ClInclude Include="Scenes\Shapes\SceneProperty.hpp" />
     <ClInclude Include="Scenes\System.hpp" />
+    <ClInclude Include="Scenes\Systems\CoordinateRenderSystem.hpp" />
     <ClInclude Include="Shared\Accelerators\Group.hpp" />
     <ClInclude Include="Shared\Color.hpp" />
+    <ClInclude Include="Shared\FrameResources.hpp" />
+    <ClInclude Include="Shared\Graphics\PipelineInfo.hpp" />
+    <ClInclude Include="Shared\Graphics\ResourceHelper.hpp" />
     <ClInclude Include="Shared\Math\Math.hpp" />
     <ClInclude Include="Shared\Math\Matrix.hpp" />
     <ClInclude Include="Shared\Math\Vector.hpp" />

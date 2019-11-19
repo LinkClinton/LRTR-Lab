@@ -1,12 +1,9 @@
 #include "SceneManager.hpp"
 
-#include "../UI/Components/Managers/SceneManagerUIComponent.hpp"
 #include "../UI/Components/SceneViewUIComponent.hpp"
 #include "../UI/UIManager.hpp"
 
-#include "../../../Scenes/Cameras/Components/Perspective.hpp"
-#include "../../../Scenes/Components/CoordinateSystem.hpp"
-#include "../../../Scenes/Components/TransformWrap.hpp"
+#include "../../../Scenes/Systems/CoordinateRenderSystem.hpp"
 #include "../../../Scenes/Components/CameraGroup.hpp"
 #include "../../../Scenes/Scene.hpp"
 
@@ -18,7 +15,8 @@ LRTR::SceneManager::SceneManager(
 	add(std::make_shared<Scene>("Scene", mDevice));
 
 	mScenes["Scene"]->add("Camera", std::make_shared<PerspectiveCamera>());
-	
+
+	mScenes["Scene"]->addSystem(std::make_shared<CoordinateRenderSystem>(mRuntimeSharing, mDevice));
 }
 
 void LRTR::SceneManager::update(float delta)
@@ -36,9 +34,10 @@ auto LRTR::SceneManager::render(float delta) ->
 	const auto camera = mScenes["Scene"]->shapes().at("Scene")
 		->component<CameraGroup>()->current();
 	
-	return mScenes["Scene"]->generate(sceneTexture,
+	return mScenes["Scene"]->render(sceneTexture,
 		camera.empty() ? nullptr : 
-		std::static_pointer_cast<SceneCamera>(mScenes["Scene"]->shapes().at(camera)));
+		std::static_pointer_cast<SceneCamera>(mScenes["Scene"]->shapes().at(camera)),
+		delta);
 }
 
 void LRTR::SceneManager::add(const std::shared_ptr<Scene>& scene)

@@ -19,7 +19,8 @@ namespace LRTR {
 	public:
 		explicit Scene(
 			const std::string& name,
-			const std::shared_ptr<CodeRed::GpuLogicalDevice>& device);
+			const std::shared_ptr<CodeRed::GpuLogicalDevice>& device,
+			const size_t maxFrameCount = 2);
 
 		virtual ~Scene() = default;
 
@@ -27,32 +28,49 @@ namespace LRTR {
 			const std::string& name,
 			const std::shared_ptr<Shape>& shape);
 
+		void addSystem(const std::shared_ptr<System>& system);
+
 		void remove(
 			const std::string& name);
-		
-		auto generate(
-			const std::shared_ptr<CodeRed::GpuTexture>& texture,
-			const std::shared_ptr<SceneCamera>& camera)
-			-> std::vector<std::shared_ptr<CodeRed::GpuGraphicsCommandList>>;
-	
+
 		auto name() const noexcept -> std::string;
 
 		auto shapes() const noexcept -> const StringGroup<std::shared_ptr<Shape>>&;
-	private:
+
+		auto systems() const noexcept -> const std::vector<std::shared_ptr<System>>&;
+		
+		auto currentFrameIndex() const noexcept -> size_t;
+	protected:
 		virtual void update(float delta);
-		
-		void setTarget(const std::shared_ptr<CodeRed::GpuTexture>& texture);
+
+		virtual auto render(
+			const std::shared_ptr<CodeRed::GpuTexture>& texture,
+			const std::shared_ptr<SceneCamera>& camera,
+			float delta)
+			-> std::vector<std::shared_ptr<CodeRed::GpuGraphicsCommandList>>;
 	private:
-		std::string mName;
-		
+		void setTarget(const std::shared_ptr<CodeRed::GpuTexture>& texture);
+
+		friend class SceneManager;
+		friend class LabApp;
+	protected:
 		std::shared_ptr<CodeRed::GpuLogicalDevice> mDevice;
-		
+
 		std::shared_ptr<CodeRed::GpuGraphicsCommandList> mCommandList;
 		std::shared_ptr<CodeRed::GpuCommandAllocator> mCommandAllocator;
-		
+
 		std::shared_ptr<CodeRed::GpuFrameBuffer> mFrameBuffer;
 		std::shared_ptr<CodeRed::GpuRenderPass> mRenderPass;
 
+		std::shared_ptr<CodeRed::GpuTexture> mDepthStencil;
+	private:
+		size_t mCurrentFrameIndex = 0;
+		size_t mMaxFrameCount = 0;
+		
+		std::string mName;
+
+		std::vector<std::shared_ptr<System>> mSystems;
+		
 		StringGroup<std::shared_ptr<Shape>> mShapes;
 
 		std::shared_ptr<Shape> mProperty;
