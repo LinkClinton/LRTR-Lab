@@ -196,6 +196,7 @@
     <ClCompile Include="Scenes\Scene.cpp" />
     <ClCompile Include="Scenes\Shape.cpp" />
     <ClCompile Include="Scenes\Shapes\SceneProperty.cpp" />
+    <ClCompile Include="Scenes\System.cpp" />
     <ClCompile Include="Shared\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -241,6 +242,7 @@
     <ClInclude Include="Scenes\Scene.hpp" />
     <ClInclude Include="Scenes\Shape.hpp" />
     <ClInclude Include="Scenes\Shapes\SceneProperty.hpp" />
+    <ClInclude Include="Scenes\System.hpp" />
     <ClInclude Include="Shared\Accelerators\Group.hpp" />
     <ClInclude Include="Shared\Color.hpp" />
     <ClInclude Include="Shared\Math\Math.hpp" />

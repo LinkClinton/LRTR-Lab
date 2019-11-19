@@ -80,6 +80,9 @@
     <ClCompile Include="Scenes\Shapes\SceneProperty.cpp">
       <Filter>Scenes\Shapes</Filter>
     </ClCompile>
+    <ClCompile Include="Scenes\System.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scenes">
@@ -141,6 +144,9 @@
     </Filter>
     <Filter Include="Scenes\Shapes">
       <UniqueIdentifier>{d0816ef1-a9f8-46d1-b866-73e968267c63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes\Systems">
+      <UniqueIdentifier>{c3196cc2-7432-4d64-8913-5e6df6e2469d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -263,6 +269,9 @@
     </ClInclude>
     <ClInclude Include="Scenes\Shapes\SceneProperty.hpp">
       <Filter>Scenes\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\System.hpp">
+      <Filter>Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

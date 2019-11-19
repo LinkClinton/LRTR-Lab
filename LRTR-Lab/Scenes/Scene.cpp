@@ -19,7 +19,7 @@ LRTR::Scene::Scene(
 
 void LRTR::Scene::add(const std::string& name, const std::shared_ptr<Shape>& shape)
 {
-	if (std::dynamic_pointer_cast<Camera>(shape) != nullptr)
+	if (std::dynamic_pointer_cast<SceneCamera>(shape) != nullptr)
 		mProperty->component<CameraGroup>()->addCamera(name);
 	
 	mShapes.insert({ name, shape });
@@ -27,7 +27,7 @@ void LRTR::Scene::add(const std::string& name, const std::shared_ptr<Shape>& sha
 
 void LRTR::Scene::remove(const std::string& name)
 {
-	if (std::dynamic_pointer_cast<Camera>(mShapes[name]) != nullptr)
+	if (std::dynamic_pointer_cast<SceneCamera>(mShapes[name]) != nullptr)
 		mProperty->component<CameraGroup>()->removeCamera(name);
 	
 	mShapes.erase(name);

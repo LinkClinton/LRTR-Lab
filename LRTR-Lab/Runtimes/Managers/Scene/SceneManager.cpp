@@ -17,7 +17,7 @@ LRTR::SceneManager::SceneManager(
 {	
 	add(std::make_shared<Scene>("Scene", mDevice));
 
-	mScenes["Scene"]->add("Camera0", std::make_shared<PerspectiveCamera>());
+	mScenes["Scene"]->add("Camera", std::make_shared<PerspectiveCamera>());
 	
 }
 
@@ -32,8 +32,13 @@ auto LRTR::SceneManager::render(float delta) ->
 		mRuntimeSharing->uiManager()->components().at("View.Scene"))->sceneTexture();
 
 	if (sceneTexture == nullptr) return {};
+
+	const auto camera = mScenes["Scene"]->shapes().at("Scene")
+		->component<CameraGroup>()->current();
 	
-	return mScenes["Scene"]->generate(sceneTexture, nullptr);
+	return mScenes["Scene"]->generate(sceneTexture,
+		camera.empty() ? nullptr : 
+		std::static_pointer_cast<SceneCamera>(mScenes["Scene"]->shapes().at(camera)));
 }
 
 void LRTR::SceneManager::add(const std::shared_ptr<Scene>& scene)

@@ -5,6 +5,7 @@
 #include "../Shared/Accelerators/Group.hpp"
 #include "../Core/Noncopyable.hpp"
 #include "Cameras/Camera.hpp"
+#include "System.hpp"
 #include "Shape.hpp"
 
 #include <unordered_map>
