@@ -10,9 +10,9 @@ void ImGui::BeginPropertyTable(const char* name)
 void ImGui::Property(const char* name, const std::function<void()>& contentCall)
 {
 	AlignTextToFramePadding();
-
 	Text(name); NextColumn();
 
+	AlignTextToFramePadding();
 	contentCall(); NextColumn();
 }
 

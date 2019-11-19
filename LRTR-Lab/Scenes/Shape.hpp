@@ -36,6 +36,8 @@ namespace LRTR {
 	private:
 		Group<std::type_index, std::shared_ptr<Component>> mComponents;
 		Group<std::type_index, size_t> mComponentsIndex;
+
+		size_t mOrder = 0;
 	};
 
 	template<typename Type>
@@ -46,10 +48,8 @@ namespace LRTR {
 	{
 		static_assert(IsComponent<TComponent>::value, "The Component should be based of Component.");
 		
-		static size_t order = 0;
-
 		mComponents.insert({ typeid(TComponent), component });
-		mComponentsIndex.insert({ typeid(TComponent),  order++ });
+		mComponentsIndex.insert({ typeid(TComponent),  mOrder++ });
 	}
 
 	template <typename TComponent>
@@ -66,7 +66,7 @@ namespace LRTR {
 	{
 		static_assert(IsComponent<TComponent>::value, "The Component should be based of Component.");
 
-		return mComponents.at(typeid(TComponent));
+		return std::dynamic_pointer_cast<TComponent>(mComponents.at(typeid(TComponent)));
 	}
 
 	template <typename TComponent>

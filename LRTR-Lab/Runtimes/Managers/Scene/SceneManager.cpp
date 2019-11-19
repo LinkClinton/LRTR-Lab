@@ -7,6 +7,7 @@
 #include "../../../Scenes/Cameras/Components/Perspective.hpp"
 #include "../../../Scenes/Components/CoordinateSystem.hpp"
 #include "../../../Scenes/Components/TransformWrap.hpp"
+#include "../../../Scenes/Components/CameraGroup.hpp"
 #include "../../../Scenes/Scene.hpp"
 
 LRTR::SceneManager::SceneManager(
@@ -17,10 +18,7 @@ LRTR::SceneManager::SceneManager(
 	add(std::make_shared<Scene>("Scene", mDevice));
 
 	mScenes["Scene"]->add("Camera0", std::make_shared<PerspectiveCamera>());
-	mScenes["Scene"]->add("Shape0", std::make_shared<Shape>());
-
-	mScenes["Scene"]->shapes().at("Shape0")->addComponent(std::make_shared<CoordinateSystem>());
-	mScenes["Scene"]->shapes().at("Shape0")->addComponent(std::make_shared<TransformWrap>());
+	
 }
 
 void LRTR::SceneManager::update(float delta)

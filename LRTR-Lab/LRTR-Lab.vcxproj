@@ -190,10 +190,12 @@
     <ClCompile Include="Scenes\Cameras\Camera.cpp" />
     <ClCompile Include="Scenes\Cameras\Components\Perspective.cpp" />
     <ClCompile Include="Scenes\Component.cpp" />
+    <ClCompile Include="Scenes\Components\CameraGroup.cpp" />
     <ClCompile Include="Scenes\Components\CoordinateSystem.cpp" />
     <ClCompile Include="Scenes\Components\TransformWrap.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
     <ClCompile Include="Scenes\Shape.cpp" />
+    <ClCompile Include="Scenes\Shapes\SceneProperty.cpp" />
     <ClCompile Include="Shared\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -233,10 +235,12 @@
     <ClInclude Include="Scenes\Cameras\Components\Perspective.hpp" />
     <ClInclude Include="Scenes\Cameras\Components\Projective.hpp" />
     <ClInclude Include="Scenes\Component.hpp" />
+    <ClInclude Include="Scenes\Components\CameraGroup.hpp" />
     <ClInclude Include="Scenes\Components\CoordinateSystem.hpp" />
     <ClInclude Include="Scenes\Components\TransformWrap.hpp" />
     <ClInclude Include="Scenes\Scene.hpp" />
     <ClInclude Include="Scenes\Shape.hpp" />
+    <ClInclude Include="Scenes\Shapes\SceneProperty.hpp" />
     <ClInclude Include="Shared\Accelerators\Group.hpp" />
     <ClInclude Include="Shared\Color.hpp" />
     <ClInclude Include="Shared\Math\Math.hpp" />

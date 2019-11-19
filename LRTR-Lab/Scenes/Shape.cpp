@@ -30,7 +30,7 @@ void LRTR::Shape::onProperty()
 			return  first.second < second.second;
 		});
 
-	static auto treeNodeFlags = ImGuiTreeNodeFlags_Framed;
+	static auto treeNodeFlags = ImGuiTreeNodeFlags_::ImGuiTreeNodeFlags_Framed;
 	
 	if (ImGui::TreeNodeEx("Info", treeNodeFlags)) {
 		ImGui::BeginPropertyTable("Info");

@@ -26,10 +26,17 @@ void LRTR::SceneViewUIComponent::update()
 	ImGui::Begin("Scene", &mShow, imGuiWindowFlags);
 
 	const auto mainMenuHeight = mRuntimeSharing->uiManager()->components().at("MainMenu")->size().y;
+
+	//ensure that the size of texture is same ratio of window.
+	const auto size = ImGui::GetWindowSize();
+	const auto offsetSize = ImVec2(
+		size.x - (ImGui::GetWindowContentRegionMax().x - ImGui::GetWindowContentRegionMin().x),
+		size.y - (ImGui::GetWindowContentRegionMax().y - ImGui::GetWindowContentRegionMin().y)
+	);
 	
 	ImGui::SetWindowSize(ImVec2(
-		mRuntimeSharing->uiManager()->width() * 0.8f,
-		mRuntimeSharing->uiManager()->height() * 0.8f
+		mRuntimeSharing->uiManager()->width() * 0.8f + offsetSize.x, 
+		mRuntimeSharing->uiManager()->height() * 0.8f + offsetSize.y
 	));
 
 	ImGui::SetWindowPos(ImVec2(

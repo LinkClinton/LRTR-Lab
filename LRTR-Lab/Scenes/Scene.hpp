@@ -53,6 +53,8 @@ namespace LRTR {
 		std::shared_ptr<CodeRed::GpuRenderPass> mRenderPass;
 
 		StringGroup<std::shared_ptr<Shape>> mShapes;
+
+		std::shared_ptr<Shape> mProperty;
 	};
 	
 }

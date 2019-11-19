@@ -74,6 +74,12 @@
     <ClCompile Include="Extensions\ImGui\ImGui.cpp">
       <Filter>Extensions\ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="Scenes\Components\CameraGroup.cpp">
+      <Filter>Scenes\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Shapes\SceneProperty.cpp">
+      <Filter>Scenes\Shapes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scenes">
@@ -132,6 +138,9 @@
     </Filter>
     <Filter Include="Scenes\Cameras\Components">
       <UniqueIdentifier>{15aacd57-0603-4c0e-b48f-2985da6f74b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes\Shapes">
+      <UniqueIdentifier>{d0816ef1-a9f8-46d1-b866-73e968267c63}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -248,6 +257,12 @@
     </ClInclude>
     <ClInclude Include="Extensions\ImGui\ImGui.hpp">
       <Filter>Extensions\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Components\CameraGroup.hpp">
+      <Filter>Scenes\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Shapes\SceneProperty.hpp">
+      <Filter>Scenes\Shapes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
