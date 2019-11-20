@@ -201,6 +201,7 @@
     <ClCompile Include="Shared\FrameResources.cpp" />
     <ClCompile Include="Shared\Graphics\PipelineInfo.cpp" />
     <ClCompile Include="Shared\Graphics\ResourceHelper.cpp" />
+    <ClCompile Include="Shared\Graphics\ShaderCompiler.cpp" />
     <ClCompile Include="Shared\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -253,6 +254,7 @@
     <ClInclude Include="Shared\FrameResources.hpp" />
     <ClInclude Include="Shared\Graphics\PipelineInfo.hpp" />
     <ClInclude Include="Shared\Graphics\ResourceHelper.hpp" />
+    <ClInclude Include="Shared\Graphics\ShaderCompiler.hpp" />
     <ClInclude Include="Shared\Math\Math.hpp" />
     <ClInclude Include="Shared\Math\Matrix.hpp" />
     <ClInclude Include="Shared\Math\Vector.hpp" />
@@ -265,6 +267,22 @@
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)/Resources/Fonts/</DestinationFolders>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Resources/Fonts/</DestinationFolders>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/Resources/Fonts/</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\CoordinateRenderSystemFrag.hlsl">
+      <FileType>Document</FileType>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)/Resources/Shaders/Systems/DirectX12</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)/Resources/Shaders/Systems/DirectX12</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Resources/Shaders/Systems/DirectX12</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/Resources/Shaders/Systems/DirectX12</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\CoordinateRenderSystemVert.hlsl">
+      <FileType>Document</FileType>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)/Resources/Shaders/Systems/DirectX12</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)/Resources/Shaders/Systems/DirectX12</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Resources/Shaders/Systems/DirectX12</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/Resources/Shaders/Systems/DirectX12</DestinationFolders>
     </CopyFileToFolders>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -16,11 +16,16 @@ LRTR::SceneManager::SceneManager(
 
 	mScenes["Scene"]->add("Camera", std::make_shared<PerspectiveCamera>());
 
+	mScenes["Scene"]->shapes().at("Camera")->component<TransformWrap>()
+		->set(Vector3f(0, 0, -10), Vector4f(0, 0, 1, 0),
+			Vector3f(1));
+	
 	mScenes["Scene"]->addSystem(std::make_shared<CoordinateRenderSystem>(mRuntimeSharing, mDevice));
 }
 
 void LRTR::SceneManager::update(float delta)
 {
+	mScenes["Scene"]->update(delta);
 }
 
 auto LRTR::SceneManager::render(float delta) ->

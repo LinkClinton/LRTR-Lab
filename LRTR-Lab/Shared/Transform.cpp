@@ -39,6 +39,11 @@ auto LRTR::Transform::matrix() const noexcept -> Matrix4x4f
 	return mTransform;
 }
 
+auto LRTR::Transform::inverseMatrix() const noexcept -> Matrix4x4f
+{
+	return mInverse;
+}
+
 auto LRTR::Transform::inverse(const Transform& transform) -> Transform
 {
 	return Transform(transform.mInverse, transform.mTransform);
@@ -75,4 +80,9 @@ auto LRTR::Transform::lookAt(const Vector3f& eye, const Vector3f& at, const Vect
 auto LRTR::Transform::perspectiveFov(Real fovy, Real width, Real height, Real zNear, Real zFar) -> Transform
 {
 	return Transform(glm::perspectiveFovLH(fovy, width, height, zNear, zFar));
+}
+
+auto LRTR::Transform::ortho(Real left, Real right, Real bottom, Real top, Real zNear, Real zFar) -> Transform
+{
+	return Transform(glm::orthoLH_ZO(left, right, bottom, top, zNear, zFar));
 }

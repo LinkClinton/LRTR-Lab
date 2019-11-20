@@ -23,6 +23,10 @@ namespace LRTR {
 			const StringGroup<std::shared_ptr<Shape>>& shapes, 
 			float delta) override;
 	private:
+		void updatePipeline(const std::shared_ptr<CodeRed::GpuFrameBuffer>& frameBuffer) const;
+
+		void updateCamera(const std::shared_ptr<SceneCamera>& camera) const;
+	private:
 		std::shared_ptr<CodeRed::PipelineInfo> mPipelineInfo;
 
 		std::shared_ptr<CodeRed::GpuBuffer> mAxisVertexBuffer;
@@ -30,5 +34,8 @@ namespace LRTR {
 		std::shared_ptr<CodeRed::GpuBuffer> mAxisViewBuffer;
 
 		std::shared_ptr<CodeRed::GpuResourceLayout> mResourceLayout;
+
+		size_t mIndexCount = 0;
+		size_t mAxisCount = 0;
 	};
 }

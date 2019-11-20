@@ -3,13 +3,17 @@
 #include "../../Extensions/ImGui/ImGui.hpp"
 
 void LRTR::CameraGroup::addCamera(const std::string& name)
-{	
+{
+	if (mCameras.empty()) mCurrent = name;
+	
 	mCameras.insert({ name, name });
 }
 
 void LRTR::CameraGroup::removeCamera(const std::string& name)
 {
 	mCameras.erase(name);
+
+	if (mCameras.empty()) mCurrent = std::string();
 }
 
 auto LRTR::CameraGroup::cameras() const noexcept -> const StringGroup<std::string>& 
@@ -36,11 +40,6 @@ void LRTR::CameraGroup::onProperty()
 {
 	ImGui::BeginPropertyTable("Combo");
 
-	//if we do not set current camera
-	//we will use the first camera
-	if (mCurrent.empty() && mCameras.size() != 0)
-		mCurrent = mCameras.begin()->first;
-	
 	ImGui::Property("Camera", [&]()
 		{
 			if (ImGui::BeginCombo("##Camera", mCurrent.c_str())) {

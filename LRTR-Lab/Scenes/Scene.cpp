@@ -81,6 +81,8 @@ auto LRTR::Scene::render(
 	mCommandList->beginRecording();
 
 	mCommandList->beginRenderPass(mRenderPass, mFrameBuffer);
+	mCommandList->setViewPort(mFrameBuffer->fullViewPort());
+	mCommandList->setScissorRect(mFrameBuffer->fullScissorRect());
 
 	for (const auto& system : mSystems) {
 		auto renderSystem = std::dynamic_pointer_cast<RenderSystem>(system);

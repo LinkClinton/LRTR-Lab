@@ -52,6 +52,17 @@ void CodeRed::PipelineInfo::setRenderPass(const std::shared_ptr<GpuRenderPass>& 
 	mRenderPass = render_pass;
 }
 
+void CodeRed::PipelineInfo::setRenderPass(const std::shared_ptr<GpuFrameBuffer>& frameBuffer)
+{
+	const auto renderTarget = frameBuffer->renderTarget();
+	const auto depthStencil = frameBuffer->depthStencil();
+	
+	mRenderPass = mDevice->createRenderPass(
+		renderTarget == nullptr ? std::nullopt : std::optional<Attachment>(Attachment::RenderTarget(renderTarget->format())),
+		depthStencil == nullptr ? std::nullopt : std::optional<Attachment>(Attachment::DepthStencil(depthStencil->format()))
+	);
+}
+
 void CodeRed::PipelineInfo::updateState()
 {
 	mGraphicsPipeline = mDevice->createGraphicsPipeline(
@@ -112,4 +123,30 @@ auto CodeRed::PipelineInfo::renderPass() const noexcept
 	-> std::shared_ptr<GpuRenderPass>
 {
 	return mRenderPass;
+}
+
+auto CodeRed::PipelineInfo::graphicsPipeline() const noexcept -> std::shared_ptr<GpuGraphicsPipeline>
+{
+	return mGraphicsPipeline;
+}
+
+auto CodeRed::PipelineInfo::pipelineFactory() const noexcept -> std::shared_ptr<GpuPipelineFactory>
+{
+	return mPipelineFactory;
+}
+
+auto CodeRed::PipelineInfo::isCompatible(
+	const std::shared_ptr<CodeRed::GpuRenderPass>& renderPass,
+	const std::shared_ptr<CodeRed::GpuFrameBuffer>& frameBuffer) -> bool
+{
+	if (renderPass->color().has_value() != (frameBuffer->renderTarget() != nullptr)) return false;
+	if (renderPass->depth().has_value() != (frameBuffer->depthStencil() != nullptr)) return false;
+
+	if (renderPass->color().has_value() &&
+		renderPass->color()->Format != frameBuffer->renderTarget()->format()) return false;
+
+	if (renderPass->depth().has_value() &&
+		renderPass->depth()->Format != frameBuffer->depthStencil()->format()) return false;
+
+	return true;
 }

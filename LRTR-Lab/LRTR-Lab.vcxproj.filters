@@ -95,6 +95,9 @@
     <ClCompile Include="Shared\Graphics\ResourceHelper.cpp">
       <Filter>Shared\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Shared\Graphics\ShaderCompiler.cpp">
+      <Filter>Shared\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scenes">
@@ -165,6 +168,12 @@
     </Filter>
     <Filter Include="Shared\Graphics">
       <UniqueIdentifier>{56390578-8bbf-4596-b907-f2286bdee8f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Shaders\Systems">
+      <UniqueIdentifier>{db001b71-da23-44f9-8ff0-e86067de2d79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Shaders\Systems\DirectX12">
+      <UniqueIdentifier>{7624bd9b-627a-42b2-af03-3836c9603d5b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -303,10 +312,21 @@
     <ClInclude Include="Shared\Graphics\ResourceHelper.hpp">
       <Filter>Shared\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Shared\Graphics\ShaderCompiler.hpp">
+      <Filter>Shared\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Resources\Fonts\Consola.ttf">
       <Filter>Resources\Fonts</Filter>
     </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Resources\Shaders\Systems\DirectX12\CoordinateRenderSystemFrag.hlsl">
+      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Systems\DirectX12\CoordinateRenderSystemVert.hlsl">
+      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

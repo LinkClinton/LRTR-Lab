@@ -106,4 +106,6 @@ void LRTR::CoordinateSystem::onProperty()
 	ImGui::PopStyleColor();
 	
 	ImGui::EndPropertyTable();
+
+	mAxes[currentAxis] = MathUtility::normalize(mAxes[currentAxis]);
 }

@@ -21,11 +21,47 @@ namespace LRTR {
 	public:
 		template<typename T>
 		static auto pi() -> T;
+
+		template<typename T>
+		static auto cross(const T& v0, const T& v1) -> T;
+
+		template<typename T>
+		static auto normalize(const T& v) -> T;
+
+		template<typename T>
+		static auto dot(const T& v0, const T& v1) -> float;
+
+		template<typename T>
+		static auto acos(const T& v) -> T;
 	};
 
 	template <typename T>
 	auto MathUtility::pi() -> T
 	{
 		return glm::pi<T>();
+	}
+
+	template <typename T>
+	auto MathUtility::cross(const T& v0, const T& v1) -> T
+	{
+		return glm::cross(v0, v1);
+	}
+
+	template <typename T>
+	auto MathUtility::normalize(const T& v) -> T
+	{
+		return glm::normalize(v);
+	}
+
+	template <typename T>
+	auto MathUtility::dot(const T& v0, const T& v1) -> float
+	{
+		return glm::dot(v0, v1);
+	}
+
+	template <typename T>
+	auto MathUtility::acos(const T& v) -> T
+	{
+		return glm::acos(v);
 	}
 }

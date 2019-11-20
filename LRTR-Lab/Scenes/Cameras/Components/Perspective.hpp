@@ -12,7 +12,7 @@ namespace LRTR {
 			const float fovy,
 			const float width,
 			const float height,
-			const float zNear = 0.f,
+			const float zNear = 0.1f,
 			const float zFar = 1000.0f);
 
 		auto typeName() const noexcept -> std::string override;

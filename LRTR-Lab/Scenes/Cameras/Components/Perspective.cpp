@@ -3,7 +3,7 @@
 #include "../../../Extensions/ImGui/ImGui.hpp"
 
 LRTR::Perspective::Perspective() :
-	Perspective(MathUtility::pi<float>() * 0.25f, 1920.0f, 1080.0f, 0.0f, 1000.0f)
+	Perspective(MathUtility::pi<float>() * 0.25f, 1920.0f, 1080.0f, 0.1f, 1000.0f)
 {
 	
 }

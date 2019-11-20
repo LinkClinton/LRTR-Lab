@@ -28,8 +28,10 @@ namespace LRTR {
 		template<typename T>
 		Vector4<T> operator()(const Vector4<T>& vector) const;
 
-		auto matrix() const noexcept->Matrix4x4f;
+		auto matrix() const noexcept -> Matrix4x4f;
 
+		auto inverseMatrix() const noexcept -> Matrix4x4f;
+		
 		static auto inverse(const Transform& transform)->Transform;
 
 		static auto translate(const Vector3f& delta)->Transform;
@@ -41,6 +43,8 @@ namespace LRTR {
 		static auto lookAt(const Vector3f& eye, const Vector3f& at, const Vector3f& up)->Transform;
 	
 		static auto perspectiveFov(Real fovy, Real width, Real height, Real zNear, Real zFar)->Transform;
+
+		static auto ortho(Real left, Real right, Real bottom, Real top, Real zNear, Real zFar)->Transform;
 	private:
 		friend class TransformWrap;
 		

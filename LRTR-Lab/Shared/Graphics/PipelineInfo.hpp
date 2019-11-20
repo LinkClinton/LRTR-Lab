@@ -32,6 +32,9 @@ namespace CodeRed {
 
 		void setRenderPass(
 			const std::shared_ptr<GpuRenderPass>& render_pass);
+
+		void setRenderPass(
+			const std::shared_ptr<GpuFrameBuffer>& frameBuffer);
 		
 		void updateState();
 
@@ -51,9 +54,13 @@ namespace CodeRed {
 
 		auto renderPass() const noexcept -> std::shared_ptr<GpuRenderPass>;
 		
-		auto graphicsPipeline() const noexcept -> std::shared_ptr<GpuGraphicsPipeline> { return mGraphicsPipeline; }
+		auto graphicsPipeline() const noexcept -> std::shared_ptr<GpuGraphicsPipeline>;
 
-		auto pipelineFactory() const noexcept -> std::shared_ptr<GpuPipelineFactory> { return mPipelineFactory; }
+		auto pipelineFactory() const noexcept -> std::shared_ptr<GpuPipelineFactory>;
+
+		static auto isCompatible(
+			const std::shared_ptr<CodeRed::GpuRenderPass>& renderPass,
+			const std::shared_ptr<CodeRed::GpuFrameBuffer>& frameBuffer) -> bool;
 	private:
 		std::shared_ptr<GpuRasterizationState> mRasterizationState;
 		std::shared_ptr<GpuInputAssemblyState> mInputAssemblyState;
