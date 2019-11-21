@@ -175,6 +175,9 @@
     <Filter Include="Resources\Shaders\Systems\DirectX12">
       <UniqueIdentifier>{7624bd9b-627a-42b2-af03-3836c9603d5b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources\Shaders\Systems\Vulkan">
+      <UniqueIdentifier>{9003d1ff-e4b0-4b68-9492-3ab5d8485322}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Runtimes\LabApp.hpp">
@@ -320,13 +323,15 @@
     <CopyFileToFolders Include="Resources\Fonts\Consola.ttf">
       <Filter>Resources\Fonts</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\CoordinateRenderSystemFrag.hlsl" />
+    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\CoordinateRenderSystemVert.hlsl" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Resources\Shaders\Systems\DirectX12\CoordinateRenderSystemFrag.hlsl">
-      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\Systems\DirectX12\CoordinateRenderSystemVert.hlsl">
-      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
-    </FxCompile>
+    <None Include="Resources\Shaders\Systems\Vulkan\CoordinateRenderSystemFrag.frag">
+      <Filter>Resources\Shaders\Systems\Vulkan</Filter>
+    </None>
+    <None Include="Resources\Shaders\Systems\Vulkan\CoordinateRenderSystemVert.vert">
+      <Filter>Resources\Shaders\Systems\Vulkan</Filter>
+    </None>
   </ItemGroup>
 </Project>

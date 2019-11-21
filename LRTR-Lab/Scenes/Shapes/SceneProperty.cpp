@@ -1,6 +1,7 @@
 #include "SceneProperty.hpp"
 
 #include "../Components/CoordinateSystem.hpp"
+#include "../Components/TransformWrap.hpp"
 #include "../Components/CameraGroup.hpp"
 
 LRTR::SceneProperty::SceneProperty()

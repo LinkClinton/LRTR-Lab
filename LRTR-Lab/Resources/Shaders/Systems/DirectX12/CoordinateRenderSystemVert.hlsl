@@ -2,12 +2,11 @@
 
 struct AxisBufferData {
 	matrix Transform;
-	float4 Color;
 };
 
 struct Output {
 	float4 Position : SV_POSITION;
-	uint Identity : SV_INSTANCEID;
+	float4 Color : COLOR;
 };
 
 struct View {
@@ -19,13 +18,14 @@ ConstantBuffer<View> view : register(b1);
 
 Output main(
 	float3 position : POSITION,
-	uint identity : SV_INSTANCEID)
+	float4 color : COLOR,
+	uint vertexId : SV_VERTEXID)
 {
 	Output result;
 
-	result.Position = mul(float4(position, 1.0f), axisBuffer[identity].Transform);
+	result.Position = mul(float4(position, 1.0f), axisBuffer[vertexId / 6].Transform);
 	result.Position = mul(result.Position, view.View);
-	result.Identity = identity;
+	result.Color = color;
 
 	return result;
 }

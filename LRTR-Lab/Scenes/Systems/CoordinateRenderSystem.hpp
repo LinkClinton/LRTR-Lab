@@ -29,13 +29,10 @@ namespace LRTR {
 	private:
 		std::shared_ptr<CodeRed::PipelineInfo> mPipelineInfo;
 
-		std::shared_ptr<CodeRed::GpuBuffer> mAxisVertexBuffer;
-		std::shared_ptr<CodeRed::GpuBuffer> mAxisIndexBuffer;
 		std::shared_ptr<CodeRed::GpuBuffer> mAxisViewBuffer;
 
 		std::shared_ptr<CodeRed::GpuResourceLayout> mResourceLayout;
 
 		size_t mIndexCount = 0;
-		size_t mAxisCount = 0;
 	};
 }

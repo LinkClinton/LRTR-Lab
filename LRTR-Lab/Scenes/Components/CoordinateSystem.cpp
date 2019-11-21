@@ -45,6 +45,11 @@ auto LRTR::CoordinateSystem::color(const Axis& axis) const -> ColorF
 	return mColors[static_cast<UInt32>(axis)];
 }
 
+auto LRTR::CoordinateSystem::length() const -> float
+{
+	return mLength;
+}
+
 auto LRTR::CoordinateSystem::typeName() const noexcept -> std::string
 {
 	return "CoordinateSystem";

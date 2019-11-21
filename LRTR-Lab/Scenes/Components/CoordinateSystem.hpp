@@ -30,6 +30,8 @@ namespace LRTR {
 		auto axis(const Axis& axis) const -> Vector3f;
 
 		auto color(const Axis& axis) const -> ColorF;
+
+		auto length() const -> float;
 		
 		auto typeName() const noexcept -> std::string override;
 
