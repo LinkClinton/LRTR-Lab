@@ -23,7 +23,7 @@ Output main(
 {
 	Output result;
 
-	result.Position = mul(float4(position, 1.0f), axisBuffer[vertexId / 6].Transform);
+	result.Position = mul(float4(position, 1.0f), axisBuffer[vertexId / 2].Transform);
 	result.Position = mul(result.Position, view.View);
 	result.Color = color;
 

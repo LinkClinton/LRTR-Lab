@@ -1,10 +1,10 @@
 #pragma once
 
-#include "../../Core/Renderable.hpp"
+#include "../../../Core/Renderable.hpp"
 
-#include "../../Shared/Math/Math.hpp"
-#include "../../Shared/Color.hpp"
-#include "../Component.hpp"
+#include "../../../Shared/Math/Math.hpp"
+#include "../../../Shared/Color.hpp"
+#include "../../Component.hpp"
 
 namespace LRTR {
 

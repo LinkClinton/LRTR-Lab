@@ -1,6 +1,6 @@
 #include "CoordinateSystem.hpp"
 
-#include "../../Extensions/ImGui/ImGui.hpp"
+#include "../../../Extensions/ImGui/ImGui.hpp"
 
 LRTR::CoordinateSystem::CoordinateSystem() :
 	CoordinateSystem(
@@ -49,13 +49,13 @@ auto LRTR::CoordinateSystem::typeIndex() const noexcept -> std::type_index
 
 void LRTR::CoordinateSystem::onProperty()
 {
-	const static auto EditFlags =
+	static const auto EditFlags =
 		ImGuiColorEditFlags_NoInputs |
 		ImGuiColorEditFlags_NoLabel |
 		ImGuiColorEditFlags_AlphaPreview |
 		ImGuiColorEditFlags_Float;
 
-	const char* AxesName[] = {
+	static const char* AxesName[] = {
 		"X",
 		"Y",
 		"Z"
@@ -63,20 +63,7 @@ void LRTR::CoordinateSystem::onProperty()
 
 	static auto currentAxis = static_cast<size_t>(Axis::eX);
 
-	ImGui::BeginPropertyTable("Combo");
-	ImGui::Property("Axis", [&]()
-		{
-			if (ImGui::BeginCombo("##Axis", AxesName[currentAxis])) {
-				for (size_t index = 0; index < mLines.size(); index++) {
-					const auto selected = (currentAxis == index);
-
-					if (ImGui::Selectable(AxesName[index], selected))
-						currentAxis = index;
-					if (selected) ImGui::SetItemDefaultFocus();
-				}
-				ImGui::EndCombo();
-			}
-		});
+	ImGui::AxisProperty(3, currentAxis);
 	
 	ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0, 0, 0, 0.1f));
 
@@ -90,7 +77,7 @@ void LRTR::CoordinateSystem::onProperty()
 		});
 
 	ImGui::BeginPropertyTable("Visibility");
-	ImGui::Property("Visibility", [&]() {ImGui::Checkbox("##Visibility", &mVisibility); });
+	ImGui::Property("Visibility", [&]() { ImGui::Checkbox("##Visibility", &mVisibility); });
 	
 	ImGui::PopStyleColor();
 	

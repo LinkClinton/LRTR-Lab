@@ -191,8 +191,9 @@
     <ClCompile Include="Scenes\Cameras\Components\Perspective.cpp" />
     <ClCompile Include="Scenes\Component.cpp" />
     <ClCompile Include="Scenes\Components\CameraGroup.cpp" />
-    <ClCompile Include="Scenes\Components\CoordinateSystem.cpp" />
-    <ClCompile Include="Scenes\Components\LinesMesh.cpp" />
+    <ClCompile Include="Scenes\Components\LinesMesh\CoordinateSystem.cpp" />
+    <ClCompile Include="Scenes\Components\LinesMesh\LinesGrid.cpp" />
+    <ClCompile Include="Scenes\Components\LinesMesh\LinesMesh.cpp" />
     <ClCompile Include="Scenes\Components\TransformWrap.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
     <ClCompile Include="Scenes\Shape.cpp" />
@@ -243,8 +244,9 @@
     <ClInclude Include="Scenes\Cameras\Components\Projective.hpp" />
     <ClInclude Include="Scenes\Component.hpp" />
     <ClInclude Include="Scenes\Components\CameraGroup.hpp" />
-    <ClInclude Include="Scenes\Components\CoordinateSystem.hpp" />
-    <ClInclude Include="Scenes\Components\LinesMesh.hpp" />
+    <ClInclude Include="Scenes\Components\LinesMesh\CoordinateSystem.hpp" />
+    <ClInclude Include="Scenes\Components\LinesMesh\LinesGrid.hpp" />
+    <ClInclude Include="Scenes\Components\LinesMesh\LinesMesh.hpp" />
     <ClInclude Include="Scenes\Components\TransformWrap.hpp" />
     <ClInclude Include="Scenes\Scene.hpp" />
     <ClInclude Include="Scenes\Shape.hpp" />
@@ -260,6 +262,7 @@
     <ClInclude Include="Shared\Math\Math.hpp" />
     <ClInclude Include="Shared\Math\Matrix.hpp" />
     <ClInclude Include="Shared\Math\Vector.hpp" />
+    <ClInclude Include="Shared\Rectangle.hpp" />
     <ClInclude Include="Shared\Transform.hpp" />
   </ItemGroup>
   <ItemGroup>

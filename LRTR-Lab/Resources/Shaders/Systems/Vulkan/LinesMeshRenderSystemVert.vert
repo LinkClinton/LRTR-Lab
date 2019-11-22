@@ -18,7 +18,7 @@ layout (location = 0) out vec4 outColor;
 
 void main()
 {
-    gl_Position = (transforms.Transform[gl_VertexIndex / 6] * vec4(inPosition, 1.0));
+    gl_Position = (transforms.Transform[gl_VertexIndex / 2] * vec4(inPosition, 1.0));
     gl_Position = (view.View * gl_Position);
     gl_Position.y = -gl_Position.y;
 

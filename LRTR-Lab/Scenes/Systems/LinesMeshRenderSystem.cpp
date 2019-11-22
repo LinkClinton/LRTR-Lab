@@ -2,7 +2,8 @@
 
 #include <CodeRed/Core/CodeRedGraphics.hpp>
 
-#include "../Components/CoordinateSystem.hpp"
+#include "../Components/LinesMesh/CoordinateSystem.hpp"
+#include "../Components/LinesMesh/LinesGrid.hpp"
 
 #include "../../Shared/Graphics/ResourceHelper.hpp"
 #include "../../Shared/Graphics/ShaderCompiler.hpp"
@@ -39,14 +40,14 @@ LRTR::LinesMeshRenderSystem::LinesMeshRenderSystem(
 		auto vertexBuffer = mDevice->createBuffer(
 			CodeRed::ResourceInfo::VertexBuffer(
 				sizeof(LineVertex),
-				600,
+				200,
 				CodeRed::MemoryHeap::Upload)
 		);
 
 		auto indexBuffer = mDevice->createBuffer(
 			CodeRed::ResourceInfo::IndexBuffer(
 				sizeof(unsigned),
-				600,
+				200,
 				CodeRed::MemoryHeap::Upload)
 		);
 
@@ -136,9 +137,9 @@ void LRTR::LinesMeshRenderSystem::update(const StringGroup<std::shared_ptr<Shape
 	{
 		if (!component->visibility()) return;
 
-		transforms.push_back(transform);
-
 		for (size_t index = 0; index < component->size(); index++) {
+			transforms.push_back(transform);
+
 			const auto line = component->line(index);
 
 			vertices.push_back({ line.Begin, line.Color });
@@ -159,6 +160,9 @@ void LRTR::LinesMeshRenderSystem::update(const StringGroup<std::shared_ptr<Shape
 
 		if (shape.second->hasComponent<LinesMesh>())
 			ProcessLinesMeshComponent(transform, shape.second->component<LinesMesh>());
+
+		if (shape.second->hasComponent<LinesGrid>())
+			ProcessLinesMeshComponent(transform, shape.second->component<LinesGrid>());
 	}
 
 	auto vertexBuffer = mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>("VertexBuffer");
@@ -178,14 +182,14 @@ void LRTR::LinesMeshRenderSystem::update(const StringGroup<std::shared_ptr<Shape
 		vertexBuffer = mDevice->createBuffer(
 			CodeRed::ResourceInfo::VertexBuffer(
 				sizeof(LineVertex),
-				newBufferCount * 6,
+				newBufferCount * 2,
 				CodeRed::MemoryHeap::Upload)
 		);
 
 		indexBuffer = mDevice->createBuffer(
 			CodeRed::ResourceInfo::IndexBuffer(
 				sizeof(unsigned),
-				newBufferCount * 6,
+				newBufferCount * 2,
 				CodeRed::MemoryHeap::Upload)
 		);
 

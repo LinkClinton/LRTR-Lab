@@ -68,9 +68,6 @@
     <ClCompile Include="Scenes\Cameras\Camera.cpp">
       <Filter>Scenes\Cameras</Filter>
     </ClCompile>
-    <ClCompile Include="Scenes\Components\CoordinateSystem.cpp">
-      <Filter>Scenes\Components</Filter>
-    </ClCompile>
     <ClCompile Include="Extensions\ImGui\ImGui.cpp">
       <Filter>Extensions\ImGui</Filter>
     </ClCompile>
@@ -95,11 +92,17 @@
     <ClCompile Include="Shared\Graphics\ShaderCompiler.cpp">
       <Filter>Shared\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Scenes\Components\LinesMesh.cpp">
-      <Filter>Scenes\Components</Filter>
-    </ClCompile>
     <ClCompile Include="Scenes\Systems\LinesMeshRenderSystem.cpp">
       <Filter>Scenes\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Components\LinesMesh\CoordinateSystem.cpp">
+      <Filter>Scenes\Components\LinesMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Components\LinesMesh\LinesMesh.cpp">
+      <Filter>Scenes\Components\LinesMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Components\LinesMesh\LinesGrid.cpp">
+      <Filter>Scenes\Components\LinesMesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -180,6 +183,9 @@
     </Filter>
     <Filter Include="Resources\Shaders\Systems\Vulkan">
       <UniqueIdentifier>{9003d1ff-e4b0-4b68-9492-3ab5d8485322}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes\Components\LinesMesh">
+      <UniqueIdentifier>{7a1921cb-d146-4d12-aebb-5eabbcdb8fad}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -288,9 +294,6 @@
     <ClInclude Include="Scenes\Components\TransformWrap.hpp">
       <Filter>Scenes\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Scenes\Components\CoordinateSystem.hpp">
-      <Filter>Scenes\Components</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Renderable.hpp">
       <Filter>Core</Filter>
     </ClInclude>
@@ -318,11 +321,20 @@
     <ClInclude Include="Shared\Graphics\ShaderCompiler.hpp">
       <Filter>Shared\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Scenes\Components\LinesMesh.hpp">
-      <Filter>Scenes\Components</Filter>
-    </ClInclude>
     <ClInclude Include="Scenes\Systems\LinesMeshRenderSystem.hpp">
       <Filter>Scenes\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Components\LinesMesh\CoordinateSystem.hpp">
+      <Filter>Scenes\Components\LinesMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Components\LinesMesh\LinesMesh.hpp">
+      <Filter>Scenes\Components\LinesMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Components\LinesMesh\LinesGrid.hpp">
+      <Filter>Scenes\Components\LinesMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Shared\Rectangle.hpp">
+      <Filter>Shared</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

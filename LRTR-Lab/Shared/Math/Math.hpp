@@ -36,6 +36,12 @@ namespace LRTR {
 
 		template<typename T>
 		static auto clamp(const T& value, const T& min, const T& max) -> T;
+
+		template<typename T>
+		static auto max(const T& v0, const T& v1) -> T;
+
+		template<typename T>
+		static auto min(const T& v0, const T& v1) -> T;
 	};
 
 	template <typename T>
@@ -72,5 +78,17 @@ namespace LRTR {
 	auto MathUtility::clamp(const T& value, const T& min, const T& max) -> T
 	{
 		return glm::clamp(value, min, max);
+	}
+
+	template <typename T>
+	auto MathUtility::max(const T& v0, const T& v1) -> T
+	{
+		return glm::max(v0, v1);
+	}
+
+	template <typename T>
+	auto MathUtility::min(const T& v0, const T& v1) -> T
+	{
+		return glm::min(v0, v1);
 	}
 }
