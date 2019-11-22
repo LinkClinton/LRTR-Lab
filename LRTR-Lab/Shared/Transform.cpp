@@ -74,15 +74,15 @@ auto LRTR::Transform::scale(const Vector3f& value) -> Transform
 
 auto LRTR::Transform::lookAt(const Vector3f& eye, const Vector3f& at, const Vector3f& up) -> Transform
 {
-	return Transform(glm::lookAtLH(eye, at, up));
+	return Transform(glm::lookAtRH(eye, at, up));
 }
 
 auto LRTR::Transform::perspectiveFov(Real fovy, Real width, Real height, Real zNear, Real zFar) -> Transform
 {
-	return Transform(glm::perspectiveFovLH(fovy, width, height, zNear, zFar));
+	return Transform(glm::perspectiveFovRH(fovy, width, height, zNear, zFar));
 }
 
 auto LRTR::Transform::ortho(Real left, Real right, Real bottom, Real top, Real zNear, Real zFar) -> Transform
 {
-	return Transform(glm::orthoLH_ZO(left, right, bottom, top, zNear, zFar));
+	return Transform(glm::orthoRH_ZO(left, right, bottom, top, zNear, zFar));
 }

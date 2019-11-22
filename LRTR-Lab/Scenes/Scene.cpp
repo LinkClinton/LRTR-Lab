@@ -88,7 +88,7 @@ auto LRTR::Scene::render(
 		auto renderSystem = std::dynamic_pointer_cast<RenderSystem>(system);
 
 		if (renderSystem != nullptr)
-			renderSystem->render(mCommandList, mFrameBuffer, camera, mShapes, delta);
+			renderSystem->render(mCommandList, mFrameBuffer, camera, delta);
 	}
 	
 	mCommandList->endRenderPass();

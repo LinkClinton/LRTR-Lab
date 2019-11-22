@@ -47,7 +47,6 @@ namespace LRTR {
 			const std::shared_ptr<CodeRed::GpuGraphicsCommandList>& commandList,
 			const std::shared_ptr<CodeRed::GpuFrameBuffer>& frameBuffer,
 			const std::shared_ptr<SceneCamera>& camera,
-			const StringGroup<std::shared_ptr<Shape>>& shapes,
 			float delta) = 0;
 	protected:
 		std::shared_ptr<CodeRed::GpuLogicalDevice> mDevice;

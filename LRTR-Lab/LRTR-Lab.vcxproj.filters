@@ -83,9 +83,6 @@
     <ClCompile Include="Scenes\System.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="Scenes\Systems\CoordinateRenderSystem.cpp">
-      <Filter>Scenes\Systems</Filter>
-    </ClCompile>
     <ClCompile Include="Shared\FrameResources.cpp">
       <Filter>Shared</Filter>
     </ClCompile>
@@ -97,6 +94,12 @@
     </ClCompile>
     <ClCompile Include="Shared\Graphics\ShaderCompiler.cpp">
       <Filter>Shared\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Components\LinesMesh.cpp">
+      <Filter>Scenes\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Systems\LinesMeshRenderSystem.cpp">
+      <Filter>Scenes\Systems</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -303,9 +306,6 @@
     <ClInclude Include="Scenes\System.hpp">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="Scenes\Systems\CoordinateRenderSystem.hpp">
-      <Filter>Scenes\Systems</Filter>
-    </ClInclude>
     <ClInclude Include="Shared\FrameResources.hpp">
       <Filter>Shared</Filter>
     </ClInclude>
@@ -318,19 +318,31 @@
     <ClInclude Include="Shared\Graphics\ShaderCompiler.hpp">
       <Filter>Shared\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Scenes\Components\LinesMesh.hpp">
+      <Filter>Scenes\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Systems\LinesMeshRenderSystem.hpp">
+      <Filter>Scenes\Systems</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Resources\Fonts\Consola.ttf">
       <Filter>Resources\Fonts</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\CoordinateRenderSystemFrag.hlsl" />
-    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\CoordinateRenderSystemVert.hlsl" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Shaders\Systems\Vulkan\CoordinateRenderSystemFrag.frag">
+    <FxCompile Include="Resources\Shaders\Systems\DirectX12\LinesMeshRenderSystemFrag.hlsl">
+      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Systems\DirectX12\LinesMeshRenderSystemVert.hlsl">
+      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Shaders\Systems\Vulkan\LinesMeshRenderSystemFrag.frag">
       <Filter>Resources\Shaders\Systems\Vulkan</Filter>
     </None>
-    <None Include="Resources\Shaders\Systems\Vulkan\CoordinateRenderSystemVert.vert">
+    <None Include="Resources\Shaders\Systems\Vulkan\LinesMeshRenderSystemVert.vert">
       <Filter>Resources\Shaders\Systems\Vulkan</Filter>
     </None>
   </ItemGroup>

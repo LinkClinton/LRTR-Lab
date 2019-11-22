@@ -1,4 +1,4 @@
-#include "CoordinateRenderSystem.hpp"
+#include "LinesMeshRenderSystem.hpp"
 
 #include <CodeRed/Core/CodeRedGraphics.hpp>
 
@@ -9,20 +9,20 @@
 #include "../../Shared/Color.hpp"
 
 namespace LRTR {
-	
-	struct AxisVertex {
+
+	struct LineVertex {
 		Vector3f Position;
 		ColorF Color;
 	};
-	
+
 }
 
-LRTR::CoordinateRenderSystem::CoordinateRenderSystem(
+LRTR::LinesMeshRenderSystem::LinesMeshRenderSystem(
 	const std::shared_ptr<RuntimeSharing>& sharing,
 	const std::shared_ptr<CodeRed::GpuLogicalDevice>& device,
 	size_t maxFrameCount) : RenderSystem(sharing, device, maxFrameCount)
 {
-	mAxisViewBuffer = mDevice->createBuffer(
+	mLineViewBuffer = mDevice->createBuffer(
 		CodeRed::ResourceInfo::ConstantBuffer(
 			sizeof(Matrix4x4f)
 		)
@@ -38,32 +38,32 @@ LRTR::CoordinateRenderSystem::CoordinateRenderSystem(
 		auto descriptorHeap = mDevice->createDescriptorHeap(mResourceLayout);
 		auto vertexBuffer = mDevice->createBuffer(
 			CodeRed::ResourceInfo::VertexBuffer(
-				sizeof(AxisVertex), 
-				60,
+				sizeof(LineVertex),
+				600,
 				CodeRed::MemoryHeap::Upload)
 		);
 
 		auto indexBuffer = mDevice->createBuffer(
 			CodeRed::ResourceInfo::IndexBuffer(
 				sizeof(unsigned),
-				60,
+				600,
 				CodeRed::MemoryHeap::Upload)
 		);
 
-		auto axisBuffer = mDevice->createBuffer(
+		auto lineBuffer = mDevice->createBuffer(
 			CodeRed::ResourceInfo::GroupBuffer(
 				sizeof(Matrix4x4f),
-				10,
+				100,
 				CodeRed::MemoryHeap::Upload)
 		);
 
-		descriptorHeap->bindBuffer(axisBuffer, 0);
-		descriptorHeap->bindBuffer(mAxisViewBuffer, 1);
-		
+		descriptorHeap->bindBuffer(lineBuffer, 0);
+		descriptorHeap->bindBuffer(mLineViewBuffer, 1);
+
 		frameResource.set("DescriptorHeap", descriptorHeap);
 		frameResource.set("VertexBuffer", vertexBuffer);
 		frameResource.set("IndexBuffer", indexBuffer);
-		frameResource.set("AxisBuffer", axisBuffer);
+		frameResource.set("LineBuffer", lineBuffer);
 	}
 
 	mPipelineInfo = std::make_shared<CodeRed::PipelineInfo>(mDevice);
@@ -79,14 +79,14 @@ LRTR::CoordinateRenderSystem::CoordinateRenderSystem(
 			CodeRed::PrimitiveTopology::LineList
 		)
 	);
-	
+
 	mPipelineInfo->setResourceLayout(mResourceLayout);
 
 	if (mDevice->apiVersion() == CodeRed::APIVersion::DirectX12) {
 		const auto vShaderCode = CodeRed::ShaderCompiler::readShader(
-			"./Resources/Shaders/Systems/DirectX12/CoordinateRenderSystemVert.hlsl");
+			"./Resources/Shaders/Systems/DirectX12/LinesMeshRenderSystemVert.hlsl");
 		const auto fShaderCode = CodeRed::ShaderCompiler::readShader(
-			"./Resources/Shaders/Systems/DirectX12/CoordinateRenderSystemFrag.hlsl");
+			"./Resources/Shaders/Systems/DirectX12/LinesMeshRenderSystemFrag.hlsl");
 
 		mPipelineInfo->setVertexShaderState(
 			pipelineFactory->createShaderState(
@@ -104,9 +104,9 @@ LRTR::CoordinateRenderSystem::CoordinateRenderSystem(
 	}
 	else {
 		const auto vShaderCode = CodeRed::ShaderCompiler::readShader(
-			"./Resources/Shaders/Systems/Vulkan/CoordinateRenderSystemVert.vert");
+			"./Resources/Shaders/Systems/Vulkan/LinesMeshRenderSystemVert.vert");
 		const auto fShaderCode = CodeRed::ShaderCompiler::readShader(
-			"./Resources/Shaders/Systems/Vulkan/CoordinateRenderSystemFrag.frag");
+			"./Resources/Shaders/Systems/Vulkan/LinesMeshRenderSystemFrag.frag");
 
 		mPipelineInfo->setVertexShaderState(
 			pipelineFactory->createShaderState(
@@ -124,97 +124,110 @@ LRTR::CoordinateRenderSystem::CoordinateRenderSystem(
 	}
 }
 
-void LRTR::CoordinateRenderSystem::update(const StringGroup<std::shared_ptr<Shape>>& shapes, float delta)
+void LRTR::LinesMeshRenderSystem::update(const StringGroup<std::shared_ptr<Shape>>& shapes, float delta)
 {
 	std::vector<Matrix4x4f> transforms;
-	std::vector<AxisVertex> vertices;
+	std::vector<LineVertex> vertices;
 	std::vector<unsigned> indices;
 
-	for (const auto& shape : shapes) {
-		if (shape.second->hasComponent<CoordinateSystem>()) {
-			const auto axisComponent = shape.second->component<CoordinateSystem>();
+	static const auto ProcessLinesMeshComponent = [&](
+		const Matrix4x4f& transform,
+		const std::shared_ptr<LinesMesh>& component)
+	{
+		if (!component->visibility()) return;
 
-			if (!axisComponent->visibility()) continue;
-			
-			//if we have transform property, we need build the transform matrix
-			if (shape.second->hasComponent<TransformWrap>())
-				transforms.push_back(shape.second->component<TransformWrap>()->transform().matrix());
-			else transforms.push_back(Matrix4x4f(1));
+		transforms.push_back(transform);
 
-			for (size_t index = 0; index < 3; index++) {
-				const auto axis = static_cast<Axis>(index);
-				const auto color = axisComponent->color(axis);
-				const auto length = axisComponent->length();
-				
-				vertices.push_back({ Vector3f(0), color });
-				vertices.push_back({ axisComponent->axis(axis) * length, color });
-				
-				indices.push_back(static_cast<unsigned>(vertices.size() - 2));
-				indices.push_back(static_cast<unsigned>(vertices.size() - 1));
-			}
+		for (size_t index = 0; index < component->size(); index++) {
+			const auto line = component->line(index);
+
+			vertices.push_back({ line.Begin, line.Color });
+			vertices.push_back({ line.End, line.Color });
+
+			indices.push_back(static_cast<unsigned>(vertices.size() - 2));
+			indices.push_back(static_cast<unsigned>(vertices.size() - 1));
 		}
+	};
+	
+	for (const auto& shape : shapes) {
+		const auto transform =
+			shape.second->hasComponent<TransformWrap>() ? shape.second->component<TransformWrap>()->transform().matrix() :
+			Matrix4x4f(1);
+		
+		if (shape.second->hasComponent<CoordinateSystem>())
+			ProcessLinesMeshComponent(transform, shape.second->component<CoordinateSystem>());
+
+		if (shape.second->hasComponent<LinesMesh>())
+			ProcessLinesMeshComponent(transform, shape.second->component<LinesMesh>());
 	}
 
 	auto vertexBuffer = mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>("VertexBuffer");
 	auto indexBuffer = mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>("IndexBuffer");
-	auto axisBuffer = mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>("AxisBuffer");
+	auto lineBuffer = mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>("LineBuffer");
 
 	//if the buffer can not store all data, we need expand them
 	//in current version, we only expand the size to transform size
-	if (axisBuffer->count() < transforms.size()) {
+	if (lineBuffer->count() < transforms.size()) {
+		const size_t expandLength = 100;
+		
+		auto newBufferCount = lineBuffer->count();
+
+		while (newBufferCount < transforms.size()) 
+			newBufferCount = newBufferCount + expandLength;
+		
 		vertexBuffer = mDevice->createBuffer(
 			CodeRed::ResourceInfo::VertexBuffer(
-				sizeof(AxisVertex),
-				transforms.size() * 6,
+				sizeof(LineVertex),
+				newBufferCount * 6,
 				CodeRed::MemoryHeap::Upload)
 		);
 
 		indexBuffer = mDevice->createBuffer(
 			CodeRed::ResourceInfo::IndexBuffer(
 				sizeof(unsigned),
-				transforms.size() * 6,
+				newBufferCount * 6,
 				CodeRed::MemoryHeap::Upload)
 		);
 
-		axisBuffer = mDevice->createBuffer(
+		lineBuffer = mDevice->createBuffer(
 			CodeRed::ResourceInfo::GroupBuffer(
 				sizeof(Matrix4x4f),
-				transforms.size(),
+				newBufferCount,
 				CodeRed::MemoryHeap::Upload)
 		);
 
 		//update the buffer to frame resources
 		mFrameResources[mCurrentFrameIndex].set("VertexBuffer", vertexBuffer);
 		mFrameResources[mCurrentFrameIndex].set("IndexBuffer", indexBuffer);
-		mFrameResources[mCurrentFrameIndex].set("AxisBuffer", axisBuffer);
+		mFrameResources[mCurrentFrameIndex].set("LineBuffer", lineBuffer);
 
 		//do not forget to update the buffer we bind to descriptor heap.
 		mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuDescriptorHeap>("DescriptorHeap")
-			->bindBuffer(axisBuffer, 0);
+			->bindBuffer(lineBuffer, 0);
 	}
 
 	mIndexCount = indices.size();
 
 	if (mIndexCount == 0) return;
-	CodeRed::ResourceHelper::updateBuffer(vertexBuffer, vertices.data(), sizeof(AxisVertex) * vertices.size());
+
+	CodeRed::ResourceHelper::updateBuffer(vertexBuffer, vertices.data(), sizeof(LineVertex) * vertices.size());
 	CodeRed::ResourceHelper::updateBuffer(indexBuffer, indices.data(), sizeof(unsigned) * indices.size());
-	CodeRed::ResourceHelper::updateBuffer(axisBuffer, transforms.data(), sizeof(Matrix4x4f) * transforms.size());
+	CodeRed::ResourceHelper::updateBuffer(lineBuffer, transforms.data(), sizeof(Matrix4x4f) * transforms.size());
 }
 
-void LRTR::CoordinateRenderSystem::render(
+void LRTR::LinesMeshRenderSystem::render(
 	const std::shared_ptr<CodeRed::GpuGraphicsCommandList>& commandList,
-	const std::shared_ptr<CodeRed::GpuFrameBuffer>& frameBuffer, 
+	const std::shared_ptr<CodeRed::GpuFrameBuffer>& frameBuffer,
 	const std::shared_ptr<SceneCamera>& camera,
-	const StringGroup<std::shared_ptr<Shape>>& shapes, 
 	float delta)
 {
 	updatePipeline(frameBuffer);
 	updateCamera(camera);
-	
+
 	const auto descriptorHeap = mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuDescriptorHeap>("DescriptorHeap");
 	const auto vertexBuffer = mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>("VertexBuffer");
 	const auto indexBuffer = mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>("IndexBuffer");
-	
+
 	commandList->setGraphicsPipeline(mPipelineInfo->graphicsPipeline());
 	commandList->setResourceLayout(mResourceLayout);
 	commandList->setDescriptorHeap(descriptorHeap);
@@ -223,11 +236,11 @@ void LRTR::CoordinateRenderSystem::render(
 	commandList->setIndexBuffer(indexBuffer);
 
 	commandList->drawIndexed(mIndexCount, 1);
-	
+
 	mCurrentFrameIndex = (mCurrentFrameIndex + 1) % mFrameResources.size();
 }
 
-void LRTR::CoordinateRenderSystem::updatePipeline(const std::shared_ptr<CodeRed::GpuFrameBuffer>& frameBuffer) const
+void LRTR::LinesMeshRenderSystem::updatePipeline(const std::shared_ptr<CodeRed::GpuFrameBuffer>& frameBuffer) const
 {
 	if (CodeRed::PipelineInfo::isCompatible(mPipelineInfo->renderPass(), frameBuffer) &&
 		mPipelineInfo->graphicsPipeline() != nullptr) return;
@@ -236,13 +249,13 @@ void LRTR::CoordinateRenderSystem::updatePipeline(const std::shared_ptr<CodeRed:
 	mPipelineInfo->updateState();
 }
 
-void LRTR::CoordinateRenderSystem::updateCamera(const std::shared_ptr<SceneCamera>& camera) const
+void LRTR::LinesMeshRenderSystem::updateCamera(const std::shared_ptr<SceneCamera>& camera) const
 {
 	if (camera == nullptr) return;
-	
+
 	const auto cameraComponent = camera->component<Projective>();
-	const auto viewMatrix = cameraComponent->toScreen().matrix() * 
+	const auto viewMatrix = cameraComponent->toScreen().matrix() *
 		camera->component<TransformWrap>()->transform().inverseMatrix();
 
-	CodeRed::ResourceHelper::updateBuffer(mAxisViewBuffer, &viewMatrix);
+	CodeRed::ResourceHelper::updateBuffer(mLineViewBuffer, &viewMatrix);
 }

@@ -21,33 +21,20 @@ LRTR::CoordinateSystem::CoordinateSystem() :
 LRTR::CoordinateSystem::CoordinateSystem(
 	const std::array<Vector3f, 3>& axes, 
 	const std::array<ColorF, 3>& colors,
-	const float length) : mAxes(axes), mColors(colors), mLength(length)
+	const float length)
 {
-}
-
-auto LRTR::CoordinateSystem::axes() const noexcept -> const std::array<Vector3f, 3>& 
-{
-	return mAxes;
-}
-
-auto LRTR::CoordinateSystem::colors() const noexcept -> const std::array<ColorF, 3>& 
-{
-	return mColors;
+	for (size_t index = 0; index < 3; index++)
+		mLines.push_back(Line(Vector3f(0), axes[index], colors[index]));
 }
 
 auto LRTR::CoordinateSystem::axis(const Axis& axis) const -> Vector3f
 {
-	return mAxes[static_cast<UInt32>(axis)];
+	return mLines[static_cast<size_t>(axis)].End;
 }
 
 auto LRTR::CoordinateSystem::color(const Axis& axis) const -> ColorF
 {
-	return mColors[static_cast<UInt32>(axis)];
-}
-
-auto LRTR::CoordinateSystem::length() const -> float
-{
-	return mLength;
+	return mLines[static_cast<size_t>(axis)].Color;
 }
 
 auto LRTR::CoordinateSystem::typeName() const noexcept -> std::string
@@ -80,7 +67,7 @@ void LRTR::CoordinateSystem::onProperty()
 	ImGui::Property("Axis", [&]()
 		{
 			if (ImGui::BeginCombo("##Axis", AxesName[currentAxis])) {
-				for (size_t index = 0; index < mAxes.size(); index++) {
+				for (size_t index = 0; index < mLines.size(); index++) {
 					const auto selected = (currentAxis == index);
 
 					if (ImGui::Selectable(AxesName[index], selected))
@@ -94,16 +81,13 @@ void LRTR::CoordinateSystem::onProperty()
 	ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0, 0, 0, 0.1f));
 
 	ImGui::BeginPropertyTable(AxesName[currentAxis]);
-	ImGui::Property("Location X", [&]() { ImGui::InputFloat("##X", &mAxes[currentAxis].x); });
-	ImGui::Property("         Y", [&]() { ImGui::InputFloat("##Y", &mAxes[currentAxis].y); });
-	ImGui::Property("         Z", [&]() { ImGui::InputFloat("##Z", &mAxes[currentAxis].z); });
+	ImGui::Property("Location X", [&]() { ImGui::InputFloat("##X", &mLines[currentAxis].End.x); });
+	ImGui::Property("         Y", [&]() { ImGui::InputFloat("##Y", &mLines[currentAxis].End.y); });
+	ImGui::Property("         Z", [&]() { ImGui::InputFloat("##Z", &mLines[currentAxis].End.z); });
 	ImGui::Property("Color    RGBA", [&]()
 		{
-			ImGui::ColorEdit4("##ColorEdit4", reinterpret_cast<float*>(&mColors[currentAxis]), EditFlags);
+			ImGui::ColorEdit4("##ColorEdit4", reinterpret_cast<float*>(&mLines[currentAxis].Color), EditFlags);
 		});
-
-	ImGui::BeginPropertyTable("Length");
-	ImGui::Property("Length", [&]() { ImGui::InputFloat("##Length", &mLength); });
 
 	ImGui::BeginPropertyTable("Visibility");
 	ImGui::Property("Visibility", [&]() {ImGui::Checkbox("##Visibility", &mVisibility); });
@@ -111,6 +95,4 @@ void LRTR::CoordinateSystem::onProperty()
 	ImGui::PopStyleColor();
 	
 	ImGui::EndPropertyTable();
-
-	mAxes[currentAxis] = MathUtility::normalize(mAxes[currentAxis]);
 }

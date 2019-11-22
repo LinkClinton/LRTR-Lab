@@ -33,6 +33,9 @@ namespace LRTR {
 
 		template<typename T>
 		static auto acos(const T& v) -> T;
+
+		template<typename T>
+		static auto clamp(const T& value, const T& min, const T& max) -> T;
 	};
 
 	template <typename T>
@@ -63,5 +66,11 @@ namespace LRTR {
 	auto MathUtility::acos(const T& v) -> T
 	{
 		return glm::acos(v);
+	}
+
+	template <typename T>
+	auto MathUtility::clamp(const T& value, const T& min, const T& max) -> T
+	{
+		return glm::clamp(value, min, max);
 	}
 }

@@ -192,12 +192,13 @@
     <ClCompile Include="Scenes\Component.cpp" />
     <ClCompile Include="Scenes\Components\CameraGroup.cpp" />
     <ClCompile Include="Scenes\Components\CoordinateSystem.cpp" />
+    <ClCompile Include="Scenes\Components\LinesMesh.cpp" />
     <ClCompile Include="Scenes\Components\TransformWrap.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
     <ClCompile Include="Scenes\Shape.cpp" />
     <ClCompile Include="Scenes\Shapes\SceneProperty.cpp" />
     <ClCompile Include="Scenes\System.cpp" />
-    <ClCompile Include="Scenes\Systems\CoordinateRenderSystem.cpp" />
+    <ClCompile Include="Scenes\Systems\LinesMeshRenderSystem.cpp" />
     <ClCompile Include="Shared\FrameResources.cpp" />
     <ClCompile Include="Shared\Graphics\PipelineInfo.cpp" />
     <ClCompile Include="Shared\Graphics\ResourceHelper.cpp" />
@@ -243,12 +244,13 @@
     <ClInclude Include="Scenes\Component.hpp" />
     <ClInclude Include="Scenes\Components\CameraGroup.hpp" />
     <ClInclude Include="Scenes\Components\CoordinateSystem.hpp" />
+    <ClInclude Include="Scenes\Components\LinesMesh.hpp" />
     <ClInclude Include="Scenes\Components\TransformWrap.hpp" />
     <ClInclude Include="Scenes\Scene.hpp" />
     <ClInclude Include="Scenes\Shape.hpp" />
     <ClInclude Include="Scenes\Shapes\SceneProperty.hpp" />
     <ClInclude Include="Scenes\System.hpp" />
-    <ClInclude Include="Scenes\Systems\CoordinateRenderSystem.hpp" />
+    <ClInclude Include="Scenes\Systems\LinesMeshRenderSystem.hpp" />
     <ClInclude Include="Shared\Accelerators\Group.hpp" />
     <ClInclude Include="Shared\Color.hpp" />
     <ClInclude Include="Shared\FrameResources.hpp" />
@@ -270,14 +272,14 @@
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\CoordinateRenderSystemFrag.hlsl">
+    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\LinesMeshRenderSystemFrag.hlsl">
       <FileType>Document</FileType>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)/Resources/Shaders/Systems/DirectX12</DestinationFolders>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)/Resources/Shaders/Systems/DirectX12</DestinationFolders>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Resources/Shaders/Systems/DirectX12</DestinationFolders>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/Resources/Shaders/Systems/DirectX12</DestinationFolders>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\CoordinateRenderSystemVert.hlsl">
+    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\LinesMeshRenderSystemVert.hlsl">
       <FileType>Document</FileType>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)/Resources/Shaders/Systems/DirectX12</DestinationFolders>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)/Resources/Shaders/Systems/DirectX12</DestinationFolders>
@@ -286,14 +288,14 @@
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\CoordinateRenderSystemFrag.frag">
+    <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\LinesMeshRenderSystemFrag.frag">
       <FileType>Document</FileType>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)/Resources/Shaders/Systems/Vulkan</DestinationFolders>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)/Resources/Shaders/Systems/Vulkan</DestinationFolders>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Resources/Shaders/Systems/Vulkan</DestinationFolders>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/Resources/Shaders/Systems/Vulkan</DestinationFolders>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\CoordinateRenderSystemVert.vert">
+    <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\LinesMeshRenderSystemVert.vert">
       <FileType>Document</FileType>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)/Resources/Shaders/Systems/Vulkan</DestinationFolders>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)/Resources/Shaders/Systems/Vulkan</DestinationFolders>
