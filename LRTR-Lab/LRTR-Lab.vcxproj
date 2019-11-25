@@ -248,6 +248,7 @@
     <ClInclude Include="Scenes\Components\LinesMesh\LinesGrid.hpp" />
     <ClInclude Include="Scenes\Components\LinesMesh\LinesMesh.hpp" />
     <ClInclude Include="Scenes\Components\TransformWrap.hpp" />
+    <ClInclude Include="Scenes\Components\TrianglesMesh.hpp" />
     <ClInclude Include="Scenes\Scene.hpp" />
     <ClInclude Include="Scenes\Shape.hpp" />
     <ClInclude Include="Scenes\Shapes\SceneProperty.hpp" />

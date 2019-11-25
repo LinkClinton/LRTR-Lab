@@ -187,6 +187,9 @@
     <Filter Include="Scenes\Components\LinesMesh">
       <UniqueIdentifier>{7a1921cb-d146-4d12-aebb-5eabbcdb8fad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scenes\Components\TrianglesMesh">
+      <UniqueIdentifier>{b2ab23d2-196b-4f6e-bbad-b2f54e887b18}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Runtimes\LabApp.hpp">
@@ -336,26 +339,25 @@
     <ClInclude Include="Shared\Rectangle.hpp">
       <Filter>Shared</Filter>
     </ClInclude>
+    <ClInclude Include="Scenes\Components\TrianglesMesh.hpp">
+      <Filter>Scenes\Components\TrianglesMesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Resources\Fonts\Consola.ttf">
       <Filter>Resources\Fonts</Filter>
     </CopyFileToFolders>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="Resources\Shaders\Systems\DirectX12\LinesMeshRenderSystemFrag.hlsl">
+    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\LinesMeshRenderSystemVert.hlsl">
       <Filter>Resources\Shaders\Systems\DirectX12</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\Systems\DirectX12\LinesMeshRenderSystemVert.hlsl">
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\LinesMeshRenderSystemFrag.hlsl">
       <Filter>Resources\Shaders\Systems\DirectX12</Filter>
-    </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Shaders\Systems\Vulkan\LinesMeshRenderSystemFrag.frag">
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\LinesMeshRenderSystemFrag.frag">
       <Filter>Resources\Shaders\Systems\Vulkan</Filter>
-    </None>
-    <None Include="Resources\Shaders\Systems\Vulkan\LinesMeshRenderSystemVert.vert">
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\LinesMeshRenderSystemVert.vert">
       <Filter>Resources\Shaders\Systems\Vulkan</Filter>
-    </None>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>
