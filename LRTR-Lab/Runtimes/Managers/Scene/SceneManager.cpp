@@ -3,6 +3,7 @@
 #include "../UI/Components/SceneViewUIComponent.hpp"
 #include "../UI/UIManager.hpp"
 
+#include "../../../Scenes/Components/TrianglesMesh/TrianglesMesh.hpp"
 #include "../../../Scenes/Systems/LinesMeshRenderSystem.hpp"
 #include "../../../Scenes/Components/CameraGroup.hpp"
 #include "../../../Scenes/Scene.hpp"
@@ -15,11 +16,17 @@ LRTR::SceneManager::SceneManager(
 	add(std::make_shared<Scene>("Scene", mDevice));
 
 	mScenes["Scene"]->add("Camera", std::make_shared<PerspectiveCamera>());
-
+	mScenes["Scene"]->add("TriangleMesh", std::make_shared<Shape>());
+	
 	mScenes["Scene"]->shapes().at("Camera")->component<TransformWrap>()
 		->set(Vector3f(7, -6.92579f, 4.95831f), 
 			Vector4f(0.773438f, 0.333831f, 0.538842f, glm::radians(77.3904f)),
 			Vector3f(1));
+
+	mScenes["Scene"]->shapes().at("TriangleMesh")->addComponent(
+		std::make_shared<TrianglesMesh>());
+	mScenes["Scene"]->shapes().at("TriangleMesh")->addComponent(
+		std::make_shared<TransformWrap>());
 	
 	mScenes["Scene"]->addSystem(std::make_shared<LinesMeshRenderSystem>(mRuntimeSharing, mDevice));
 }

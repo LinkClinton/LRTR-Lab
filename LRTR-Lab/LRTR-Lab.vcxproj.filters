@@ -104,6 +104,9 @@
     <ClCompile Include="Scenes\Components\LinesMesh\LinesGrid.cpp">
       <Filter>Scenes\Components\LinesMesh</Filter>
     </ClCompile>
+    <ClCompile Include="Scenes\Components\TrianglesMesh\TrianglesMesh.cpp">
+      <Filter>Scenes\Components\TrianglesMesh</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scenes">
@@ -339,7 +342,10 @@
     <ClInclude Include="Shared\Rectangle.hpp">
       <Filter>Shared</Filter>
     </ClInclude>
-    <ClInclude Include="Scenes\Components\TrianglesMesh.hpp">
+    <ClInclude Include="Shared\Triangle.hpp">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Components\TrianglesMesh\TrianglesMesh.hpp">
       <Filter>Scenes\Components\TrianglesMesh</Filter>
     </ClInclude>
   </ItemGroup>

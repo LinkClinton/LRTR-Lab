@@ -40,7 +40,7 @@ auto LRTR::LinesMesh::typeIndex() const noexcept -> std::type_index
 
 void LRTR::LinesMesh::onProperty()
 {
-	static const auto LineName = [](size_t index) {return "Line " + std::to_string(index); };
+	static const auto LineName = [](size_t index) {return std::to_string(index); };
 	
 	const static auto EditFlags =
 		ImGuiColorEditFlags_NoInputs |
@@ -76,9 +76,11 @@ void LRTR::LinesMesh::onProperty()
 	ImGui::Property("Begin    X", [&]() { ImGui::InputFloat("##X0", &line.Begin.x); });
 	ImGui::Property("         Y", [&]() { ImGui::InputFloat("##Y0", &line.Begin.y); });
 	ImGui::Property("         Z", [&]() { ImGui::InputFloat("##Z0", &line.Begin.z); });
+	ImGui::BeginPropertyTable(LineName(mCurrentLine).c_str());
 	ImGui::Property("End      X", [&]() { ImGui::InputFloat("##X1", &line.End.x); });
 	ImGui::Property("         Y", [&]() { ImGui::InputFloat("##Y1", &line.End.y); });
 	ImGui::Property("         Z", [&]() { ImGui::InputFloat("##Z1", &line.End.z); });
+	ImGui::BeginPropertyTable(LineName(mCurrentLine).c_str());
 	ImGui::Property("Color    RGBA", [&]()
 		{
 			ImGui::ColorEdit4("##ColorEdit4", reinterpret_cast<float*>(&line.Color), EditFlags);
