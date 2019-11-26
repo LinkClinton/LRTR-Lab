@@ -18,6 +18,8 @@ namespace LRTR {
 			const std::vector<Vector3f>& vertices,
 			const std::vector<unsigned>& indices);
 
+		~TrianglesMesh() = default;
+		
 		auto vertices() const noexcept -> const std::vector<Vector3f>&;
 
 		auto indices() const noexcept -> const std::vector<unsigned>&;

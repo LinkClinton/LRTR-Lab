@@ -194,6 +194,7 @@
     <ClCompile Include="Scenes\Components\LinesMesh\CoordinateSystem.cpp" />
     <ClCompile Include="Scenes\Components\LinesMesh\LinesGrid.cpp" />
     <ClCompile Include="Scenes\Components\LinesMesh\LinesMesh.cpp" />
+    <ClCompile Include="Scenes\Components\Materials\WireframeMaterial.cpp" />
     <ClCompile Include="Scenes\Components\TransformWrap.cpp" />
     <ClCompile Include="Scenes\Components\TrianglesMesh\TrianglesMesh.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
@@ -201,6 +202,7 @@
     <ClCompile Include="Scenes\Shapes\SceneProperty.cpp" />
     <ClCompile Include="Scenes\System.cpp" />
     <ClCompile Include="Scenes\Systems\LinesMeshRenderSystem.cpp" />
+    <ClCompile Include="Scenes\Systems\WireframeRenderSystem.cpp" />
     <ClCompile Include="Shared\FrameResources.cpp" />
     <ClCompile Include="Shared\Graphics\PipelineInfo.cpp" />
     <ClCompile Include="Shared\Graphics\ResourceHelper.cpp" />
@@ -248,6 +250,8 @@
     <ClInclude Include="Scenes\Components\LinesMesh\CoordinateSystem.hpp" />
     <ClInclude Include="Scenes\Components\LinesMesh\LinesGrid.hpp" />
     <ClInclude Include="Scenes\Components\LinesMesh\LinesMesh.hpp" />
+    <ClInclude Include="Scenes\Components\Materials\Material.hpp" />
+    <ClInclude Include="Scenes\Components\Materials\WireframeMaterial.hpp" />
     <ClInclude Include="Scenes\Components\TransformWrap.hpp" />
     <ClInclude Include="Scenes\Components\TrianglesMesh\TrianglesMesh.hpp" />
     <ClInclude Include="Scenes\Scene.hpp" />
@@ -255,6 +259,7 @@
     <ClInclude Include="Scenes\Shapes\SceneProperty.hpp" />
     <ClInclude Include="Scenes\System.hpp" />
     <ClInclude Include="Scenes\Systems\LinesMeshRenderSystem.hpp" />
+    <ClInclude Include="Scenes\Systems\WireframeRenderSystem.hpp" />
     <ClInclude Include="Shared\Accelerators\Group.hpp" />
     <ClInclude Include="Shared\Color.hpp" />
     <ClInclude Include="Shared\FrameResources.hpp" />

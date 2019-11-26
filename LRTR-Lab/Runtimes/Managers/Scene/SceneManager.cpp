@@ -4,6 +4,7 @@
 #include "../UI/UIManager.hpp"
 
 #include "../../../Scenes/Components/TrianglesMesh/TrianglesMesh.hpp"
+#include "../../../Scenes/Components/Materials/WireframeMaterial.hpp"
 #include "../../../Scenes/Systems/LinesMeshRenderSystem.hpp"
 #include "../../../Scenes/Components/CameraGroup.hpp"
 #include "../../../Scenes/Scene.hpp"
@@ -24,9 +25,11 @@ LRTR::SceneManager::SceneManager(
 			Vector3f(1));
 
 	mScenes["Scene"]->shapes().at("TriangleMesh")->addComponent(
+		std::make_shared<TransformWrap>());
+	mScenes["Scene"]->shapes().at("TriangleMesh")->addComponent(
 		std::make_shared<TrianglesMesh>());
 	mScenes["Scene"]->shapes().at("TriangleMesh")->addComponent(
-		std::make_shared<TransformWrap>());
+		std::make_shared<WireframeMaterial>());
 	
 	mScenes["Scene"]->addSystem(std::make_shared<LinesMeshRenderSystem>(mRuntimeSharing, mDevice));
 }

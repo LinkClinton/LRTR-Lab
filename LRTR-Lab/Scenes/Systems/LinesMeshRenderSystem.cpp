@@ -23,7 +23,7 @@ LRTR::LinesMeshRenderSystem::LinesMeshRenderSystem(
 	const std::shared_ptr<CodeRed::GpuLogicalDevice>& device,
 	size_t maxFrameCount) : RenderSystem(sharing, device, maxFrameCount)
 {
-	mLineViewBuffer = mDevice->createBuffer(
+	mViewBuffer = mDevice->createBuffer(
 		CodeRed::ResourceInfo::ConstantBuffer(
 			sizeof(Matrix4x4f)
 		)
@@ -59,7 +59,7 @@ LRTR::LinesMeshRenderSystem::LinesMeshRenderSystem(
 		);
 
 		descriptorHeap->bindBuffer(lineBuffer, 0);
-		descriptorHeap->bindBuffer(mLineViewBuffer, 1);
+		descriptorHeap->bindBuffer(mViewBuffer, 1);
 
 		frameResource.set("DescriptorHeap", descriptorHeap);
 		frameResource.set("VertexBuffer", vertexBuffer);
@@ -261,5 +261,5 @@ void LRTR::LinesMeshRenderSystem::updateCamera(const std::shared_ptr<SceneCamera
 	const auto viewMatrix = cameraComponent->toScreen().matrix() *
 		camera->component<TransformWrap>()->transform().inverseMatrix();
 
-	CodeRed::ResourceHelper::updateBuffer(mLineViewBuffer, &viewMatrix);
+	CodeRed::ResourceHelper::updateBuffer(mViewBuffer, &viewMatrix);
 }

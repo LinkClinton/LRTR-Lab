@@ -18,6 +18,8 @@ namespace LRTR {
 			const std::array<Vector3f, 3>& axes,
 			const std::array<ColorF, 3>& colors,
 			const float length = 1.0f);
+
+		~CoordinateSystem() = default;
 		
 		auto axis(const Axis& axis) const -> Vector3f;
 

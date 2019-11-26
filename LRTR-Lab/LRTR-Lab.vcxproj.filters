@@ -107,6 +107,12 @@
     <ClCompile Include="Scenes\Components\TrianglesMesh\TrianglesMesh.cpp">
       <Filter>Scenes\Components\TrianglesMesh</Filter>
     </ClCompile>
+    <ClCompile Include="Scenes\Components\Materials\WireframeMaterial.cpp">
+      <Filter>Scenes\Components\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Systems\WireframeRenderSystem.cpp">
+      <Filter>Scenes\Systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scenes">
@@ -192,6 +198,9 @@
     </Filter>
     <Filter Include="Scenes\Components\TrianglesMesh">
       <UniqueIdentifier>{b2ab23d2-196b-4f6e-bbad-b2f54e887b18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes\Components\Materials">
+      <UniqueIdentifier>{5a2ec781-0ac1-4573-b2b4-af9d03d77378}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -347,6 +356,15 @@
     </ClInclude>
     <ClInclude Include="Scenes\Components\TrianglesMesh\TrianglesMesh.hpp">
       <Filter>Scenes\Components\TrianglesMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Components\Materials\Material.hpp">
+      <Filter>Scenes\Components\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Components\Materials\WireframeMaterial.hpp">
+      <Filter>Scenes\Components\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Systems\WireframeRenderSystem.hpp">
+      <Filter>Scenes\Systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

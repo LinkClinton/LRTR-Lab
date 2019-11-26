@@ -33,6 +33,8 @@ namespace LRTR {
 			const Vector3f& origin,
 			const ColorF& color = ColorF(1, 1, 1, 1));
 
+		~LinesGrid() = default;
+		
 		auto origin() const noexcept -> Vector3f;
 
 		auto xAxis() const noexcept -> Vector3f;
