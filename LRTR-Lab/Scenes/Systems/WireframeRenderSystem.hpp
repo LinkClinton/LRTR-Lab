@@ -2,12 +2,21 @@
 
 #include "../../Shared/Graphics/PipelineInfo.hpp"
 #include "../../Shared/Accelerators/Group.hpp"
+#include "../../Shared/Color.hpp"
 
 #include "../System.hpp"
 
 namespace LRTR {
 
 	class TrianglesMesh;
+
+	struct WireframeDrawCall {
+		size_t StartVertexLocation;
+		size_t StartIndexLocation;
+		size_t IndexCount;
+
+		ColorF Color;
+	};
 	
 	class WireframeRenderSystem : public RenderSystem {
 	public:
@@ -30,11 +39,13 @@ namespace LRTR {
 		void updateCamera(const std::shared_ptr<SceneCamera>& camera) const;
 	private:
 		using Location = std::pair<size_t, size_t>;
-		using DataIndexGroup = Group<std::shared_ptr<TrianglesMesh>, Location>;
+		using DataIndexGroup = Group<Identity, Location>;
 		
 		std::shared_ptr<CodeRed::GpuResourceLayout> mResourceLayout;
 		std::shared_ptr<CodeRed::PipelineInfo> mPipelineInfo;
 		std::shared_ptr<CodeRed::GpuBuffer> mViewBuffer;
+
+		std::vector<WireframeDrawCall> mDrawCalls;
 	};
 	
 }

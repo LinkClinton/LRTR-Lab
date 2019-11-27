@@ -261,5 +261,5 @@ void LRTR::LinesMeshRenderSystem::updateCamera(const std::shared_ptr<SceneCamera
 	const auto viewMatrix = cameraComponent->toScreen().matrix() *
 		camera->component<TransformWrap>()->transform().inverseMatrix();
 
-	CodeRed::ResourceHelper::updateBuffer(mViewBuffer, &viewMatrix);
+	CodeRed::ResourceHelper::updateBuffer(mViewBuffer, &viewMatrix, sizeof(Matrix4x4f));
 }

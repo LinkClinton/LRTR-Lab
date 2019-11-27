@@ -6,6 +6,7 @@
 #include "../../../Scenes/Components/TrianglesMesh/TrianglesMesh.hpp"
 #include "../../../Scenes/Components/Materials/WireframeMaterial.hpp"
 #include "../../../Scenes/Systems/LinesMeshRenderSystem.hpp"
+#include "../../../Scenes/Systems/WireframeRenderSystem.hpp"
 #include "../../../Scenes/Components/CameraGroup.hpp"
 #include "../../../Scenes/Scene.hpp"
 
@@ -24,14 +25,22 @@ LRTR::SceneManager::SceneManager(
 			Vector4f(0.773438f, 0.333831f, 0.538842f, glm::radians(77.3904f)),
 			Vector3f(1));
 
+	std::vector<TriangleF> triangles = {
+		TriangleF(
+			Vector3f(0,0,0),
+			Vector3f(0,10,0),
+			Vector3f(10,0,0))
+	};
+	
 	mScenes["Scene"]->shapes().at("TriangleMesh")->addComponent(
 		std::make_shared<TransformWrap>());
 	mScenes["Scene"]->shapes().at("TriangleMesh")->addComponent(
-		std::make_shared<TrianglesMesh>());
+		std::make_shared<TrianglesMesh>(triangles));
 	mScenes["Scene"]->shapes().at("TriangleMesh")->addComponent(
 		std::make_shared<WireframeMaterial>());
 	
 	mScenes["Scene"]->addSystem(std::make_shared<LinesMeshRenderSystem>(mRuntimeSharing, mDevice));
+	mScenes["Scene"]->addSystem(std::make_shared<WireframeRenderSystem>(mRuntimeSharing, mDevice));
 }
 
 void LRTR::SceneManager::update(float delta)

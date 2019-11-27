@@ -65,11 +65,70 @@ void CodeRed::ResourceHelper::updateBuffer(
 	const void* data, 
 	const size_t size)
 {
+	if (size == 0) return;
+	
 	const auto memory = buffer->mapMemory();
 
-	std::memcpy(memory, data, size == 0 ? buffer->size() : size);
+	std::memcpy(memory, data, size);
 
 	buffer->unmapMemory();
+}
+
+void CodeRed::ResourceHelper::updateBuffer(
+	const std::shared_ptr<GpuBuffer>& buffer, 
+	const void* data,
+	const size_t offset, 
+	const size_t size)
+{
+	if (size == 0) return;
+	
+	const auto memory = 
+		reinterpret_cast<void*>(
+		reinterpret_cast<size_t>(buffer->mapMemory()) + offset);
+	
+	std::memcpy(memory, data, size);
+
+	buffer->unmapMemory();
+}
+
+void CodeRed::ResourceHelper::copyBuffer(
+	const std::shared_ptr<GpuBuffer>& destination,
+	const std::shared_ptr<GpuBuffer>& source, 
+	const size_t offset)
+{
+	const auto dstMemory =
+		reinterpret_cast<void*>(
+			reinterpret_cast<size_t>(destination->mapMemory()) + offset);
+	const auto srcMemory = source->mapMemory();
+
+	std::memcpy(dstMemory, srcMemory, source->size());
+
+	destination->unmapMemory();
+	source->unmapMemory();
+}
+
+auto CodeRed::ResourceHelper::expandBuffer(
+	const std::shared_ptr<GpuLogicalDevice>& device,
+	const std::shared_ptr<GpuBuffer>& buffer,
+	const size_t count)
+	-> std::shared_ptr<GpuBuffer>
+{
+	if (buffer->size() >= count) return buffer;
+
+	auto bufferSize = buffer->size();
+
+	while (bufferSize < count) bufferSize <<= 1;
+	
+	auto newBuffer = device->createBuffer(
+		ResourceInfo(
+			BufferProperty(buffer->stride(), bufferSize),
+			buffer->layout(),
+			buffer->usage(),
+			buffer->type(),
+			buffer->heap())
+	);
+
+	return newBuffer;
 }
 
 void CodeRed::ResourceHelper::updateTexture(

@@ -384,4 +384,20 @@
       <Filter>Resources\Shaders\Systems\Vulkan</Filter>
     </CopyFileToFolders>
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Resources\Shaders\Systems\DirectX12\WireframeRenderSystemFrag.hlsl">
+      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Systems\DirectX12\WireframeRenderSystemVert.hlsl">
+      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Shaders\Systems\Vulkan\WireframeRenderSystemFrag.frag">
+      <Filter>Resources\Shaders\Systems\Vulkan</Filter>
+    </None>
+    <None Include="Resources\Shaders\Systems\Vulkan\WireframeRenderSystemVert.vert">
+      <Filter>Resources\Shaders\Systems\Vulkan</Filter>
+    </None>
+  </ItemGroup>
 </Project>
