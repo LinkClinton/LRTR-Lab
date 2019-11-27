@@ -113,6 +113,12 @@
     <ClCompile Include="Scenes\Systems\WireframeRenderSystem.cpp">
       <Filter>Scenes\Systems</Filter>
     </ClCompile>
+    <ClCompile Include="Extensions\Assimp\AssimpLoader.cpp">
+      <Filter>Extensions\Assimp</Filter>
+    </ClCompile>
+    <ClCompile Include="Extensions\Assimp\AssimpScene.cpp">
+      <Filter>Extensions\Assimp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scenes">
@@ -201,6 +207,18 @@
     </Filter>
     <Filter Include="Scenes\Components\Materials">
       <UniqueIdentifier>{5a2ec781-0ac1-4573-b2b4-af9d03d77378}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Extensions\Assimp">
+      <UniqueIdentifier>{45638a04-785a-445b-a20b-0f18ce93cb49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Blenders">
+      <UniqueIdentifier>{efe949d3-e2eb-48e7-af81-d12daa7b0063}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Models">
+      <UniqueIdentifier>{2f09abe8-1902-47d6-ae70-81db59a8209c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Scenes">
+      <UniqueIdentifier>{436588aa-a274-4dac-adda-492b59142dac}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -366,6 +384,12 @@
     <ClInclude Include="Scenes\Systems\WireframeRenderSystem.hpp">
       <Filter>Scenes\Systems</Filter>
     </ClInclude>
+    <ClInclude Include="Extensions\Assimp\AssimpLoader.hpp">
+      <Filter>Extensions\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="Extensions\Assimp\AssimpScene.hpp">
+      <Filter>Extensions\Assimp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Resources\Fonts\Consola.ttf">
@@ -383,21 +407,14 @@
     <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\LinesMeshRenderSystemVert.vert">
       <Filter>Resources\Shaders\Systems\Vulkan</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\WireframeRenderSystemFrag.hlsl" />
+    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\WireframeRenderSystemVert.hlsl" />
+    <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\WireframeRenderSystemFrag.frag" />
+    <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\WireframeRenderSystemVert.vert" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Resources\Shaders\Systems\DirectX12\WireframeRenderSystemFrag.hlsl">
-      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\Systems\DirectX12\WireframeRenderSystemVert.hlsl">
-      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
-    </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Shaders\Systems\Vulkan\WireframeRenderSystemFrag.frag">
-      <Filter>Resources\Shaders\Systems\Vulkan</Filter>
-    </None>
-    <None Include="Resources\Shaders\Systems\Vulkan\WireframeRenderSystemVert.vert">
-      <Filter>Resources\Shaders\Systems\Vulkan</Filter>
+    <None Include="Resources\Scenes\fishy_cat.glb">
+      <Filter>Resources\Scenes</Filter>
     </None>
   </ItemGroup>
 </Project>

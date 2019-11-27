@@ -10,12 +10,13 @@
 #define LRTR_RESET_AND_COPY_BUFFER(buffer, name) \
 	if (buffer != mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>(name)) { \
 		CodeRed::ResourceHelper::copyBuffer(buffer, mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>(name)); \
-		mFrameResources[mCurrentFrameIndex].set(name, vertexBuffer); \
+		mFrameResources[mCurrentFrameIndex].set(name, buffer); \
 	}
 
 #define LRTR_RESET_BUFFER(buffer, name) \
 	if (buffer != mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>(name)) { \
-		mFrameResources[mCurrentFrameIndex].set(name, vertexBuffer); \
+		mFrameResources[mCurrentFrameIndex].set(name, buffer); \
+		mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuDescriptorHeap>("DescriptorHeap")->bindBuffer(buffer, 0); \
 	}
 
 LRTR::WireframeRenderSystem::WireframeRenderSystem(
@@ -33,7 +34,7 @@ LRTR::WireframeRenderSystem::WireframeRenderSystem(
 		{
 			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::GroupBuffer, 0),
 			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Buffer,1)
-		}, {}, CodeRed::Constant32Bits(4, 2));
+		}, {}, CodeRed::Constant32Bits(5, 2));
 
 	for (auto& frameResource : mFrameResources) {
 		auto descriptorHeap = mDevice->createDescriptorHeap(mResourceLayout);
@@ -251,13 +252,14 @@ void LRTR::WireframeRenderSystem::render(
 			drawCall.Color.Red,
 			drawCall.Color.Green,
 			drawCall.Color.Blue,
-			drawCall.Color.Alpha
+			drawCall.Color.Alpha,
+			static_cast<unsigned>(index)
 		});
 
 		commandList->drawIndexed(drawCall.IndexCount, 1,
 			drawCall.StartIndexLocation,
 			drawCall.StartVertexLocation,
-			index);
+			0);
 	}
 	
 	mCurrentFrameIndex = (mCurrentFrameIndex + 1) % mFrameResources.size();

@@ -3,6 +3,8 @@
 #include "../UI/Components/SceneViewUIComponent.hpp"
 #include "../UI/UIManager.hpp"
 
+#include "../../../Extensions/Assimp/AssimpLoader.hpp"
+
 #include "../../../Scenes/Components/TrianglesMesh/TrianglesMesh.hpp"
 #include "../../../Scenes/Components/Materials/WireframeMaterial.hpp"
 #include "../../../Scenes/Systems/LinesMeshRenderSystem.hpp"
@@ -15,29 +17,17 @@ LRTR::SceneManager::SceneManager(
 	const std::shared_ptr<CodeRed::GpuLogicalDevice>& device) :
 	Manager(sharing), mDevice(device)
 {	
-	add(std::make_shared<Scene>("Scene", mDevice));
+	add(AssimpLoader::loadScene(mRuntimeSharing, "Scene", "./Resources/Scenes/fishy_cat.glb"));
 
-	mScenes["Scene"]->add("Camera", std::make_shared<PerspectiveCamera>());
-	mScenes["Scene"]->add("TriangleMesh", std::make_shared<Shape>());
-	
-	mScenes["Scene"]->shapes().at("Camera")->component<TransformWrap>()
-		->set(Vector3f(7, -6.92579f, 4.95831f), 
-			Vector4f(0.773438f, 0.333831f, 0.538842f, glm::radians(77.3904f)),
-			Vector3f(1));
-
-	std::vector<TriangleF> triangles = {
-		TriangleF(
-			Vector3f(0,0,0),
-			Vector3f(0,10,0),
-			Vector3f(10,0,0))
-	};
-	
-	mScenes["Scene"]->shapes().at("TriangleMesh")->addComponent(
-		std::make_shared<TransformWrap>());
-	mScenes["Scene"]->shapes().at("TriangleMesh")->addComponent(
-		std::make_shared<TrianglesMesh>(triangles));
-	mScenes["Scene"]->shapes().at("TriangleMesh")->addComponent(
-		std::make_shared<WireframeMaterial>());
+	mScenes["Scene"]->add("Camera", std::make_shared<PerspectiveCamera>(
+		std::make_shared<TransformWrap>(
+			Vector3f(19.4036f, -48.3112f, -2.55386f),
+			Vector4f(0.964458f, 0.156321f, 0.213037f, glm::radians(104.1f)),
+			Vector3f(2.18742f)),
+		std::make_shared<Perspective>(
+			MathUtility::pi<float>() * 0.125f,
+			1920.0f,
+			1080.0f)));
 	
 	mScenes["Scene"]->addSystem(std::make_shared<LinesMeshRenderSystem>(mRuntimeSharing, mDevice));
 	mScenes["Scene"]->addSystem(std::make_shared<WireframeRenderSystem>(mRuntimeSharing, mDevice));

@@ -42,6 +42,9 @@ namespace LRTR {
 
 		template<typename T>
 		static auto min(const T& v0, const T& v1) -> T;
+
+		template<typename T>
+		static auto rotate(const Vector3<T>& from, const Vector3<T>& to) -> Vector4<T>;
 	};
 
 	template <typename T>
@@ -90,5 +93,17 @@ namespace LRTR {
 	auto MathUtility::min(const T& v0, const T& v1) -> T
 	{
 		return glm::min(v0, v1);
+	}
+
+	template <typename T>
+	auto MathUtility::rotate(const Vector3<T>& from, const Vector3<T>& to) -> Vector4<T>
+	{
+		const auto normalFrom = normalize(from);
+		const auto normalTo = normalize(to);
+		
+		const auto rAngle = acos(MathUtility::dot(normalFrom, normalTo));
+		const auto rAxis = cross(normalFrom, normalTo);
+
+		return rAxis == Vector3<T>(0) ? Vector4<T>(0, 0, 0, 0) : Vector4<T>(rAxis, rAngle);
 	}
 }

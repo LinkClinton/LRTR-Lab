@@ -11,11 +11,17 @@ layout (set = 0, binding = 1) uniform View
     mat4 View;
 } view;
 
+layout (push_constant) uniform Config
+{
+	vec4 Color;
+	uint Index;
+} config;
+
 layout (location = 0) in vec3 inPosition;
 
 void main()
 {
-    gl_Position = (transforms.Transform[gl_InstanceIndex] * vec4(inPosition, 1.0));
+    gl_Position = (transforms.Transform[config.Index] * vec4(inPosition, 1.0));
     gl_Position = (view.View * gl_Position);
     gl_Position.y = -gl_Position.y;
 }

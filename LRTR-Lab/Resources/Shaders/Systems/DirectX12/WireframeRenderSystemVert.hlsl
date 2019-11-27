@@ -12,16 +12,21 @@ struct View {
 	matrix View;
 };
 
+struct Config {
+	float4 Color;
+	uint Index;
+};
+
 StructuredBuffer<MeshBufferData> meshBuffer : register(t0);
 ConstantBuffer<View> view : register(b1);
+ConstantBuffer<Config> config : register(b2);
 
 Output main(
-	float3 position : POSITION,
-	uint identity : SV_INSTANCEID)
+	float3 position : POSITION)
 {
 	Output result;
 
-	result.Position = mul(float4(position, 1.0f), meshBuffer[identity].Transform);
+	result.Position = mul(float4(position, 1.0f), meshBuffer[config.Index].Transform);
 	result.Position = mul(result.Position, view.View);
 	
 	return result;

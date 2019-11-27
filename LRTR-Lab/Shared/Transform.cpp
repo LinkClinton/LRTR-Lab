@@ -19,7 +19,7 @@ LRTR::Transform::Transform(const Vector3f& translate, const Vector4f& rotate, co
 	//T * R * S
 	const auto I = Matrix4x4f(1);
 	const auto T = glm::translate(I, translate);
-	const auto R = glm::rotate(I, rotate.w, Vector3f(rotate));
+	const auto R = Vector3f(rotate) == Vector3f(0) ? Matrix4x4f(1) : glm::rotate(I, rotate.w, Vector3f(rotate));
 	const auto S = glm::scale(I, scale);
 
 	mTransform = T * R * S;

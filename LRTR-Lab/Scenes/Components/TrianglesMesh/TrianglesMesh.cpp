@@ -96,6 +96,17 @@ void LRTR::TrianglesMesh::onProperty()
 	mCurrentTriangle = MathUtility::clamp(mCurrentTriangle, static_cast<size_t>(0), mIndices.size() / 3);
 
 	auto currentName = mIndices.empty() ? "Empty" : TriangleName(mCurrentTriangle);
+	auto count = static_cast<int>(size());
+
+	ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0, 0, 0, 0.1f));
+
+	ImGui::BeginPropertyTable("Triangles");
+	ImGui::Property("Triangles", [&]()
+		{
+			ImGui::InputInt("##Count", &count, 0, 0, ImGuiInputTextFlags_ReadOnly);
+		});
+
+	ImGui::PopStyleColor();
 
 	ImGui::BeginPropertyTable("Combo");
 	ImGui::Property("Triangle", [&]()
@@ -115,7 +126,7 @@ void LRTR::TrianglesMesh::onProperty()
 	auto triangle = mIndices.empty() ? TriangleF() : TrianglesMesh::triangle(mCurrentTriangle);
 
 	ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0, 0, 0, 0.1f));
-
+	
 	ImGui::BeginPropertyTable(TriangleName(mCurrentTriangle).c_str());
 	ImGui::Property("V[0]     X", [&]() { DrawFloat("##X0", &triangle.Vertices[0].x); });
 	ImGui::Property("         Y", [&]() { DrawFloat("##Y0", &triangle.Vertices[0].y); });
