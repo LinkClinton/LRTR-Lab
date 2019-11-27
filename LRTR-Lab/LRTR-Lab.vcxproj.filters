@@ -407,14 +407,18 @@
     <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\LinesMeshRenderSystemVert.vert">
       <Filter>Resources\Shaders\Systems\Vulkan</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\WireframeRenderSystemFrag.hlsl" />
-    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\WireframeRenderSystemVert.hlsl" />
-    <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\WireframeRenderSystemFrag.frag" />
-    <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\WireframeRenderSystemVert.vert" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Scenes\fishy_cat.glb">
-      <Filter>Resources\Scenes</Filter>
-    </None>
+    <CopyFileToFolders Include="Resources\Scenes\fishy_cat.glb" />
+    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\WireframeRenderSystemVert.hlsl">
+      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\WireframeRenderSystemFrag.hlsl">
+      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\WireframeRenderSystemFrag.frag">
+      <Filter>Resources\Shaders\Systems\Vulkan</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\WireframeRenderSystemVert.vert">
+      <Filter>Resources\Shaders\Systems\Vulkan</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>

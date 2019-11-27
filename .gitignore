@@ -340,6 +340,8 @@ ASALocalRun/
 healthchecksdb
 /LRTR-Lab/Resources/Fonts/consola.ttf
 *.blend
-/LRTR-Lab/Resources/Models/PikachuM.FBX
 *.FBX
 *.glb
+
+/LRTR-Lab/dna.txt
+/LRTR-Lab/imgui.ini
