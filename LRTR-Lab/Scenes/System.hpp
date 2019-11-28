@@ -13,12 +13,15 @@ namespace LRTR {
 
 	using SceneCamera = ProjectiveCamera;
 	
-	class System : public Noncopyable {
+	class System : public Noncopyable, public TypeInfo {
 	public:
 		explicit System(const std::shared_ptr<RuntimeSharing>& sharing);
 
 		~System() = default;
 
+		auto typeName() const noexcept -> std::string override;
+
+		auto typeIndex() const noexcept -> std::type_index override;
 	protected:
 		std::shared_ptr<RuntimeSharing> mRuntimeSharing;
 	};
@@ -32,6 +35,10 @@ namespace LRTR {
 		virtual void update(
 			const StringGroup<std::shared_ptr<Shape>>& shapes,
 			float delta) = 0;
+
+		auto typeName() const noexcept -> std::string override;
+
+		auto typeIndex() const noexcept -> std::type_index override;
 	};
 
 	class RenderSystem : public UpdateSystem {
@@ -48,6 +55,10 @@ namespace LRTR {
 			const std::shared_ptr<CodeRed::GpuFrameBuffer>& frameBuffer,
 			const std::shared_ptr<SceneCamera>& camera,
 			float delta) = 0;
+
+		auto typeName() const noexcept -> std::string override;
+
+		auto typeIndex() const noexcept -> std::type_index override;
 	protected:
 		std::shared_ptr<CodeRed::GpuLogicalDevice> mDevice;
 

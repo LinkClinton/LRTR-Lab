@@ -21,6 +21,10 @@ namespace LRTR {
 			const std::shared_ptr<CodeRed::GpuFrameBuffer>& frameBuffer,
 			const std::shared_ptr<SceneCamera>& camera,
 			float delta) override;
+
+		auto typeName() const noexcept -> std::string override;
+
+		auto typeIndex() const noexcept -> std::type_index override;
 	private:
 		void updatePipeline(const std::shared_ptr<CodeRed::GpuFrameBuffer>& frameBuffer) const;
 

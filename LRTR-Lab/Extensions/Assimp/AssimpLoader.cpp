@@ -3,6 +3,7 @@
 #include "../../Scenes/Components/TrianglesMesh/TrianglesMesh.hpp"
 #include "../../Scenes/Components/Materials/WireframeMaterial.hpp"
 #include "../../Scenes/Components/LinesMesh/CoordinateSystem.hpp"
+#include "../../Scenes/Components/CollectionLabel.hpp"
 #include "../../Scenes/Cameras/Camera.hpp"
 
 #include <assimp/postprocess.h>
@@ -53,6 +54,8 @@ namespace LRTR {
 
 				totalNumIndices = totalNumIndices + mesh->mFaces[nFace].mNumIndices;
 			}
+
+			meshShape->component<CollectionLabel>()->set(node->mName.C_Str());
 			
 			meshShape->addComponent(std::make_shared<TransformWrap>(
 				Vector3f(position.x, position.y, position.z),

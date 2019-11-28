@@ -244,6 +244,16 @@ void LRTR::LinesMeshRenderSystem::render(
 	mCurrentFrameIndex = (mCurrentFrameIndex + 1) % mFrameResources.size();
 }
 
+auto LRTR::LinesMeshRenderSystem::typeName() const noexcept -> std::string
+{
+	return "LinesMeshRenderSystem";
+}
+
+auto LRTR::LinesMeshRenderSystem::typeIndex() const noexcept -> std::type_index
+{
+	return typeid(LinesMeshRenderSystem);
+}
+
 void LRTR::LinesMeshRenderSystem::updatePipeline(const std::shared_ptr<CodeRed::GpuFrameBuffer>& frameBuffer) const
 {
 	if (CodeRed::PipelineInfo::isCompatible(mPipelineInfo->renderPass(), frameBuffer) &&

@@ -10,13 +10,16 @@ namespace LRTR {
 
 	class Shape : public Noncopyable, public Propertyable, public TypeInfo {
 	public:
-		Shape() = default;
+		Shape();
 
 		~Shape() = default;
-
+		
 		template<typename TComponent>
 		void addComponent(const std::shared_ptr<TComponent>& component);
 
+		template<typename TComponent>
+		void setComponent(const std::shared_ptr<TComponent>& component);
+		
 		template<typename TComponent>
 		void removeComponent();
 
@@ -50,6 +53,15 @@ namespace LRTR {
 		
 		mComponents.insert({ typeid(TComponent), component });
 		mComponentsIndex.insert({ typeid(TComponent),  mOrder++ });
+	}
+
+	template <typename TComponent>
+	void Shape::setComponent(const std::shared_ptr<TComponent>& component)
+	{
+		static_assert(IsComponent<TComponent>::value, "The Component should be based of Component.");
+
+		if (!hasComponent<TComponent>()) addComponent(component);
+		else mComponents[typeid(TComponent)] = component;
 	}
 
 	template <typename TComponent>

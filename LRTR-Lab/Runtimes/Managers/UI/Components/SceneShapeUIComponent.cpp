@@ -1,5 +1,6 @@
 #include "SceneShapeUIComponent.hpp"
 
+#include "../../../../Scenes/Systems/CollectionUpdateSystem.hpp"
 #include "../../../../Scenes/Scene.hpp"
 #include "../../Scene/SceneManager.hpp"
 #include "../UIManager.hpp"
@@ -21,6 +22,9 @@ void LRTR::SceneShapeUIComponent::update()
 		ImGuiWindowFlags_NoMove |
 		ImGuiWindowFlags_NoResize |
 		ImGuiWindowFlags_NoCollapse;
+
+	static auto treeNodeFlags = 
+		ImGuiTreeNodeFlags_::ImGuiTreeNodeFlags_Framed;
 	
 	ImGui::Begin("Shape", &mShow, imGuiWindowFlags);
 
@@ -37,17 +41,33 @@ void LRTR::SceneShapeUIComponent::update()
 		mainMenuHeight
 	));
 
-	for (auto shape : mRuntimeSharing->sceneManager()->scenes().at("Scene")->shapes()) {
-		const auto status = mSelected == shape.first ? true : false;
+	const auto &systems = mRuntimeSharing->sceneManager()->scenes().at("Scene")->systems();
 
-		if (ImGui::Selectable(shape.first.c_str(), status)) {
-			mSelected = shape.first;
+	for (const auto& system : systems) {
+		if (system->typeIndex() != typeid(CollectionUpdateSystem)) continue;
+		
+		const auto& collections = std::static_pointer_cast<CollectionUpdateSystem>(system)->collections();
 
-			std::static_pointer_cast<PropertyUIComponent>(
-				mRuntimeSharing->uiManager()->components().at("View.Property"))
-				->showProperty(shape.second);
-			
+		for (const auto& collection : collections) {
+			if (ImGui::TreeNodeEx(collection.first.c_str(), treeNodeFlags)) {
+
+				for (const auto& shape : collection.second) {
+					const auto status = mSelected == shape.first ? true : false;
+
+					if (ImGui::Selectable(shape.first.c_str(), status)) {
+						mSelected = shape.first;
+
+						std::static_pointer_cast<PropertyUIComponent>(
+							mRuntimeSharing->uiManager()->components().at("View.Property"))
+							->showProperty(shape.second);
+					}
+				}
+
+				ImGui::TreePop();
+			}
 		}
+
+		break;
 	}
 	
 	updateProperties();

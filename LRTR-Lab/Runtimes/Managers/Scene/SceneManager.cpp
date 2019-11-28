@@ -7,6 +7,7 @@
 
 #include "../../../Scenes/Components/TrianglesMesh/TrianglesMesh.hpp"
 #include "../../../Scenes/Components/Materials/WireframeMaterial.hpp"
+#include "../../../Scenes/Systems/CollectionUpdateSystem.hpp"
 #include "../../../Scenes/Systems/LinesMeshRenderSystem.hpp"
 #include "../../../Scenes/Systems/WireframeRenderSystem.hpp"
 #include "../../../Scenes/Components/CameraGroup.hpp"
@@ -31,6 +32,7 @@ LRTR::SceneManager::SceneManager(
 	
 	mScenes["Scene"]->addSystem(std::make_shared<LinesMeshRenderSystem>(mRuntimeSharing, mDevice));
 	mScenes["Scene"]->addSystem(std::make_shared<WireframeRenderSystem>(mRuntimeSharing, mDevice));
+	mScenes["Scene"]->addSystem(std::make_shared<CollectionUpdateSystem>(mRuntimeSharing));
 }
 
 void LRTR::SceneManager::update(float delta)

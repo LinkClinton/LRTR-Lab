@@ -193,6 +193,7 @@
     <ClCompile Include="Scenes\Cameras\Components\Perspective.cpp" />
     <ClCompile Include="Scenes\Component.cpp" />
     <ClCompile Include="Scenes\Components\CameraGroup.cpp" />
+    <ClCompile Include="Scenes\Components\CollectionLabel.cpp" />
     <ClCompile Include="Scenes\Components\LinesMesh\CoordinateSystem.cpp" />
     <ClCompile Include="Scenes\Components\LinesMesh\LinesGrid.cpp" />
     <ClCompile Include="Scenes\Components\LinesMesh\LinesMesh.cpp" />
@@ -203,6 +204,7 @@
     <ClCompile Include="Scenes\Shape.cpp" />
     <ClCompile Include="Scenes\Shapes\SceneProperty.cpp" />
     <ClCompile Include="Scenes\System.cpp" />
+    <ClCompile Include="Scenes\Systems\CollectionUpdateSystem.cpp" />
     <ClCompile Include="Scenes\Systems\LinesMeshRenderSystem.cpp" />
     <ClCompile Include="Scenes\Systems\WireframeRenderSystem.cpp" />
     <ClCompile Include="Shared\FrameResources.cpp" />
@@ -251,6 +253,7 @@
     <ClInclude Include="Scenes\Cameras\Components\Projective.hpp" />
     <ClInclude Include="Scenes\Component.hpp" />
     <ClInclude Include="Scenes\Components\CameraGroup.hpp" />
+    <ClInclude Include="Scenes\Components\CollectionLabel.hpp" />
     <ClInclude Include="Scenes\Components\LinesMesh\CoordinateSystem.hpp" />
     <ClInclude Include="Scenes\Components\LinesMesh\LinesGrid.hpp" />
     <ClInclude Include="Scenes\Components\LinesMesh\LinesMesh.hpp" />
@@ -262,6 +265,7 @@
     <ClInclude Include="Scenes\Shape.hpp" />
     <ClInclude Include="Scenes\Shapes\SceneProperty.hpp" />
     <ClInclude Include="Scenes\System.hpp" />
+    <ClInclude Include="Scenes\Systems\CollectionUpdateSystem.hpp" />
     <ClInclude Include="Scenes\Systems\LinesMeshRenderSystem.hpp" />
     <ClInclude Include="Scenes\Systems\WireframeRenderSystem.hpp" />
     <ClInclude Include="Shared\Accelerators\Group.hpp" />

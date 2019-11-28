@@ -1,6 +1,12 @@
 #include "Shape.hpp"
 
+#include "Components/CollectionLabel.hpp"
 #include "../Extensions/ImGui/ImGui.hpp"
+
+LRTR::Shape::Shape()
+{
+	addComponent(std::make_shared<CollectionLabel>());
+}
 
 auto LRTR::Shape::components() const -> const Group<std::type_index, std::shared_ptr<Component>>& 
 {

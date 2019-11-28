@@ -265,6 +265,16 @@ void LRTR::WireframeRenderSystem::render(
 	mCurrentFrameIndex = (mCurrentFrameIndex + 1) % mFrameResources.size();
 }
 
+auto LRTR::WireframeRenderSystem::typeName() const noexcept -> std::string
+{
+	return "WireframeRenderSystem";
+}
+
+auto LRTR::WireframeRenderSystem::typeIndex() const noexcept -> std::type_index
+{
+	return typeid(WireframeRenderSystem);
+}
+
 void LRTR::WireframeRenderSystem::updatePipeline(const std::shared_ptr<CodeRed::GpuFrameBuffer>& frameBuffer) const
 {
 	if (CodeRed::PipelineInfo::isCompatible(mPipelineInfo->renderPass(), frameBuffer) &&

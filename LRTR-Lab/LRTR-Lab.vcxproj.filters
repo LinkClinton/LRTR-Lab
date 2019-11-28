@@ -119,6 +119,12 @@
     <ClCompile Include="Extensions\Assimp\AssimpScene.cpp">
       <Filter>Extensions\Assimp</Filter>
     </ClCompile>
+    <ClCompile Include="Scenes\Components\CollectionLabel.cpp">
+      <Filter>Scenes\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Systems\CollectionUpdateSystem.cpp">
+      <Filter>Scenes\Systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scenes">
@@ -390,6 +396,12 @@
     <ClInclude Include="Extensions\Assimp\AssimpScene.hpp">
       <Filter>Extensions\Assimp</Filter>
     </ClInclude>
+    <ClInclude Include="Scenes\Components\CollectionLabel.hpp">
+      <Filter>Scenes\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Systems\CollectionUpdateSystem.hpp">
+      <Filter>Scenes\Systems</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Resources\Fonts\Consola.ttf">
@@ -407,7 +419,6 @@
     <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\LinesMeshRenderSystemVert.vert">
       <Filter>Resources\Shaders\Systems\Vulkan</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Resources\Scenes\fishy_cat.glb" />
     <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\WireframeRenderSystemVert.hlsl">
       <Filter>Resources\Shaders\Systems\DirectX12</Filter>
     </CopyFileToFolders>
@@ -419,6 +430,9 @@
     </CopyFileToFolders>
     <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\WireframeRenderSystemVert.vert">
       <Filter>Resources\Shaders\Systems\Vulkan</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Scenes\fishy_cat.glb">
+      <Filter>Resources\Scenes</Filter>
     </CopyFileToFolders>
   </ItemGroup>
 </Project>
