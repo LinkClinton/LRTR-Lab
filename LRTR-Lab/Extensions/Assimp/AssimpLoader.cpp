@@ -24,7 +24,7 @@ namespace LRTR {
 		aiVector3D rAxis;
 		aiVector3D scale;
 		float rAngle;
-
+		
 		currentTransform.Decompose(scale, rAxis, rAngle, position);
 
 		for (unsigned index = 0; index < node->mNumMeshes; index++) {

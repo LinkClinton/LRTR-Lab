@@ -17,19 +17,19 @@ LRTR::SceneManager::SceneManager(
 	const std::shared_ptr<RuntimeSharing>& sharing,
 	const std::shared_ptr<CodeRed::GpuLogicalDevice>& device) :
 	Manager(sharing), mDevice(device)
-{	
-	add(AssimpLoader::loadScene(mRuntimeSharing, "Scene", "./Resources/Scenes/fishy_cat.glb"));
+{
+	add(AssimpLoader::loadScene(mRuntimeSharing, "Scene", "./Resources/Models/WaterBottle.glb"));
 
 	mScenes["Scene"]->add("Camera", std::make_shared<PerspectiveCamera>(
 		std::make_shared<TransformWrap>(
-			Vector3f(19.4036f, -48.3112f, -2.55386f),
-			Vector4f(0.964458f, 0.156321f, 0.213037f, glm::radians(104.1f)),
-			Vector3f(2.18742f)),
+			Vector3f(0, 0, 1),
+			Vector4f(0, 0, 1, 0),
+			Vector3f(1)),
 		std::make_shared<Perspective>(
 			MathUtility::pi<float>() * 0.125f,
 			1920.0f,
 			1080.0f)));
-	
+
 	mScenes["Scene"]->addSystem(std::make_shared<LinesMeshRenderSystem>(mRuntimeSharing, mDevice));
 	mScenes["Scene"]->addSystem(std::make_shared<WireframeRenderSystem>(mRuntimeSharing, mDevice));
 	mScenes["Scene"]->addSystem(std::make_shared<CollectionUpdateSystem>(mRuntimeSharing));

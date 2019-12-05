@@ -113,15 +113,15 @@ auto CodeRed::ResourceHelper::expandBuffer(
 	const size_t count)
 	-> std::shared_ptr<GpuBuffer>
 {
-	if (buffer->size() >= count) return buffer;
+	if (buffer->count() >= count) return buffer;
 
-	auto bufferSize = buffer->size();
+	auto bufferCount = buffer->count();
 
-	while (bufferSize < count) bufferSize <<= 1;
+	while (bufferCount < count) bufferCount <<= 1;
 	
 	auto newBuffer = device->createBuffer(
 		ResourceInfo(
-			BufferProperty(buffer->stride(), bufferSize),
+			BufferProperty(buffer->stride(), bufferCount),
 			buffer->layout(),
 			buffer->usage(),
 			buffer->type(),

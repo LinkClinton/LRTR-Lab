@@ -197,6 +197,7 @@
     <ClCompile Include="Scenes\Components\LinesMesh\CoordinateSystem.cpp" />
     <ClCompile Include="Scenes\Components\LinesMesh\LinesGrid.cpp" />
     <ClCompile Include="Scenes\Components\LinesMesh\LinesMesh.cpp" />
+    <ClCompile Include="Scenes\Components\Materials\PhysicalBaseMaterial.cpp" />
     <ClCompile Include="Scenes\Components\Materials\WireframeMaterial.cpp" />
     <ClCompile Include="Scenes\Components\TransformWrap.cpp" />
     <ClCompile Include="Scenes\Components\TrianglesMesh\TrianglesMesh.cpp" />
@@ -258,6 +259,7 @@
     <ClInclude Include="Scenes\Components\LinesMesh\LinesGrid.hpp" />
     <ClInclude Include="Scenes\Components\LinesMesh\LinesMesh.hpp" />
     <ClInclude Include="Scenes\Components\Materials\Material.hpp" />
+    <ClInclude Include="Scenes\Components\Materials\PhysicalBaseMaterial.hpp" />
     <ClInclude Include="Scenes\Components\Materials\WireframeMaterial.hpp" />
     <ClInclude Include="Scenes\Components\TransformWrap.hpp" />
     <ClInclude Include="Scenes\Components\TrianglesMesh\TrianglesMesh.hpp" />
@@ -278,6 +280,8 @@
     <ClInclude Include="Shared\Math\Matrix.hpp" />
     <ClInclude Include="Shared\Math\Vector.hpp" />
     <ClInclude Include="Shared\Rectangle.hpp" />
+    <ClInclude Include="Shared\Textures\ConstantTexture.hpp" />
+    <ClInclude Include="Shared\Textures\Texture.hpp" />
     <ClInclude Include="Shared\Transform.hpp" />
     <ClInclude Include="Shared\Triangle.hpp" />
   </ItemGroup>
@@ -361,6 +365,15 @@
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)/Resources/Scenes</DestinationFolders>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Resources/Scenes</DestinationFolders>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/Resources/Scenes</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="Resources\Models\WaterBottle.glb">
+      <FileType>Document</FileType>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)/Resources/Models</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)/Resources/Models</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Resources/Models</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/Resources/Models</DestinationFolders>
     </CopyFileToFolders>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
