@@ -23,13 +23,15 @@ LRTR::SceneManager::SceneManager(
 
 	const auto camera = std::make_shared<PerspectiveCamera>(
 		std::make_shared<TransformWrap>(
-			Vector3f(0, 0, 1),
+			Vector3f(0.002f, 0.003f, 0.025f),
 			Vector4f(0, 0, 1, 0),
 			Vector3f(1)),
 		std::make_shared<Perspective>(
 			MathUtility::pi<float>() * 0.125f,
 			1920.0f,
-			1080.0f));
+			1080.0f,
+			0.001f,
+			1000.0f));
 
 	camera->component<CollectionLabel>()->set("Collection", "Camera");
 	

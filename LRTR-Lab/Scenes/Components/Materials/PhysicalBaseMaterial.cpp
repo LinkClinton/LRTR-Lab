@@ -1,5 +1,8 @@
 #include "PhysicalBaseMaterial.hpp"
 
+#include "../../../Shared/Textures/ConstantTexture.hpp"
+#include "../../../Shared/Math/Math.hpp"
+
 #include "../../../Extensions/ImGui/ImGui.hpp"
 
 LRTR::PhysicalBaseMaterial::PhysicalBaseMaterial(
@@ -50,8 +53,64 @@ auto LRTR::PhysicalBaseMaterial::typeIndex() const noexcept -> std::type_index
 
 void LRTR::PhysicalBaseMaterial::onProperty()
 {
+	const static auto EditFlags =
+		ImGuiColorEditFlags_NoInputs |
+		ImGuiColorEditFlags_NoLabel |
+		ImGuiColorEditFlags_AlphaPreview |
+		ImGuiColorEditFlags_Float;
+
+	ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0, 0, 0, 0.1f));
+	
+	ImGui::BeginPropertyTable("BaseColor");
+
+	ImGui::Property("BaseColor", [&]()
+		{
+			//for non-texture material property
+			if (std::dynamic_pointer_cast<ConstantTexture<Vector4f>>(mBaseColor)) {
+				auto baseColor = std::static_pointer_cast<ConstantTexture<Vector4f>>(mBaseColor)->value();
+				
+				ImGui::ColorEdit4("##BaseColor", reinterpret_cast<float*>(&baseColor), EditFlags);
+			}else {
+				//todo
+			}
+		});
+
+	ImGui::BeginPropertyTable("Roughness");
+
+	ImGui::Property("Roughness", [&]()
+		{
+			//for non-texture material property
+			if (std::dynamic_pointer_cast<ConstantTexture<Vector1f>>(mRoughness)) {
+				auto roughness = std::static_pointer_cast<ConstantTexture<Vector1f>>(mRoughness)->value();
+
+				ImGui::InputFloat("##Roughness", &roughness.x, 0, 0, 3, ImGuiInputTextFlags_ReadOnly);
+			}
+			else {
+				//todo
+			}
+		});
+
+	ImGui::BeginPropertyTable("Metallic");
+
+	ImGui::Property("Metallic", [&]()
+		{
+			//for non-texture material property
+			if (std::dynamic_pointer_cast<ConstantTexture<Vector1f>>(mMetallic)) {
+				auto metallic = std::static_pointer_cast<ConstantTexture<Vector1f>>(mMetallic)->value();
+
+				ImGui::InputFloat("##Metallic", &metallic.x, 0, 0, 3, ImGuiInputTextFlags_ReadOnly);
+			}
+			else {
+				//todo
+			}
+		});
+
+	//normal map and occlusion are textures, so we will support next time.
+	
 	ImGui::BeginPropertyTable("Visibility");
 	ImGui::Property("Visibility", [&]() {ImGui::Checkbox("##Visibility", &mVisibility); });
 
 	ImGui::EndPropertyTable();
+
+	ImGui::PopStyleColor();
 }

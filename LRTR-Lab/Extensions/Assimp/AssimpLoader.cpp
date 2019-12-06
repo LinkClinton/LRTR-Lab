@@ -1,10 +1,13 @@
 #include "AssimpLoader.hpp"
 
-#include "../../Scenes/Components/MeshData/TrianglesMesh.hpp"
+#include "../../Scenes/Components/Materials/PhysicalBaseMaterial.hpp"
 #include "../../Scenes/Components/Materials/WireframeMaterial.hpp"
 #include "../../Scenes/Components/LinesMesh/CoordinateSystem.hpp"
+#include "../../Scenes/Components/MeshData/TrianglesMesh.hpp"
 #include "../../Scenes/Components/CollectionLabel.hpp"
 #include "../../Scenes/Cameras/Camera.hpp"
+
+#include "../../Shared/Textures/ConstantTexture.hpp"
 
 #include <assimp/postprocess.h>
 #include <assimp/Importer.hpp>
@@ -26,6 +29,65 @@ namespace LRTR {
 		dest = std::vector<Vector3f>(size);
 
 		copyVertexAttribute(dest.data(), src, size);
+	}
+
+	auto readVector4f(aiMaterialProperty* property) -> Vector4f {
+		assert(property->mDataLength == 16 && property->mType == aiPTI_Float);
+
+		Vector4f data;
+
+		std::memcpy(&data, property->mData, property->mDataLength);
+
+		return data;
+	}
+
+	auto readVector1f(aiMaterialProperty* property) -> Vector1f {
+		assert(property->mDataLength == 4 && property->mType == aiPTI_Float);
+
+		Vector1f data;
+
+		std::memcpy(&data, property->mData, property->mDataLength);
+
+		return data;
+	}
+
+	auto convertTo(aiMaterial* material) -> std::shared_ptr<PhysicalBaseMaterial> {
+		std::shared_ptr<Texture> roughness;
+		std::shared_ptr<Texture> baseColor;
+		std::shared_ptr<Texture> metallic;
+		
+		for (unsigned index = 0; index < material->mNumProperties; index++) {
+			const auto& property = material->mProperties[index];
+			const auto key = std::string(property->mKey.C_Str());
+
+			if (key.find("pbrMetallicRoughness") == std::string::npos) continue;
+
+			//this property is roughness
+			if (key.find("roughnessFactor") != std::string::npos) {
+				//non-texture property, we will read 1 floats
+				if (property->mType == aiPTI_Float && property->mSemantic == 0) {
+					roughness = std::make_shared<ConstantTexture<Vector1f>>(readVector1f(property));
+				}
+			}
+			
+			//this property is base color
+			if (key.find("baseColorFactor") != std::string::npos) {
+				//non-texture property, we will read 4 floats
+				if (property->mType == aiPTI_Float && property->mSemantic == 0) {
+					baseColor = std::make_shared<ConstantTexture<Vector4f>>(readVector4f(property));
+				}
+			}
+
+			//this property is metallic
+			if (key.find("metallicFactor") != std::string::npos) {
+				//non-texture property, we will read 1 floats
+				if (property->mType == aiPTI_Float && property->mSemantic == 0) {
+					metallic = std::make_shared<ConstantTexture<Vector1f>>(readVector1f(property));
+				}
+			}
+		}
+		
+		return std::make_shared<PhysicalBaseMaterial>(metallic, baseColor, roughness);
 	}
 	
 	void AssimpBuildScene(
@@ -86,7 +148,7 @@ namespace LRTR {
 
 				totalNumIndices = totalNumIndices + mesh->mFaces[nFace].mNumIndices;
 			}
-			
+
 			meshShape->component<CollectionLabel>()->set(node->mName.C_Str(), mesh->mName.C_Str());
 			
 			meshShape->addComponent(std::make_shared<TransformWrap>(
@@ -96,6 +158,7 @@ namespace LRTR {
 			meshShape->addComponent(std::make_shared<WireframeMaterial>());
 			meshShape->addComponent(std::make_shared<TrianglesMesh>(
 				texCoords, vertices, tangents, normals, indices));
+			meshShape->addComponent(convertTo(scene->mMaterials[mesh->mMaterialIndex]));
 
 			assimpScene->add(meshShape);
 		}
@@ -107,9 +170,10 @@ namespace LRTR {
 }
 
 auto LRTR::AssimpLoader::loadScene(
-	const std::shared_ptr<RuntimeSharing>& sharing, 
+	const std::shared_ptr<RuntimeSharing>& sharing,
 	const std::string& sceneName,
-	const std::string& fileName)
+	const std::string& fileName,
+	const Transform& transform)
 	-> std::shared_ptr<AssimpScene>
 {
 	Assimp::Importer importer;
@@ -124,8 +188,15 @@ auto LRTR::AssimpLoader::loadScene(
 		importer.GetErrorString());
 
 	if (scene == nullptr) return assimpScene;
+
+	const auto matrix = transform.matrix();
 	
-	AssimpBuildScene(assimpScene, aiMatrix4x4(), scene, scene->mRootNode);
+	AssimpBuildScene(assimpScene, aiMatrix4x4(
+		matrix[0].x, matrix[0].y, matrix[0].z, matrix[0].w,
+		matrix[1].x, matrix[1].y, matrix[1].z, matrix[1].w,
+		matrix[2].x, matrix[2].y, matrix[2].z, matrix[2].w,
+		matrix[3].x, matrix[3].y, matrix[3].z, matrix[3].w
+	), scene, scene->mRootNode);
 
 	return assimpScene;
 }
