@@ -1,29 +1,33 @@
 #include "CameraGroup.hpp"
 
+#include "../Components/CollectionLabel.hpp"
 #include "../../Extensions/ImGui/ImGui.hpp"
 
-void LRTR::CameraGroup::addCamera(const std::string& name)
+#include "../Shape.hpp"
+
+
+void LRTR::CameraGroup::addCamera(const std::shared_ptr<Shape>& shape)
 {
-	if (mCameras.empty()) mCurrent = name;
+	if (mCameras.empty()) mCurrent = shape->identity();
 	
-	mCameras.insert({ name, name });
+	mCameras.insert({ shape->identity(), shape });
 }
 
-void LRTR::CameraGroup::removeCamera(const std::string& name)
+void LRTR::CameraGroup::removeCamera(const Identity& identity)
 {
-	mCameras.erase(name);
+	mCameras.erase(identity);
 
-	if (mCameras.empty()) mCurrent = std::string();
+	if (mCameras.empty()) mCurrent = std::numeric_limits<Identity>::max();
 }
 
-auto LRTR::CameraGroup::cameras() const noexcept -> const StringGroup<std::string>& 
+auto LRTR::CameraGroup::cameras() const noexcept -> const Group<Identity, std::shared_ptr<Shape>>& 
 {
 	return mCameras;
 }
 
-auto LRTR::CameraGroup::current() const noexcept -> std::string
+auto LRTR::CameraGroup::current() const noexcept -> std::shared_ptr<Shape>
 {
-	return mCurrent;
+	return mCurrent == std::numeric_limits<Identity>::max() ? nullptr : mCameras.at(mCurrent);
 }
 
 auto LRTR::CameraGroup::typeName() const noexcept -> std::string
@@ -42,11 +46,19 @@ void LRTR::CameraGroup::onProperty()
 
 	ImGui::Property("Camera", [&]()
 		{
-			if (ImGui::BeginCombo("##Camera", mCurrent.c_str())) {
+			const auto currentName = mCurrent == std::numeric_limits<Identity>::max() ? "Empty" :
+				(current()->hasComponent<CollectionLabel>() ?
+					current()->component<CollectionLabel>()->name() :
+					"Unknown");
+		
+			if (ImGui::BeginCombo("##Camera", currentName.c_str())) {
 				for (const auto& camera : mCameras) {
 					const auto selected = (mCurrent == camera.first);
-
-					if (ImGui::Selectable(camera.first.c_str(), selected))
+					const auto name = camera.second->hasComponent<CollectionLabel>() ?
+						camera.second->component<CollectionLabel>()->name() :
+						"Unknown";
+					
+					if (ImGui::Selectable(name.c_str(), selected))
 						mCurrent = camera.first;
 					
 					if (selected) ImGui::SetItemDefaultFocus();

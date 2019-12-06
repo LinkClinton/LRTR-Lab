@@ -4,6 +4,8 @@
 
 LRTR::TrianglesMesh::TrianglesMesh(const std::vector<TriangleF>& triangles)
 {
+	mPrimitive = CodeRed::PrimitiveTopology::TriangleList;
+	
 	using sort_pair = std::pair<Vector3f, size_t>;
 	
 	auto vertices = std::vector<sort_pair>(triangles.size() * 3);
@@ -39,20 +41,23 @@ LRTR::TrianglesMesh::TrianglesMesh(const std::vector<TriangleF>& triangles)
 	}
 }
 
-LRTR::TrianglesMesh::TrianglesMesh(const std::vector<Vector3f>& vertices, const std::vector<unsigned>& indices) :
-	mVertices(vertices), mIndices(indices)
+LRTR::TrianglesMesh::TrianglesMesh(
+	const std::vector<Vector3f>& vertices,
+	const std::vector<unsigned>& indices) :
+	MeshData(vertices, indices, CodeRed::PrimitiveTopology::TriangleList)
 {
 	
 }
 
-auto LRTR::TrianglesMesh::vertices() const noexcept -> const std::vector<Vector3f>& 
+LRTR::TrianglesMesh::TrianglesMesh(
+	const std::vector<Vector3f>& texCoords, 
+	const std::vector<Vector3f>& vertices,
+	const std::vector<Vector3f>& tangents, 
+	const std::vector<Vector3f>& normals, 
+	const std::vector<unsigned>& indices) :
+	MeshData(texCoords, vertices, tangents, normals, indices,
+		CodeRed::PrimitiveTopology::TriangleList)
 {
-	return mVertices;
-}
-
-auto LRTR::TrianglesMesh::indices() const noexcept -> const std::vector<unsigned>& 
-{
-	return mIndices;
 }
 
 auto LRTR::TrianglesMesh::triangle(const size_t index) const -> TriangleF

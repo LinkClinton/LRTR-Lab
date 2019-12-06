@@ -125,7 +125,7 @@ LRTR::LinesMeshRenderSystem::LinesMeshRenderSystem(
 	}
 }
 
-void LRTR::LinesMeshRenderSystem::update(const StringGroup<std::shared_ptr<Shape>>& shapes, float delta)
+void LRTR::LinesMeshRenderSystem::update(const Group<Identity, std::shared_ptr<Shape>>& shapes, float delta)
 {
 	std::vector<Matrix4x4f> transforms;
 	std::vector<LineVertex> vertices;

@@ -1,13 +1,12 @@
 #pragma once
 
-#include "../../../Shared/Math/Math.hpp"
 #include "../../../Shared/Triangle.hpp"
 
-#include "../../Component.hpp"
+#include "MeshData.hpp"
 
 namespace LRTR {
 
-	class TrianglesMesh : public Component {
+	class TrianglesMesh : public MeshData {
 	public:
 		TrianglesMesh() = default;
 		
@@ -18,11 +17,14 @@ namespace LRTR {
 			const std::vector<Vector3f>& vertices,
 			const std::vector<unsigned>& indices);
 
-		~TrianglesMesh() = default;
+		explicit TrianglesMesh(
+			const std::vector<Vector3f>& texCoords,
+			const std::vector<Vector3f>& vertices,
+			const std::vector<Vector3f>& tangents,
+			const std::vector<Vector3f>& normals,
+			const std::vector<unsigned>& indices);
 		
-		auto vertices() const noexcept -> const std::vector<Vector3f>&;
-
-		auto indices() const noexcept -> const std::vector<unsigned>&;
+		~TrianglesMesh() = default;
 		
 		auto triangle(const size_t index) const -> TriangleF;
 
@@ -34,9 +36,6 @@ namespace LRTR {
 	protected:
 		void onProperty() override;
 	private:
-		std::vector<Vector3f> mVertices;
-		std::vector<unsigned> mIndices;
-
 		size_t mCurrentTriangle = 0;
 	};
 	

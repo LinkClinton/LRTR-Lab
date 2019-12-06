@@ -199,8 +199,9 @@
     <ClCompile Include="Scenes\Components\LinesMesh\LinesMesh.cpp" />
     <ClCompile Include="Scenes\Components\Materials\PhysicalBaseMaterial.cpp" />
     <ClCompile Include="Scenes\Components\Materials\WireframeMaterial.cpp" />
+    <ClCompile Include="Scenes\Components\MeshData\MeshData.cpp" />
+    <ClCompile Include="Scenes\Components\MeshData\TrianglesMesh.cpp" />
     <ClCompile Include="Scenes\Components\TransformWrap.cpp" />
-    <ClCompile Include="Scenes\Components\TrianglesMesh\TrianglesMesh.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
     <ClCompile Include="Scenes\Shape.cpp" />
     <ClCompile Include="Scenes\Shapes\SceneProperty.cpp" />
@@ -261,8 +262,9 @@
     <ClInclude Include="Scenes\Components\Materials\Material.hpp" />
     <ClInclude Include="Scenes\Components\Materials\PhysicalBaseMaterial.hpp" />
     <ClInclude Include="Scenes\Components\Materials\WireframeMaterial.hpp" />
+    <ClInclude Include="Scenes\Components\MeshData\MeshData.hpp" />
+    <ClInclude Include="Scenes\Components\MeshData\TrianglesMesh.hpp" />
     <ClInclude Include="Scenes\Components\TransformWrap.hpp" />
-    <ClInclude Include="Scenes\Components\TrianglesMesh\TrianglesMesh.hpp" />
     <ClInclude Include="Scenes\Scene.hpp" />
     <ClInclude Include="Scenes\Shape.hpp" />
     <ClInclude Include="Scenes\Shapes\SceneProperty.hpp" />
@@ -369,6 +371,15 @@
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Resources\Models\WaterBottle.glb">
+      <FileType>Document</FileType>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)/Resources/Models</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)/Resources/Models</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Resources/Models</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/Resources/Models</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="Resources\Models\MetalRoughSpheresNoTextures.glb">
       <FileType>Document</FileType>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)/Resources/Models</DestinationFolders>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)/Resources/Models</DestinationFolders>

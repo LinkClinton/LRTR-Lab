@@ -1,6 +1,6 @@
 #include "AssimpLoader.hpp"
 
-#include "../../Scenes/Components/TrianglesMesh/TrianglesMesh.hpp"
+#include "../../Scenes/Components/MeshData/TrianglesMesh.hpp"
 #include "../../Scenes/Components/Materials/WireframeMaterial.hpp"
 #include "../../Scenes/Components/LinesMesh/CoordinateSystem.hpp"
 #include "../../Scenes/Components/CollectionLabel.hpp"
@@ -10,8 +10,24 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 
+#define LRTR_TRY_EXECUTE(condition, expression) if (condition) expression;
+
 namespace LRTR {
 
+	void copyVertexAttribute(Vector3f* dest, aiVector3D* src, size_t size) {
+		std::copy(
+			reinterpret_cast<Vector3f*>(src),
+			reinterpret_cast<Vector3f*>(src) + size,
+			dest
+		);
+	}
+
+	void copyVertexAttribute(std::vector<Vector3f>& dest, aiVector3D* src, size_t size) {
+		dest = std::vector<Vector3f>(size);
+
+		copyVertexAttribute(dest.data(), src, size);
+	}
+	
 	void AssimpBuildScene(
 		const std::shared_ptr<AssimpScene>& assimpScene,
 		const aiMatrix4x4& transform,
@@ -39,13 +55,29 @@ namespace LRTR {
 			std::vector<Vector3f> vertices(mesh->mNumVertices);
 			std::vector<unsigned> indices(totalNumIndices);
 
-			std::copy(
-				reinterpret_cast<Vector3f*>(mesh->mVertices),
-				reinterpret_cast<Vector3f*>(mesh->mVertices) + mesh->mNumVertices,
-				vertices.data());
+			std::vector<Vector3f> texCoords;
+			std::vector<Vector3f> tangents;
+			std::vector<Vector3f> normals;
+			
+			copyVertexAttribute(vertices.data(), mesh->mVertices, mesh->mNumVertices);
+
+			LRTR_TRY_EXECUTE(
+				mesh->HasTextureCoords(0),
+				copyVertexAttribute(texCoords, mesh->mTextureCoords[0], mesh->mNumVertices)
+			);
+
+			LRTR_TRY_EXECUTE(
+				mesh->HasTangentsAndBitangents(),
+				copyVertexAttribute(tangents, mesh->mTangents, mesh->mNumVertices);
+			);
+
+			LRTR_TRY_EXECUTE(
+				mesh->HasNormals(),
+				copyVertexAttribute(normals, mesh->mNormals, mesh->mNumVertices)
+			);
 
 			totalNumIndices = 0;
-
+			
 			for (unsigned nFace = 0; nFace < mesh->mNumFaces; nFace++) {
 				std::copy(
 					mesh->mFaces[nFace].mIndices,
@@ -54,17 +86,18 @@ namespace LRTR {
 
 				totalNumIndices = totalNumIndices + mesh->mFaces[nFace].mNumIndices;
 			}
-
-			meshShape->component<CollectionLabel>()->set(node->mName.C_Str());
+			
+			meshShape->component<CollectionLabel>()->set(node->mName.C_Str(), mesh->mName.C_Str());
 			
 			meshShape->addComponent(std::make_shared<TransformWrap>(
 				Vector3f(position.x, position.y, position.z),
 				Vector4f(rAxis.x, rAxis.y, rAxis.z, rAngle),
 				Vector3f(scale.x, scale.y, scale.z)));
 			meshShape->addComponent(std::make_shared<WireframeMaterial>());
-			meshShape->addComponent(std::make_shared<TrianglesMesh>(vertices, indices));
+			meshShape->addComponent(std::make_shared<TrianglesMesh>(
+				texCoords, vertices, tangents, normals, indices));
 
-			assimpScene->add(mesh->mName.C_Str(), meshShape);
+			assimpScene->add(meshShape);
 		}
 
 		for (unsigned index = 0; index < node->mNumChildren; index++) 

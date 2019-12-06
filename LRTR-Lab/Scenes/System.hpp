@@ -33,7 +33,7 @@ namespace LRTR {
 		~UpdateSystem() = default;
 
 		virtual void update(
-			const StringGroup<std::shared_ptr<Shape>>& shapes,
+			const Group<Identity, std::shared_ptr<Shape>>& shapes,
 			float delta) = 0;
 
 		auto typeName() const noexcept -> std::string override;

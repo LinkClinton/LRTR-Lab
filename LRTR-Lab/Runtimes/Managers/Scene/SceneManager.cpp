@@ -5,11 +5,12 @@
 
 #include "../../../Extensions/Assimp/AssimpLoader.hpp"
 
-#include "../../../Scenes/Components/TrianglesMesh/TrianglesMesh.hpp"
 #include "../../../Scenes/Components/Materials/WireframeMaterial.hpp"
+#include "../../../Scenes/Components/MeshData/TrianglesMesh.hpp"
 #include "../../../Scenes/Systems/CollectionUpdateSystem.hpp"
 #include "../../../Scenes/Systems/LinesMeshRenderSystem.hpp"
 #include "../../../Scenes/Systems/WireframeRenderSystem.hpp"
+#include "../../../Scenes/Components/CollectionLabel.hpp"
 #include "../../../Scenes/Components/CameraGroup.hpp"
 #include "../../../Scenes/Scene.hpp"
 
@@ -18,9 +19,9 @@ LRTR::SceneManager::SceneManager(
 	const std::shared_ptr<CodeRed::GpuLogicalDevice>& device) :
 	Manager(sharing), mDevice(device)
 {
-	add(AssimpLoader::loadScene(mRuntimeSharing, "Scene", "./Resources/Models/WaterBottle.glb"));
+	add(AssimpLoader::loadScene(mRuntimeSharing, "Scene", "./Resources/Models/MetalRoughSpheresNoTextures.glb"));
 
-	mScenes["Scene"]->add("Camera", std::make_shared<PerspectiveCamera>(
+	const auto camera = std::make_shared<PerspectiveCamera>(
 		std::make_shared<TransformWrap>(
 			Vector3f(0, 0, 1),
 			Vector4f(0, 0, 1, 0),
@@ -28,7 +29,11 @@ LRTR::SceneManager::SceneManager(
 		std::make_shared<Perspective>(
 			MathUtility::pi<float>() * 0.125f,
 			1920.0f,
-			1080.0f)));
+			1080.0f));
+
+	camera->component<CollectionLabel>()->set("Collection", "Camera");
+	
+	mScenes["Scene"]->add(camera);
 
 	mScenes["Scene"]->addSystem(std::make_shared<LinesMeshRenderSystem>(mRuntimeSharing, mDevice));
 	mScenes["Scene"]->addSystem(std::make_shared<WireframeRenderSystem>(mRuntimeSharing, mDevice));
@@ -48,12 +53,12 @@ auto LRTR::SceneManager::render(float delta) ->
 
 	if (sceneTexture == nullptr) return {};
 
-	const auto camera = mScenes["Scene"]->shapes().at("Scene")
+	const auto camera = mScenes["Scene"]->property()
 		->component<CameraGroup>()->current();
 	
 	return mScenes["Scene"]->render(sceneTexture,
-		camera.empty() ? nullptr : 
-		std::static_pointer_cast<SceneCamera>(mScenes["Scene"]->shapes().at(camera)),
+		camera == nullptr ? nullptr : 
+		std::static_pointer_cast<SceneCamera>(camera),
 		delta);
 }
 

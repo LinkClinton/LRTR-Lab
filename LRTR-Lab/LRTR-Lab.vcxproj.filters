@@ -104,9 +104,6 @@
     <ClCompile Include="Scenes\Components\LinesMesh\LinesGrid.cpp">
       <Filter>Scenes\Components\LinesMesh</Filter>
     </ClCompile>
-    <ClCompile Include="Scenes\Components\TrianglesMesh\TrianglesMesh.cpp">
-      <Filter>Scenes\Components\TrianglesMesh</Filter>
-    </ClCompile>
     <ClCompile Include="Scenes\Components\Materials\WireframeMaterial.cpp">
       <Filter>Scenes\Components\Materials</Filter>
     </ClCompile>
@@ -127,6 +124,12 @@
     </ClCompile>
     <ClCompile Include="Scenes\Components\Materials\PhysicalBaseMaterial.cpp">
       <Filter>Scenes\Components\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Components\MeshData\MeshData.cpp">
+      <Filter>Scenes\Components\MeshData</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Components\MeshData\TrianglesMesh.cpp">
+      <Filter>Scenes\Components\MeshData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -211,9 +214,6 @@
     <Filter Include="Scenes\Components\LinesMesh">
       <UniqueIdentifier>{7a1921cb-d146-4d12-aebb-5eabbcdb8fad}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scenes\Components\TrianglesMesh">
-      <UniqueIdentifier>{b2ab23d2-196b-4f6e-bbad-b2f54e887b18}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Scenes\Components\Materials">
       <UniqueIdentifier>{5a2ec781-0ac1-4573-b2b4-af9d03d77378}</UniqueIdentifier>
     </Filter>
@@ -231,6 +231,9 @@
     </Filter>
     <Filter Include="Shared\Textures">
       <UniqueIdentifier>{3a0d8f87-6753-426c-9bf6-749f1c49304a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes\Components\MeshData">
+      <UniqueIdentifier>{5566d63a-4274-4405-9c6d-df67885bfe3a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -384,9 +387,6 @@
     <ClInclude Include="Shared\Triangle.hpp">
       <Filter>Shared</Filter>
     </ClInclude>
-    <ClInclude Include="Scenes\Components\TrianglesMesh\TrianglesMesh.hpp">
-      <Filter>Scenes\Components\TrianglesMesh</Filter>
-    </ClInclude>
     <ClInclude Include="Scenes\Components\Materials\Material.hpp">
       <Filter>Scenes\Components\Materials</Filter>
     </ClInclude>
@@ -416,6 +416,12 @@
     </ClInclude>
     <ClInclude Include="Scenes\Components\Materials\PhysicalBaseMaterial.hpp">
       <Filter>Scenes\Components\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Components\MeshData\MeshData.hpp">
+      <Filter>Scenes\Components\MeshData</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Components\MeshData\TrianglesMesh.hpp">
+      <Filter>Scenes\Components\MeshData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -449,9 +455,10 @@
     <CopyFileToFolders Include="Resources\Scenes\fishy_cat.glb">
       <Filter>Resources\Scenes</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Models\WaterBottle.glb" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Models\WaterBottle.glb">
+    <None Include="Resources\Models\MetalRoughSpheresNoTextures.glb">
       <Filter>Resources\Models</Filter>
     </None>
   </ItemGroup>

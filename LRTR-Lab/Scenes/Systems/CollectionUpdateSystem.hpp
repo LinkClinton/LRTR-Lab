@@ -16,7 +16,7 @@ namespace LRTR {
 		~CollectionUpdateSystem() = default;
 
 		void update(
-			const StringGroup<std::shared_ptr<Shape>>& shapes, 
+			const Group<Identity, std::shared_ptr<Shape>>& shapes, 
 			float delta) override;
 
 		auto collections() const noexcept -> const StringGroup<Collection>&;

@@ -2,7 +2,7 @@
 
 #include <CodeRed/Core/CodeRedGraphics.hpp>
 
-#include "../../Scenes/Components/TrianglesMesh/TrianglesMesh.hpp"
+#include "../../Scenes/Components/MeshData/TrianglesMesh.hpp"
 #include "../../Scenes/Components/Materials/WireframeMaterial.hpp"
 #include "../../Shared/Graphics/ResourceHelper.hpp"
 #include "../../Shared/Graphics/ShaderCompiler.hpp"
@@ -139,7 +139,7 @@ LRTR::WireframeRenderSystem::WireframeRenderSystem(
 	}
 }
 
-void LRTR::WireframeRenderSystem::update(const StringGroup<std::shared_ptr<Shape>>& shapes, float delta)
+void LRTR::WireframeRenderSystem::update(const Group<Identity, std::shared_ptr<Shape>>& shapes, float delta)
 {
 	mDrawCalls.clear();
 

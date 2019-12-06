@@ -8,16 +8,16 @@ LRTR::CollectionUpdateSystem::CollectionUpdateSystem(const std::shared_ptr<Runti
 	
 }
 
-void LRTR::CollectionUpdateSystem::update(const StringGroup<std::shared_ptr<Shape>>& shapes, float delta)
+void LRTR::CollectionUpdateSystem::update(const Group<Identity, std::shared_ptr<Shape>>& shapes, float delta)
 {
 	mCollections.clear();
 
 	for (const auto& shape : shapes) {
 		//if the shape does not have the component, we will think it has a label called "Collection"
-		const auto label = shape.second->hasComponent<CollectionLabel>() ? 
-			shape.second->component<CollectionLabel>()->label() : "Collection";
-
-		mCollections[label].push_back(shape);
+		const auto component = shape.second->hasComponent<CollectionLabel>() ?
+			shape.second->component<CollectionLabel>() : std::make_shared<CollectionLabel>();
+		
+		mCollections[component->label()].push_back({ component->name(), shape.second });
 	}
 }
 

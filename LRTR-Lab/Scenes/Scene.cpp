@@ -2,6 +2,7 @@
 
 #include "../Core/Logging.hpp"
 
+#include "Components/CollectionLabel.hpp"
 #include "Components/CameraGroup.hpp"
 
 #include "Shapes/SceneProperty.hpp"
@@ -10,20 +11,22 @@ LRTR::Scene::Scene(
 	const std::string& name,
 	const std::shared_ptr<CodeRed::GpuLogicalDevice>& device,
 	const size_t maxFrameCount) :
-	mMaxFrameCount(maxFrameCount), mName(name), mDevice(device)
+	mDevice(device), mMaxFrameCount(maxFrameCount), mName(name)
 {
 	mCommandAllocator = mDevice->createCommandAllocator();
 	mCommandList = mDevice->createGraphicsCommandList(mCommandAllocator);
 
-	add("Scene", mProperty = std::make_shared<SceneProperty>());
+	add(mProperty = std::make_shared<SceneProperty>());
+
+	mProperty->component<CollectionLabel>()->set("Collection", "Scene");
 }
 
-void LRTR::Scene::add(const std::string& name, const std::shared_ptr<Shape>& shape)
+void LRTR::Scene::add(const std::shared_ptr<Shape>& shape)
 {
 	if (std::dynamic_pointer_cast<SceneCamera>(shape) != nullptr)
-		mProperty->component<CameraGroup>()->addCamera(name);
+		mProperty->component<CameraGroup>()->addCamera(shape);
 	
-	mShapes.insert({ name, shape });
+	mShapes.insert({ shape->identity(), shape });
 }
 
 void LRTR::Scene::addSystem(const std::shared_ptr<System>& system)
@@ -31,12 +34,12 @@ void LRTR::Scene::addSystem(const std::shared_ptr<System>& system)
 	mSystems.push_back(system);
 }
 
-void LRTR::Scene::remove(const std::string& name)
+void LRTR::Scene::remove(const Identity& identity)
 {
-	if (std::dynamic_pointer_cast<SceneCamera>(mShapes[name]) != nullptr)
-		mProperty->component<CameraGroup>()->removeCamera(name);
+	if (std::dynamic_pointer_cast<SceneCamera>(mShapes.at(identity)) != nullptr)
+		mProperty->component<CameraGroup>()->removeCamera(identity);
 	
-	mShapes.erase(name);
+	mShapes.erase(identity);
 }
 
 auto LRTR::Scene::name() const noexcept -> std::string
@@ -44,7 +47,7 @@ auto LRTR::Scene::name() const noexcept -> std::string
 	return mName;
 }
 
-auto LRTR::Scene::shapes() const noexcept -> const StringGroup<std::shared_ptr<Shape>>& 
+auto LRTR::Scene::shapes() const noexcept -> const Group<Identity, std::shared_ptr<Shape>>&
 {
 	return mShapes;
 }
@@ -52,6 +55,11 @@ auto LRTR::Scene::shapes() const noexcept -> const StringGroup<std::shared_ptr<S
 auto LRTR::Scene::systems() const noexcept -> const std::vector<std::shared_ptr<System>>& 
 {
 	return mSystems;
+}
+
+auto LRTR::Scene::property() const noexcept -> std::shared_ptr<Shape>
+{
+	return mProperty;
 }
 
 auto LRTR::Scene::currentFrameIndex() const noexcept -> size_t

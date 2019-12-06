@@ -24,20 +24,19 @@ namespace LRTR {
 
 		virtual ~Scene() = default;
 
-		void add(
-			const std::string& name,
-			const std::shared_ptr<Shape>& shape);
+		void add(const std::shared_ptr<Shape>& shape);
 
 		void addSystem(const std::shared_ptr<System>& system);
 
-		void remove(
-			const std::string& name);
+		void remove(const Identity& identity);
 
 		auto name() const noexcept -> std::string;
 
-		auto shapes() const noexcept -> const StringGroup<std::shared_ptr<Shape>>&;
+		auto shapes() const noexcept -> const Group<Identity, std::shared_ptr<Shape>>&;
 
 		auto systems() const noexcept -> const std::vector<std::shared_ptr<System>>&;
+
+		auto property() const noexcept -> std::shared_ptr<Shape>;
 		
 		auto currentFrameIndex() const noexcept -> size_t;
 	protected:
@@ -71,7 +70,7 @@ namespace LRTR {
 
 		std::vector<std::shared_ptr<System>> mSystems;
 		
-		StringGroup<std::shared_ptr<Shape>> mShapes;
+		Group<Identity, std::shared_ptr<Shape>> mShapes;
 
 		std::shared_ptr<Shape> mProperty;
 	};

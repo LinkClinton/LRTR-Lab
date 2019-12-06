@@ -26,7 +26,7 @@ namespace LRTR {
 			size_t maxFrameCount = 2);
 
 		void update(
-			const StringGroup<std::shared_ptr<Shape>>& shapes, float delta) override;
+			const Group<Identity, std::shared_ptr<Shape>>& shapes, float delta) override;
 
 		void render(
 			const std::shared_ptr<CodeRed::GpuGraphicsCommandList>& commandList, 

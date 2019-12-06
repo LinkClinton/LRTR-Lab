@@ -5,19 +5,21 @@
 
 namespace LRTR {
 
+	class Shape;
+	
 	class CameraGroup : public Component {
 	public:
 		CameraGroup() = default;
 
 		~CameraGroup() = default;
 
-		void addCamera(const std::string& name);
+		void addCamera(const std::shared_ptr<Shape>& shape);
 
-		void removeCamera(const std::string& name);
+		void removeCamera(const Identity& identity);
 
-		auto cameras() const noexcept -> const StringGroup<std::string>&;
+		auto cameras() const noexcept -> const Group<Identity, std::shared_ptr<Shape>>&;
 
-		auto current() const noexcept -> std::string;
+		auto current() const noexcept -> std::shared_ptr<Shape>;
 
 		auto typeName() const noexcept -> std::string override;
 
@@ -25,9 +27,9 @@ namespace LRTR {
 	protected:
 		void onProperty() override;
 	private:
-		StringGroup<std::string> mCameras;
+		Group<Identity, std::shared_ptr<Shape>> mCameras;
 
-		std::string mCurrent;
+		Identity mCurrent;
 	};
 	
 }
