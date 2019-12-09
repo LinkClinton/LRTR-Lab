@@ -14,12 +14,12 @@ namespace LRTR {
 			const std::vector<TriangleF>& triangles);
 
 		explicit TrianglesMesh(
-			const std::vector<Vector3f>& vertices,
+			const std::vector<Vector3f>& positions,
 			const std::vector<unsigned>& indices);
 
 		explicit TrianglesMesh(
+			const std::vector<Vector3f>& positions,
 			const std::vector<Vector3f>& texCoords,
-			const std::vector<Vector3f>& vertices,
 			const std::vector<Vector3f>& tangents,
 			const std::vector<Vector3f>& normals,
 			const std::vector<unsigned>& indices);

@@ -1,6 +1,6 @@
 #include "AssimpLoader.hpp"
 
-#include "../../Scenes/Components/Materials/PhysicalBaseMaterial.hpp"
+#include "../../Scenes/Components/Materials/PhysicalBasedMaterial.hpp"
 #include "../../Scenes/Components/Materials/WireframeMaterial.hpp"
 #include "../../Scenes/Components/LinesMesh/CoordinateSystem.hpp"
 #include "../../Scenes/Components/MeshData/TrianglesMesh.hpp"
@@ -51,7 +51,7 @@ namespace LRTR {
 		return data;
 	}
 
-	auto convertTo(aiMaterial* material) -> std::shared_ptr<PhysicalBaseMaterial> {
+	auto convertTo(aiMaterial* material) -> std::shared_ptr<PhysicalBasedMaterial> {
 		std::shared_ptr<Texture> roughness;
 		std::shared_ptr<Texture> baseColor;
 		std::shared_ptr<Texture> metallic;
@@ -87,7 +87,7 @@ namespace LRTR {
 			}
 		}
 		
-		return std::make_shared<PhysicalBaseMaterial>(metallic, baseColor, roughness);
+		return std::make_shared<PhysicalBasedMaterial>(metallic, baseColor, roughness);
 	}
 	
 	void AssimpBuildScene(
@@ -157,7 +157,7 @@ namespace LRTR {
 				Vector3f(scale.x, scale.y, scale.z)));
 			meshShape->addComponent(std::make_shared<WireframeMaterial>());
 			meshShape->addComponent(std::make_shared<TrianglesMesh>(
-				texCoords, vertices, tangents, normals, indices));
+				vertices, texCoords, tangents, normals, indices));
 			meshShape->addComponent(convertTo(scene->mMaterials[mesh->mMaterialIndex]));
 
 			assimpScene->add(meshShape);

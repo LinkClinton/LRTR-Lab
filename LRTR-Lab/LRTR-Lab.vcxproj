@@ -197,7 +197,7 @@
     <ClCompile Include="Scenes\Components\LinesMesh\CoordinateSystem.cpp" />
     <ClCompile Include="Scenes\Components\LinesMesh\LinesGrid.cpp" />
     <ClCompile Include="Scenes\Components\LinesMesh\LinesMesh.cpp" />
-    <ClCompile Include="Scenes\Components\Materials\PhysicalBaseMaterial.cpp" />
+    <ClCompile Include="Scenes\Components\Materials\PhysicalBasedMaterial.cpp" />
     <ClCompile Include="Scenes\Components\Materials\WireframeMaterial.cpp" />
     <ClCompile Include="Scenes\Components\MeshData\MeshData.cpp" />
     <ClCompile Include="Scenes\Components\MeshData\TrianglesMesh.cpp" />
@@ -208,6 +208,7 @@
     <ClCompile Include="Scenes\System.cpp" />
     <ClCompile Include="Scenes\Systems\CollectionUpdateSystem.cpp" />
     <ClCompile Include="Scenes\Systems\LinesMeshRenderSystem.cpp" />
+    <ClCompile Include="Scenes\Systems\PhysicalBasedRenderSystem.cpp" />
     <ClCompile Include="Scenes\Systems\WireframeRenderSystem.cpp" />
     <ClCompile Include="Shared\FrameResources.cpp" />
     <ClCompile Include="Shared\Graphics\PipelineInfo.cpp" />
@@ -260,7 +261,7 @@
     <ClInclude Include="Scenes\Components\LinesMesh\LinesGrid.hpp" />
     <ClInclude Include="Scenes\Components\LinesMesh\LinesMesh.hpp" />
     <ClInclude Include="Scenes\Components\Materials\Material.hpp" />
-    <ClInclude Include="Scenes\Components\Materials\PhysicalBaseMaterial.hpp" />
+    <ClInclude Include="Scenes\Components\Materials\PhysicalBasedMaterial.hpp" />
     <ClInclude Include="Scenes\Components\Materials\WireframeMaterial.hpp" />
     <ClInclude Include="Scenes\Components\MeshData\MeshData.hpp" />
     <ClInclude Include="Scenes\Components\MeshData\TrianglesMesh.hpp" />
@@ -271,6 +272,7 @@
     <ClInclude Include="Scenes\System.hpp" />
     <ClInclude Include="Scenes\Systems\CollectionUpdateSystem.hpp" />
     <ClInclude Include="Scenes\Systems\LinesMeshRenderSystem.hpp" />
+    <ClInclude Include="Scenes\Systems\PhysicalBasedRenderSystem.hpp" />
     <ClInclude Include="Scenes\Systems\WireframeRenderSystem.hpp" />
     <ClInclude Include="Shared\Accelerators\Group.hpp" />
     <ClInclude Include="Shared\Color.hpp" />

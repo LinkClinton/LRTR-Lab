@@ -167,8 +167,8 @@ void LRTR::WireframeRenderSystem::update(const Group<Identity, std::shared_ptr<S
 					currentLocation->second + indices.size()) });
 
 			vertices.insert(vertices.end(),
-				trianglesMesh->vertices().begin(),
-				trianglesMesh->vertices().end());
+				trianglesMesh->positions().begin(),
+				trianglesMesh->positions().end());
 
 			indices.insert(indices.end(),
 				trianglesMesh->indices().begin(),

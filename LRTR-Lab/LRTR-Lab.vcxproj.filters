@@ -122,14 +122,17 @@
     <ClCompile Include="Scenes\Systems\CollectionUpdateSystem.cpp">
       <Filter>Scenes\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="Scenes\Components\Materials\PhysicalBaseMaterial.cpp">
-      <Filter>Scenes\Components\Materials</Filter>
-    </ClCompile>
     <ClCompile Include="Scenes\Components\MeshData\MeshData.cpp">
       <Filter>Scenes\Components\MeshData</Filter>
     </ClCompile>
     <ClCompile Include="Scenes\Components\MeshData\TrianglesMesh.cpp">
       <Filter>Scenes\Components\MeshData</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Components\Materials\PhysicalBasedMaterial.cpp">
+      <Filter>Scenes\Components\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Systems\PhysicalBasedRenderSystem.cpp">
+      <Filter>Scenes\Systems</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -414,14 +417,17 @@
     <ClInclude Include="Shared\Textures\ConstantTexture.hpp">
       <Filter>Shared\Textures</Filter>
     </ClInclude>
-    <ClInclude Include="Scenes\Components\Materials\PhysicalBaseMaterial.hpp">
-      <Filter>Scenes\Components\Materials</Filter>
-    </ClInclude>
     <ClInclude Include="Scenes\Components\MeshData\MeshData.hpp">
       <Filter>Scenes\Components\MeshData</Filter>
     </ClInclude>
     <ClInclude Include="Scenes\Components\MeshData\TrianglesMesh.hpp">
       <Filter>Scenes\Components\MeshData</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Components\Materials\PhysicalBasedMaterial.hpp">
+      <Filter>Scenes\Components\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Systems\PhysicalBasedRenderSystem.hpp">
+      <Filter>Scenes\Systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -455,11 +461,11 @@
     <CopyFileToFolders Include="Resources\Scenes\fishy_cat.glb">
       <Filter>Resources\Scenes</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Resources\Models\WaterBottle.glb" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Models\MetalRoughSpheresNoTextures.glb">
+    <CopyFileToFolders Include="Resources\Models\WaterBottle.glb">
       <Filter>Resources\Models</Filter>
-    </None>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Models\MetalRoughSpheresNoTextures.glb">
+      <Filter>Resources\Models</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>

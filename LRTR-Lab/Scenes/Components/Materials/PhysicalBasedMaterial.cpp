@@ -1,11 +1,11 @@
-#include "PhysicalBaseMaterial.hpp"
+#include "PhysicalBasedMaterial.hpp"
 
 #include "../../../Shared/Textures/ConstantTexture.hpp"
 #include "../../../Shared/Math/Math.hpp"
 
 #include "../../../Extensions/ImGui/ImGui.hpp"
 
-LRTR::PhysicalBaseMaterial::PhysicalBaseMaterial(
+LRTR::PhysicalBasedMaterial::PhysicalBasedMaterial(
 	const std::shared_ptr<Texture>& metallic,
 	const std::shared_ptr<Texture>& baseColor, 
 	const std::shared_ptr<Texture>& roughness,
@@ -16,42 +16,42 @@ LRTR::PhysicalBaseMaterial::PhysicalBaseMaterial(
 {
 }
 
-auto LRTR::PhysicalBaseMaterial::metallic() const noexcept -> std::shared_ptr<Texture>
+auto LRTR::PhysicalBasedMaterial::metallic() const noexcept -> std::shared_ptr<Texture>
 {
 	return mMetallic;
 }
 
-auto LRTR::PhysicalBaseMaterial::baseColor() const noexcept -> std::shared_ptr<Texture>
+auto LRTR::PhysicalBasedMaterial::baseColor() const noexcept -> std::shared_ptr<Texture>
 {
 	return mBaseColor;
 }
 
-auto LRTR::PhysicalBaseMaterial::roughness() const noexcept -> std::shared_ptr<Texture>
+auto LRTR::PhysicalBasedMaterial::roughness() const noexcept -> std::shared_ptr<Texture>
 {
 	return mRoughness;
 }
 
-auto LRTR::PhysicalBaseMaterial::occlusion() const noexcept -> std::shared_ptr<Texture>
+auto LRTR::PhysicalBasedMaterial::occlusion() const noexcept -> std::shared_ptr<Texture>
 {
 	return mOcclusion;
 }
 
-auto LRTR::PhysicalBaseMaterial::normalMap() const noexcept -> std::shared_ptr<Texture>
+auto LRTR::PhysicalBasedMaterial::normalMap() const noexcept -> std::shared_ptr<Texture>
 {
 	return mNormalMap;
 }
 
-auto LRTR::PhysicalBaseMaterial::typeName() const noexcept -> std::string
+auto LRTR::PhysicalBasedMaterial::typeName() const noexcept -> std::string
 {
-	return "PhysicalBaseMaterial";
+	return "PhysicalBasedMaterial";
 }
 
-auto LRTR::PhysicalBaseMaterial::typeIndex() const noexcept -> std::type_index
+auto LRTR::PhysicalBasedMaterial::typeIndex() const noexcept -> std::type_index
 {
-	return typeid(PhysicalBaseMaterial);
+	return typeid(PhysicalBasedMaterial);
 }
 
-void LRTR::PhysicalBaseMaterial::onProperty()
+void LRTR::PhysicalBasedMaterial::onProperty()
 {
 	const static auto EditFlags =
 		ImGuiColorEditFlags_NoInputs |

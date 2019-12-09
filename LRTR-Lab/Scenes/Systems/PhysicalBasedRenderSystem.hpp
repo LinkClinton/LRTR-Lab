@@ -8,19 +8,21 @@
 
 namespace LRTR {
 
-	class TrianglesMesh;
-
-	struct WireframeDrawCall {
+	struct PhysicalBasedDrawCall {
 		size_t StartVertexLocation = 0;
 		size_t StartIndexLocation = 0;
 		size_t IndexCount = 0;
 
-		ColorF Color;
+		bool HasBaseColor = false;
+		bool HasRoughness = false;
+		bool HasOcclusion = false;
+		bool HasNormalMap = false;
+		bool HasMetallic = false;
 	};
 	
-	class WireframeRenderSystem : public RenderSystem {
+	class PhysicalBasedRenderSystem : public RenderSystem {
 	public:
-		explicit WireframeRenderSystem(
+		explicit PhysicalBasedRenderSystem(
 			const std::shared_ptr<RuntimeSharing>& sharing,
 			const std::shared_ptr<CodeRed::GpuLogicalDevice>& device,
 			size_t maxFrameCount = 2);
@@ -35,7 +37,7 @@ namespace LRTR {
 			float delta) override;
 
 		auto typeName() const noexcept -> std::string override;
-		
+
 		auto typeIndex() const noexcept -> std::type_index override;
 	private:
 		void updatePipeline(const std::shared_ptr<CodeRed::GpuFrameBuffer>& frameBuffer) const;
@@ -44,12 +46,12 @@ namespace LRTR {
 	private:
 		using Location = std::pair<size_t, size_t>;
 		using DataIndexGroup = Group<Identity, Location>;
-		
+
 		std::shared_ptr<CodeRed::GpuResourceLayout> mResourceLayout;
 		std::shared_ptr<CodeRed::PipelineInfo> mPipelineInfo;
 		std::shared_ptr<CodeRed::GpuBuffer> mViewBuffer;
 
-		std::vector<WireframeDrawCall> mDrawCalls;
+		std::vector<PhysicalBasedDrawCall> mDrawCalls;
 	};
 	
 }

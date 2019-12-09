@@ -35,27 +35,27 @@ LRTR::TrianglesMesh::TrianglesMesh(const std::vector<TriangleF>& triangles)
 
 	for (size_t index = 0; index < vertices.size(); index++) {
 		if (index == 0 || vertices[index].first != vertices[index - 1].first)
-			mVertices.push_back(vertices[index].first);
+			mPositions.push_back(vertices[index].first);
 
-		mIndices[vertices[index].second] = static_cast<unsigned>(mVertices.size() - 1);
+		mIndices[vertices[index].second] = static_cast<unsigned>(mPositions.size() - 1);
 	}
 }
 
 LRTR::TrianglesMesh::TrianglesMesh(
-	const std::vector<Vector3f>& vertices,
+	const std::vector<Vector3f>& positions,
 	const std::vector<unsigned>& indices) :
-	MeshData(vertices, indices, CodeRed::PrimitiveTopology::TriangleList)
+	MeshData(positions, indices, CodeRed::PrimitiveTopology::TriangleList)
 {
 	
 }
 
 LRTR::TrianglesMesh::TrianglesMesh(
-	const std::vector<Vector3f>& texCoords, 
-	const std::vector<Vector3f>& vertices,
+	const std::vector<Vector3f>& positions,
+	const std::vector<Vector3f>& texCoords,
 	const std::vector<Vector3f>& tangents, 
 	const std::vector<Vector3f>& normals, 
 	const std::vector<unsigned>& indices) :
-	MeshData(texCoords, vertices, tangents, normals, indices,
+	MeshData(positions, texCoords, tangents, normals, indices,
 		CodeRed::PrimitiveTopology::TriangleList)
 {
 }
@@ -63,9 +63,9 @@ LRTR::TrianglesMesh::TrianglesMesh(
 auto LRTR::TrianglesMesh::triangle(const size_t index) const -> TriangleF
 {
 	return TriangleF(
-		mVertices[mIndices[index * 3 + 0]],
-		mVertices[mIndices[index * 3 + 1]],
-		mVertices[mIndices[index * 3 + 2]]
+		mPositions[mIndices[index * 3 + 0]],
+		mPositions[mIndices[index * 3 + 1]],
+		mPositions[mIndices[index * 3 + 2]]
 	);
 }
 
