@@ -2,16 +2,14 @@
 
 #include <CodeRed/Core/CodeRedGraphics.hpp>
 
+#include "../../Runtimes/Managers/Asset/Components/MeshDataAssetComponent.hpp"
+#include "../../Runtimes/Managers/Asset/AssetManager.hpp"
+
 #include "../../Scenes/Components/MeshData/TrianglesMesh.hpp"
 #include "../../Scenes/Components/Materials/WireframeMaterial.hpp"
+
 #include "../../Shared/Graphics/ResourceHelper.hpp"
 #include "../../Shared/Graphics/ShaderCompiler.hpp"
-
-#define LRTR_RESET_AND_COPY_BUFFER(buffer, name) \
-	if (buffer != mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>(name)) { \
-		CodeRed::ResourceHelper::copyBuffer(buffer, mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>(name)); \
-		mFrameResources[mCurrentFrameIndex].set(name, buffer); \
-	}
 
 #define LRTR_RESET_BUFFER(buffer, name) \
 	if (buffer != mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>(name)) { \
@@ -39,22 +37,6 @@ LRTR::WireframeRenderSystem::WireframeRenderSystem(
 	for (auto& frameResource : mFrameResources) {
 		auto descriptorHeap = mDevice->createDescriptorHeap(mResourceLayout);
 
-		auto vertexBuffer = mDevice->createBuffer(
-			CodeRed::ResourceInfo::VertexBuffer(
-				sizeof(Vector3f),
-				1000,
-				CodeRed::MemoryHeap::Upload
-			)
-		);
-
-		auto indexBuffer = mDevice->createBuffer(
-			CodeRed::ResourceInfo::IndexBuffer(
-				sizeof(unsigned),
-				3000,
-				CodeRed::MemoryHeap::Upload
-			)
-		);
-
 		auto meshBuffer = mDevice->createBuffer(
 			CodeRed::ResourceInfo::GroupBuffer(
 				sizeof(Matrix4x4f),
@@ -67,8 +49,6 @@ LRTR::WireframeRenderSystem::WireframeRenderSystem(
 		descriptorHeap->bindBuffer(mViewBuffer, 1);
 
 		frameResource.set("DescriptorHeap", descriptorHeap);
-		frameResource.set("VertexBuffer", vertexBuffer);
-		frameResource.set("IndexBuffer", indexBuffer);
 		frameResource.set("MeshBuffer", meshBuffer);
 		frameResource.set("DataIndexGroup", std::make_shared<DataIndexGroup>());
 		frameResource.set("CurrentLocation", std::make_shared<Location>());
@@ -144,12 +124,7 @@ void LRTR::WireframeRenderSystem::update(const Group<Identity, std::shared_ptr<S
 	mDrawCalls.clear();
 
 	std::vector<Matrix4x4f> transforms;
-	std::vector<Vector3f> vertices;
-	std::vector<unsigned> indices;
-
-	auto dataIndexGroup = mFrameResources[mCurrentFrameIndex].get<DataIndexGroup>("DataIndexGroup");
-	auto currentLocation = mFrameResources[mCurrentFrameIndex].get<Location>("CurrentLocation");
-
+	
 	static const auto ProcessTrianglesMeshComponent = [&](
 		const std::shared_ptr<WireframeMaterial>& wireframeMaterial,
 		const std::shared_ptr<TrianglesMesh>& trianglesMesh,
@@ -157,31 +132,10 @@ void LRTR::WireframeRenderSystem::update(const Group<Identity, std::shared_ptr<S
 	{
 		if (!wireframeMaterial->visibility()) return;
 
-		//if we mapped the triangles mesh to vertex buffers, we do not need update it again
-		//but current version we manager the vertex buffer is fool.
-		//because we do not free the old triangle mesh. we need update it.
-		if (dataIndexGroup->find(trianglesMesh->identity()) == dataIndexGroup->end()) {
-			dataIndexGroup->insert({ trianglesMesh->identity(),
-				Location(
-					currentLocation->first + vertices.size(),
-					currentLocation->second + indices.size()) });
-
-			vertices.insert(vertices.end(),
-				trianglesMesh->positions().begin(),
-				trianglesMesh->positions().end());
-
-			indices.insert(indices.end(),
-				trianglesMesh->indices().begin(),
-				trianglesMesh->indices().end());
-		}
-
-		const auto location = dataIndexGroup->find(trianglesMesh->identity())->second;
-
 		mDrawCalls.push_back({
-			location.first,
-			location.second,
-			trianglesMesh->indices().size(),
-			wireframeMaterial->color() });
+			trianglesMesh,
+			wireframeMaterial->color()
+		});
 
 		transforms.push_back(transform);
 	};
@@ -202,27 +156,14 @@ void LRTR::WireframeRenderSystem::update(const Group<Identity, std::shared_ptr<S
 		}
 	}
 
-	auto vertexBuffer = mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>("VertexBuffer");
-	auto indexBuffer = mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>("IndexBuffer");
 	auto meshBuffer = mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>("MeshBuffer");
 
-	vertexBuffer = CodeRed::ResourceHelper::expandBuffer(mDevice, vertexBuffer, currentLocation->first + vertices.size());
-	indexBuffer = CodeRed::ResourceHelper::expandBuffer(mDevice, indexBuffer, currentLocation->second + indices.size());
 	meshBuffer = CodeRed::ResourceHelper::expandBuffer(mDevice, meshBuffer, transforms.size());
 
-	LRTR_RESET_AND_COPY_BUFFER(vertexBuffer, "VertexBuffer");
-	LRTR_RESET_AND_COPY_BUFFER(indexBuffer, "IndexBuffer");
 	LRTR_RESET_BUFFER(meshBuffer, "MeshBuffer");
 
-	CodeRed::ResourceHelper::updateBuffer(vertexBuffer, vertices.data(), sizeof(Vector3f) * currentLocation->first,
-		sizeof(Vector3f) * vertices.size());
-	CodeRed::ResourceHelper::updateBuffer(indexBuffer, indices.data(), sizeof(unsigned) * currentLocation->second,
-		sizeof(unsigned) * indices.size());
 	CodeRed::ResourceHelper::updateBuffer(meshBuffer, transforms.data(),
 		sizeof(Matrix4x4f) * transforms.size());
-
-	currentLocation->first = currentLocation->first + vertices.size();
-	currentLocation->second = currentLocation->second + indices.size();
 }
 
 void LRTR::WireframeRenderSystem::render(
@@ -234,9 +175,22 @@ void LRTR::WireframeRenderSystem::render(
 	updatePipeline(frameBuffer);
 	updateCamera(camera);
 
+	const auto meshDataAssetComponent = std::static_pointer_cast<MeshDataAssetComponent>(
+		mRuntimeSharing->assetManager()->components().at("MeshData"));
+
+	//update the vertex buffer we use,
+	//in render function, we do not render anything
+	//so we can update vertex buffer directly
+	meshDataAssetComponent->beginAllocating();
+	
+	for (const auto& drawCall : mDrawCalls) 
+		meshDataAssetComponent->allocate(drawCall.Mesh);
+
+	meshDataAssetComponent->endAllocating();
+	
 	const auto descriptorHeap = mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuDescriptorHeap>("DescriptorHeap");
-	const auto vertexBuffer = mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>("VertexBuffer");
-	const auto indexBuffer = mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>("IndexBuffer");
+	const auto vertexBuffer = meshDataAssetComponent->positions();
+	const auto indexBuffer = meshDataAssetComponent->indices();
 
 	commandList->setGraphicsPipeline(mPipelineInfo->graphicsPipeline());
 	commandList->setResourceLayout(mResourceLayout);
@@ -244,9 +198,10 @@ void LRTR::WireframeRenderSystem::render(
 
 	commandList->setVertexBuffer(vertexBuffer);
 	commandList->setIndexBuffer(indexBuffer);
-
+	
 	for (size_t index = 0; index < mDrawCalls.size();index++) {
-		const auto& drawCall = mDrawCalls[index];
+		const auto drawCall = mDrawCalls[index];
+		const auto meshDataInfo = meshDataAssetComponent->get(drawCall.Mesh);
 		
 		commandList->setConstant32Bits({
 			drawCall.Color.Red,
@@ -256,9 +211,9 @@ void LRTR::WireframeRenderSystem::render(
 			static_cast<unsigned>(index)
 		});
 
-		commandList->drawIndexed(drawCall.IndexCount, 1,
-			drawCall.StartIndexLocation,
-			drawCall.StartVertexLocation,
+		commandList->drawIndexed(meshDataInfo.IndexCount, 1,
+			meshDataInfo.StartIndexLocation,
+			meshDataInfo.StartVertexLocation,
 			0);
 	}
 	

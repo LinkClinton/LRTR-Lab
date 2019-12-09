@@ -16,6 +16,11 @@ auto LRTR::RuntimeSharing::sceneManager() const noexcept -> std::shared_ptr<Scen
 	return mLabApp->mSceneManager;
 }
 
+auto LRTR::RuntimeSharing::assetManager() const noexcept -> std::shared_ptr<AssetManager>
+{
+	return mLabApp->mAssetManager;
+}
+
 auto LRTR::RuntimeSharing::allocator() const noexcept -> std::shared_ptr<CodeRed::GpuCommandAllocator>
 {
 	return mLabApp->mCommandAllocator;

@@ -11,10 +11,8 @@ namespace LRTR {
 	class TrianglesMesh;
 
 	struct WireframeDrawCall {
-		size_t StartVertexLocation = 0;
-		size_t StartIndexLocation = 0;
-		size_t IndexCount = 0;
-
+		std::shared_ptr<TrianglesMesh> Mesh;
+		
 		ColorF Color;
 	};
 	

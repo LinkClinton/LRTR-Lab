@@ -176,6 +176,8 @@
     <ClCompile Include="Extensions\ImGui\imgui_impl_win32.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Runtimes\LabApp.cpp" />
+    <ClCompile Include="Runtimes\Managers\Asset\AssetManager.cpp" />
+    <ClCompile Include="Runtimes\Managers\Asset\Components\MeshDataAssetComponent.cpp" />
     <ClCompile Include="Runtimes\Managers\Scene\SceneManager.cpp" />
     <ClCompile Include="Runtimes\Managers\UI\Components\ConsoleUIComponent.cpp" />
     <ClCompile Include="Runtimes\Managers\UI\Components\LoggingUIComponent.cpp" />
@@ -236,6 +238,9 @@
     <ClInclude Include="Extensions\ImGui\imgui_impl_win32.hpp" />
     <ClInclude Include="Extensions\SpdLog\SinkStorage.hpp" />
     <ClInclude Include="Runtimes\LabApp.hpp" />
+    <ClInclude Include="Runtimes\Managers\Asset\AssetManager.hpp" />
+    <ClInclude Include="Runtimes\Managers\Asset\Components\AssetComponent.hpp" />
+    <ClInclude Include="Runtimes\Managers\Asset\Components\MeshDataAssetComponent.hpp" />
     <ClInclude Include="Runtimes\Managers\Manager.hpp" />
     <ClInclude Include="Runtimes\Managers\Scene\SceneManager.hpp" />
     <ClInclude Include="Runtimes\Managers\UI\Components\ConsoleUIComponent.hpp" />

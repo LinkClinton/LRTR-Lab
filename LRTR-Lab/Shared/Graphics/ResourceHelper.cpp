@@ -128,6 +128,8 @@ auto CodeRed::ResourceHelper::expandBuffer(
 			buffer->heap())
 	);
 
+	copyBuffer(newBuffer, buffer, 0);
+
 	return newBuffer;
 }
 

@@ -134,6 +134,12 @@
     <ClCompile Include="Scenes\Systems\PhysicalBasedRenderSystem.cpp">
       <Filter>Scenes\Systems</Filter>
     </ClCompile>
+    <ClCompile Include="Runtimes\Managers\Asset\AssetManager.cpp">
+      <Filter>Runtimes\Managers\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Runtimes\Managers\Asset\Components\MeshDataAssetComponent.cpp">
+      <Filter>Runtimes\Managers\Asset\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scenes">
@@ -237,6 +243,12 @@
     </Filter>
     <Filter Include="Scenes\Components\MeshData">
       <UniqueIdentifier>{5566d63a-4274-4405-9c6d-df67885bfe3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Runtimes\Managers\Asset">
+      <UniqueIdentifier>{a4b00b9e-e545-4115-98c6-2551dbd23f7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Runtimes\Managers\Asset\Components">
+      <UniqueIdentifier>{4cbf6107-fa74-4fbf-90df-b11994cfa77e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -428,6 +440,15 @@
     </ClInclude>
     <ClInclude Include="Scenes\Systems\PhysicalBasedRenderSystem.hpp">
       <Filter>Scenes\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Runtimes\Managers\Asset\AssetManager.hpp">
+      <Filter>Runtimes\Managers\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Runtimes\Managers\Asset\Components\AssetComponent.hpp">
+      <Filter>Runtimes\Managers\Asset\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Runtimes\Managers\Asset\Components\MeshDataAssetComponent.hpp">
+      <Filter>Runtimes\Managers\Asset\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

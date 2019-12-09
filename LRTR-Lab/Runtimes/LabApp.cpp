@@ -6,6 +6,7 @@
 #include "../Core/Logging.hpp"
 
 #include "Managers/Scene/SceneManager.hpp"
+#include "Managers/Asset/AssetManager.hpp"
 #include "Managers/UI/UIManager.hpp"
 #include "RuntimeSharing.hpp"
 
@@ -163,6 +164,7 @@ void LRTR::LabApp::initializeManagerComponents()
 	LRTR_DEBUG_INFO("Initialize Managers.");
 
 	initializeSceneManager();
+	initializeAssetManager();
 	initializeUIManager();
 
 	LRTR_DEBUG_INFO("Finish initialize Managers.");
@@ -243,6 +245,14 @@ void LRTR::LabApp::initializeSceneManager()
 	mSceneManager = std::make_shared<SceneManager>(
 		mRuntimeSharing,
 		mDevice);
+}
+
+void LRTR::LabApp::initializeAssetManager()
+{
+	LRTR_DEBUG_INFO("Initialize Asset Manager.");
+
+	mAssetManager = std::make_shared<AssetManager>(
+		mRuntimeSharing);
 }
 
 void LRTR::LabApp::initializeUIManager()

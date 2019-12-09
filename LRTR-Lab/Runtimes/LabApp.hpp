@@ -13,6 +13,7 @@ namespace LRTR {
 
 	class RuntimeSharing;
 	class SceneManager;
+	class AssetManager;
 	class UIManager;
 	
 	class LabApp final : public Noncopyable {
@@ -66,9 +67,12 @@ namespace LRTR {
 		void initializeSwapChain();
 	private:
 		std::shared_ptr<SceneManager> mSceneManager;
+		std::shared_ptr<AssetManager> mAssetManager;
 		std::shared_ptr<UIManager> mUIManager;
 
 		void initializeSceneManager();
+
+		void initializeAssetManager();
 		
 		void initializeUIManager();
 	private:
