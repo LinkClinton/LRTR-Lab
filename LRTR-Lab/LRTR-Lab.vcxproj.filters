@@ -140,6 +140,9 @@
     <ClCompile Include="Runtimes\Managers\Asset\Components\MeshDataAssetComponent.cpp">
       <Filter>Runtimes\Managers\Asset\Components</Filter>
     </ClCompile>
+    <ClCompile Include="Scenes\Components\LightSources\PointLightSource.cpp">
+      <Filter>Scenes\Components\LightSources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scenes">
@@ -249,6 +252,9 @@
     </Filter>
     <Filter Include="Runtimes\Managers\Asset\Components">
       <UniqueIdentifier>{4cbf6107-fa74-4fbf-90df-b11994cfa77e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes\Components\LightSources">
+      <UniqueIdentifier>{4e3853ca-1f15-4dad-b4f3-b4b2a026bb24}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -449,6 +455,12 @@
     </ClInclude>
     <ClInclude Include="Runtimes\Managers\Asset\Components\MeshDataAssetComponent.hpp">
       <Filter>Runtimes\Managers\Asset\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Components\LightSources\LightSource.hpp">
+      <Filter>Scenes\Components\LightSources</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Components\LightSources\PointLightSource.hpp">
+      <Filter>Scenes\Components\LightSources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

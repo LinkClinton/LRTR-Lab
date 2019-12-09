@@ -2,24 +2,18 @@
 
 #include <CodeRed/Core/CodeRedGraphics.hpp>
 
-#include "../../Scenes/Components/Materials/PhysicalBasedMaterial.hpp"
+#include "../../Runtimes/Managers/Asset/Components/MeshDataAssetComponent.hpp"
+#include "../../Runtimes/Managers/Asset/AssetManager.hpp"
+
 #include "../../Scenes/Components/MeshData/TrianglesMesh.hpp"
+#include "../../Scenes/Components/Materials/PhysicalBasedMaterial.hpp"
+
 #include "../../Shared/Textures/ConstantTexture.hpp"
 #include "../../Shared/Graphics/ResourceHelper.hpp"
 #include "../../Shared/Graphics/ShaderCompiler.hpp"
 
-#define LRTR_INSERT_VERTEX_PROPERTY(condition, dest, source0, source1) \
-	if (condition) dest.insert(dest.end(), source0.begin(), source0.end()); \
-	else dest.insert(dest.end(), source1.begin(), source1.end());
-
 #define LRTR_IS_CONSTANT_TEXTURE(texture) \
 	(std::dynamic_pointer_cast<ConstantTexture<Vector4f>>(texture) != nullptr)
-
-#define LRTR_RESET_AND_COPY_BUFFER(buffer, name) \
-	if (buffer != mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>(name)) { \
-		CodeRed::ResourceHelper::copyBuffer(buffer, mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>(name)); \
-		mFrameResources[mCurrentFrameIndex].set(name, buffer); \
-	}
 
 #define LRTR_RESET_BUFFER(buffer, name) \
 	if (buffer != mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>(name)) { \
@@ -51,6 +45,7 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 	//resource 0 : material properties
 	//resource 1 : transform matrix
 	//resource 2 : camera matrix
+	//resource 8 : hasBaseColor, HasRoughness, HasOcclusion, HasNormalMap, HasMetallic, index
 	mResourceLayout = mDevice->createResourceLayout(
 		{
 			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::GroupBuffer, 0),
@@ -61,28 +56,6 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 	for (auto& frameResource : mFrameResources) {
 		auto vertexBuffers = std::make_shared<std::vector<std::shared_ptr<CodeRed::GpuBuffer>>>(4);
 		auto descriptorHeap = mDevice->createDescriptorHeap(mResourceLayout);
-
-		//vertex buffer 0 : position property
-		//vertex buffer 1 : texcoord property
-		//vertex buffer 2 : tangent property
-		//vertex buffer 3 : normal property
-		for (size_t index = 0; index < vertexBuffers->size(); index++) {
-			(*vertexBuffers)[index] = mDevice->createBuffer(
-				CodeRed::ResourceInfo::VertexBuffer(
-					sizeof(Vector3f),
-					1000,
-					CodeRed::MemoryHeap::Upload
-				)
-			);
-		}
-		
-		auto indexBuffer = mDevice->createBuffer(
-			CodeRed::ResourceInfo::IndexBuffer(
-				sizeof(unsigned),
-				3000,
-				CodeRed::MemoryHeap::Upload
-			)
-		);
 
 		auto transformBuffer = mDevice->createBuffer(
 			CodeRed::ResourceInfo::GroupBuffer(
@@ -105,12 +78,8 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 		descriptorHeap->bindBuffer(mViewBuffer, 2);
 
 		frameResource.set("DescriptorHeap", descriptorHeap);
-		frameResource.set("VertexBuffer", vertexBuffers);
-		frameResource.set("IndexBuffer", indexBuffer);
 		frameResource.set("TransformBuffer", transformBuffer);
 		frameResource.set("MaterialBuffer", materialBuffer);
-		frameResource.set("DataIndexGroup", std::make_shared<DataIndexGroup>());
-		frameResource.set("CurrentLocation", std::make_shared<Location>());
 	}
 
 	mPipelineInfo = std::make_shared<CodeRed::PipelineInfo>(mDevice);
@@ -179,12 +148,7 @@ void LRTR::PhysicalBasedRenderSystem::update(const Group<Identity, std::shared_p
 
 	std::vector<Matrix4x4f> transforms;
 	std::vector<SharedMaterial> materials;
-	std::vector<std::vector<Vector3f>> vertices(4);
-	std::vector<unsigned> indices;
-
-	auto dataIndexGroup = mFrameResources[mCurrentFrameIndex].get<DataIndexGroup>("DataIndexGroup");
-	auto currentLocation = mFrameResources[mCurrentFrameIndex].get<Location>("CurrentLocation");
-
+	
 	static const auto ProcessTrianglesMeshComponent = [&](
 		const std::shared_ptr<PhysicalBasedMaterial>& physicalBasedMaterial,
 		const std::shared_ptr<TrianglesMesh>& trianglesMesh,
@@ -192,54 +156,8 @@ void LRTR::PhysicalBasedRenderSystem::update(const Group<Identity, std::shared_p
 	{
 		if (!physicalBasedMaterial->visibility()) return;
 
-		//if we mapped the triangles mesh to vertex buffers, we do not need update it again
-		//but current version we manager the vertex buffer is fool.
-		//because we do not free the old triangle mesh. we need update it.
-		if (dataIndexGroup->find(trianglesMesh->identity()) == dataIndexGroup->end()) {
-			dataIndexGroup->insert({ trianglesMesh->identity(),
-				Location(
-					currentLocation->first + vertices[0].size(),
-					currentLocation->second + indices.size()) });
-
-			//the zero array is used to fill properties that mesh does not have.
-			//when we create the mesh, we will test the size of properties,
-			//so the size of properties will be greater or equal than positions
-			const auto zeroArray = std::vector<Vector3f>(
-				trianglesMesh->positions().size() > trianglesMesh->texCoords().size() ||
-				trianglesMesh->positions().size() > trianglesMesh->tangents().size() ||
-				trianglesMesh->positions().size() > trianglesMesh->normals().size() ?
-				trianglesMesh->positions().size() : 0, Vector3f());
-
-			//position
-			vertices[0].insert(vertices[0].end(),
-				trianglesMesh->positions().begin(),
-				trianglesMesh->positions().end());
-
-			LRTR_INSERT_VERTEX_PROPERTY(
-				trianglesMesh->positions().size() > trianglesMesh->texCoords().size(),
-				vertices[1], zeroArray, trianglesMesh->texCoords());
-
-			LRTR_INSERT_VERTEX_PROPERTY(
-				trianglesMesh->positions().size() > trianglesMesh->tangents().size(),
-				vertices[2], zeroArray, trianglesMesh->tangents());
-
-			LRTR_INSERT_VERTEX_PROPERTY(
-				trianglesMesh->positions().size() > trianglesMesh->normals().size(),
-				vertices[3], zeroArray, trianglesMesh->normals());
-
-			indices.insert(indices.end(),
-				trianglesMesh->indices().begin(),
-				trianglesMesh->indices().end());
-		}
-
-		const auto location = dataIndexGroup->find(trianglesMesh->identity())->second;
-
 		const PhysicalBasedDrawCall drawCall = {
-			location.first,
-			location.second,
-			trianglesMesh->indices().size(),
-			false, false, false,
-			false, false
+			trianglesMesh
 		};
 
 		SharedMaterial material;
@@ -272,6 +190,20 @@ void LRTR::PhysicalBasedRenderSystem::update(const Group<Identity, std::shared_p
 			);
 		}
 	}
+
+	auto transformBuffer = mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>("TransformBuffer");
+	auto materialBuffer = mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>("MaterialBuffer");
+	
+	transformBuffer = CodeRed::ResourceHelper::expandBuffer(mDevice, transformBuffer, transforms.size());
+	materialBuffer = CodeRed::ResourceHelper::expandBuffer(mDevice, materialBuffer, materials.size());
+	
+	LRTR_RESET_BUFFER(transformBuffer, "TransformBuffer");
+	LRTR_RESET_BUFFER(materialBuffer, "MaterialBuffer");
+
+	CodeRed::ResourceHelper::updateBuffer(transformBuffer, transforms.data(),
+		sizeof(Matrix4x4f) * transforms.size());
+	CodeRed::ResourceHelper::updateBuffer(materialBuffer, materials.data(),
+		sizeof(SharedMaterial) * materials.size());
 }
 
 void LRTR::PhysicalBasedRenderSystem::render(
@@ -280,6 +212,57 @@ void LRTR::PhysicalBasedRenderSystem::render(
 	const std::shared_ptr<SceneCamera>& camera,
 	float delta)
 {
+	updatePipeline(frameBuffer);
+	updateCamera(camera);
+
+	const auto meshDataAssetComponent = std::static_pointer_cast<MeshDataAssetComponent>(
+		mRuntimeSharing->assetManager()->components().at("MeshData"));
+
+	//update the vertex buffer we use,
+	//in render function, we do not render anything
+	//so we can update vertex buffer directly
+	meshDataAssetComponent->beginAllocating();
+
+	for (const auto& drawCall : mDrawCalls)
+		meshDataAssetComponent->allocate(drawCall.Mesh);
+
+	meshDataAssetComponent->endAllocating();
+
+	const auto descriptorHeap = mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuDescriptorHeap>("DescriptorHeap");
+	
+	commandList->setGraphicsPipeline(mPipelineInfo->graphicsPipeline());
+	commandList->setResourceLayout(mResourceLayout);
+	commandList->setDescriptorHeap(descriptorHeap);
+
+	commandList->setVertexBuffers({
+		meshDataAssetComponent->positions(),
+		meshDataAssetComponent->texCoords(),
+		meshDataAssetComponent->tangents(),
+		meshDataAssetComponent->normals()
+		});
+	
+	commandList->setIndexBuffer(meshDataAssetComponent->indices());
+
+	for (size_t index = 0; index < mDrawCalls.size(); index++) {
+		const auto drawCall = mDrawCalls[index];
+		const auto meshDataInfo = meshDataAssetComponent->get(drawCall.Mesh);
+
+		commandList->setConstant32Bits({
+			drawCall.HasBaseColor,
+			drawCall.HasRoughness,
+			drawCall.HasOcclusion,
+			drawCall.HasNormalMap,
+			drawCall.HasMetallic,
+			static_cast<unsigned>(index)
+		});
+
+		commandList->drawIndexed(meshDataInfo.IndexCount, 1,
+			meshDataInfo.StartIndexLocation,
+			meshDataInfo.StartVertexLocation,
+			0);
+	}
+
+	mCurrentFrameIndex = (mCurrentFrameIndex + 1) % mFrameResources.size();
 }
 
 auto LRTR::PhysicalBasedRenderSystem::typeName() const noexcept -> std::string
@@ -290,4 +273,26 @@ auto LRTR::PhysicalBasedRenderSystem::typeName() const noexcept -> std::string
 auto LRTR::PhysicalBasedRenderSystem::typeIndex() const noexcept -> std::type_index
 {
 	return typeid(PhysicalBasedRenderSystem);
+}
+
+void LRTR::PhysicalBasedRenderSystem::updatePipeline(
+	const std::shared_ptr<CodeRed::GpuFrameBuffer>& frameBuffer) const
+{
+	if (CodeRed::PipelineInfo::isCompatible(mPipelineInfo->renderPass(), frameBuffer) &&
+		mPipelineInfo->graphicsPipeline() != nullptr) return;
+
+	mPipelineInfo->setRenderPass(frameBuffer);
+	mPipelineInfo->updateState();
+}
+
+void LRTR::PhysicalBasedRenderSystem::updateCamera(
+	const std::shared_ptr<SceneCamera>& camera) const
+{
+	if (camera == nullptr) return;
+
+	const auto cameraComponent = camera->component<Projective>();
+	const auto viewMatrix = cameraComponent->toScreen().matrix() *
+		camera->component<TransformWrap>()->transform().inverseMatrix();
+
+	CodeRed::ResourceHelper::updateBuffer(mViewBuffer, &viewMatrix, sizeof(Matrix4x4f));
 }

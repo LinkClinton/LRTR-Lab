@@ -128,6 +128,30 @@ auto CodeRed::ResourceHelper::expandBuffer(
 			buffer->heap())
 	);
 
+	return newBuffer;
+}
+
+auto CodeRed::ResourceHelper::expandAndCopyBuffer(
+	const std::shared_ptr<GpuLogicalDevice>& device,
+	const std::shared_ptr<GpuBuffer>& buffer,
+	const size_t count)
+	-> std::shared_ptr<GpuBuffer>
+{
+	if (buffer->count() >= count) return buffer;
+
+	auto bufferCount = buffer->count();
+
+	while (bufferCount < count) bufferCount <<= 1;
+
+	auto newBuffer = device->createBuffer(
+		ResourceInfo(
+			BufferProperty(buffer->stride(), bufferCount),
+			buffer->layout(),
+			buffer->usage(),
+			buffer->type(),
+			buffer->heap())
+	);
+
 	copyBuffer(newBuffer, buffer, 0);
 
 	return newBuffer;

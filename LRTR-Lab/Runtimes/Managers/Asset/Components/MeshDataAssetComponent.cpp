@@ -44,14 +44,14 @@ void LRTR::MeshDataAssetComponent::endAllocating()
 {
 	//expand the buffer if the count is not enough
 	for (size_t index = 0; index < mProperties.size(); index++) {
-		mProperties[index] = CodeRed::ResourceHelper::expandBuffer(mDevice, mProperties[index], mVertexLocation);
+		mProperties[index] = CodeRed::ResourceHelper::expandAndCopyBuffer(mDevice, mProperties[index], mVertexLocation);
 
 		CodeRed::ResourceHelper::updateBuffer(mProperties[index], mPropertiesAllocateCache[index].data(),
 			sizeof(Vector3f) * (mVertexLocation - mPropertiesAllocateCache[index].size()),
 			sizeof(Vector3f) * mPropertiesAllocateCache[index].size());
 	}
 	
-	mIndices = CodeRed::ResourceHelper::expandBuffer(mDevice, mIndices, mIndexLocation);
+	mIndices = CodeRed::ResourceHelper::expandAndCopyBuffer(mDevice, mIndices, mIndexLocation);
 
 	CodeRed::ResourceHelper::updateBuffer(mIndices, mIndicesAllocateCache.data(),
 		sizeof(unsigned) * (mIndexLocation - mIndicesAllocateCache.size()),

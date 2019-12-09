@@ -50,8 +50,6 @@ LRTR::WireframeRenderSystem::WireframeRenderSystem(
 
 		frameResource.set("DescriptorHeap", descriptorHeap);
 		frameResource.set("MeshBuffer", meshBuffer);
-		frameResource.set("DataIndexGroup", std::make_shared<DataIndexGroup>());
-		frameResource.set("CurrentLocation", std::make_shared<Location>());
 	}
 
 	mPipelineInfo = std::make_shared<CodeRed::PipelineInfo>(mDevice);

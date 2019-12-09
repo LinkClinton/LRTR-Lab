@@ -8,16 +8,16 @@
 
 namespace LRTR {
 
+	class TrianglesMesh;
+	
 	struct PhysicalBasedDrawCall {
-		size_t StartVertexLocation = 0;
-		size_t StartIndexLocation = 0;
-		size_t IndexCount = 0;
+		std::shared_ptr<TrianglesMesh> Mesh;
 
-		bool HasBaseColor = false;
-		bool HasRoughness = false;
-		bool HasOcclusion = false;
-		bool HasNormalMap = false;
-		bool HasMetallic = false;
+		unsigned HasBaseColor = 0;
+		unsigned HasRoughness = 0;
+		unsigned HasOcclusion = 0;
+		unsigned HasNormalMap = 0;
+		unsigned HasMetallic = 0;
 	};
 	
 	class PhysicalBasedRenderSystem : public RenderSystem {
@@ -44,9 +44,6 @@ namespace LRTR {
 
 		void updateCamera(const std::shared_ptr<SceneCamera>& camera) const;
 	private:
-		using Location = std::pair<size_t, size_t>;
-		using DataIndexGroup = Group<Identity, Location>;
-
 		std::shared_ptr<CodeRed::GpuResourceLayout> mResourceLayout;
 		std::shared_ptr<CodeRed::PipelineInfo> mPipelineInfo;
 		std::shared_ptr<CodeRed::GpuBuffer> mViewBuffer;

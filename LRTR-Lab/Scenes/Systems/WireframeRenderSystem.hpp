@@ -40,9 +40,6 @@ namespace LRTR {
 
 		void updateCamera(const std::shared_ptr<SceneCamera>& camera) const;
 	private:
-		using Location = std::pair<size_t, size_t>;
-		using DataIndexGroup = Group<Identity, Location>;
-		
 		std::shared_ptr<CodeRed::GpuResourceLayout> mResourceLayout;
 		std::shared_ptr<CodeRed::PipelineInfo> mPipelineInfo;
 		std::shared_ptr<CodeRed::GpuBuffer> mViewBuffer;
