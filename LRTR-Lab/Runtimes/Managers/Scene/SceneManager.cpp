@@ -5,11 +5,12 @@
 
 #include "../../../Extensions/Assimp/AssimpLoader.hpp"
 
-#include "../../../Scenes/Components/Materials/WireframeMaterial.hpp"
-#include "../../../Scenes/Components/MeshData/TrianglesMesh.hpp"
+#include "../../../Scenes/Systems/PhysicalBasedRenderSystem.hpp"
 #include "../../../Scenes/Systems/CollectionUpdateSystem.hpp"
 #include "../../../Scenes/Systems/LinesMeshRenderSystem.hpp"
 #include "../../../Scenes/Systems/WireframeRenderSystem.hpp"
+
+#include "../../../Scenes/Components/MeshData/TrianglesMesh.hpp"
 #include "../../../Scenes/Components/CollectionLabel.hpp"
 #include "../../../Scenes/Components/CameraGroup.hpp"
 #include "../../../Scenes/Scene.hpp"
@@ -38,7 +39,8 @@ LRTR::SceneManager::SceneManager(
 	mScenes["Scene"]->add(camera);
 
 	mScenes["Scene"]->addSystem(std::make_shared<LinesMeshRenderSystem>(mRuntimeSharing, mDevice));
-	mScenes["Scene"]->addSystem(std::make_shared<WireframeRenderSystem>(mRuntimeSharing, mDevice));
+	//mScenes["Scene"]->addSystem(std::make_shared<WireframeRenderSystem>(mRuntimeSharing, mDevice));
+	mScenes["Scene"]->addSystem(std::make_shared<PhysicalBasedRenderSystem>(mRuntimeSharing, mDevice));
 	mScenes["Scene"]->addSystem(std::make_shared<CollectionUpdateSystem>(mRuntimeSharing));
 }
 

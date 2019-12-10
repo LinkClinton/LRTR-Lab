@@ -6,6 +6,7 @@
 #include "../../Runtimes/Managers/Asset/AssetManager.hpp"
 
 #include "../../Scenes/Components/MeshData/TrianglesMesh.hpp"
+#include "../../Scenes/Components/LightSources/PointLightSource.hpp"
 #include "../../Scenes/Components/Materials/PhysicalBasedMaterial.hpp"
 
 #include "../../Shared/Textures/ConstantTexture.hpp"
@@ -15,10 +16,10 @@
 #define LRTR_IS_CONSTANT_TEXTURE(texture) \
 	(std::dynamic_pointer_cast<ConstantTexture<Vector4f>>(texture) != nullptr)
 
-#define LRTR_RESET_BUFFER(buffer, name) \
+#define LRTR_RESET_BUFFER(buffer, name, binding) \
 	if (buffer != mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>(name)) { \
 		mFrameResources[mCurrentFrameIndex].set(name, buffer); \
-		mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuDescriptorHeap>("DescriptorHeap")->bindBuffer(buffer, 0); \
+		mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuDescriptorHeap>("DescriptorHeap")->bindBuffer(buffer, binding); \
 	}
 
 namespace LRTR {
@@ -27,6 +28,11 @@ namespace LRTR {
 		Vector4f BaseColor;
 		Vector4f Roughness;
 		Vector4f Metallic;
+	};
+
+	struct SharedLight {
+		Vector3f Position;
+		Vector3f Intensity;
 	};
 	
 }
@@ -43,18 +49,20 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 	);
 
 	//resource 0 : material properties
-	//resource 1 : transform matrix
-	//resource 2 : camera matrix
-	//resource 8 : hasBaseColor, HasRoughness, HasOcclusion, HasNormalMap, HasMetallic, index
+	//resource 1 : light properties
+	//resource 2 : transform matrix
+	//resource 3 : camera matrix
+	//resource 9 : hasBaseColor, HasRoughness, HasOcclusion, HasNormalMap, HasMetallic,
+	//eyePosition.x, eyePosition.y, eyePosition.z, nLights, index
 	mResourceLayout = mDevice->createResourceLayout(
 		{
 			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::GroupBuffer, 0),
-			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::GroupBuffer,1),
-			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Buffer,2)
-		}, {}, CodeRed::Constant32Bits(6, 8));
+			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::GroupBuffer, 1),
+			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::GroupBuffer, 2),
+			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Buffer, 3)
+		}, {}, CodeRed::Constant32Bits(10, 9));
 
 	for (auto& frameResource : mFrameResources) {
-		auto vertexBuffers = std::make_shared<std::vector<std::shared_ptr<CodeRed::GpuBuffer>>>(4);
 		auto descriptorHeap = mDevice->createDescriptorHeap(mResourceLayout);
 
 		auto transformBuffer = mDevice->createBuffer(
@@ -73,13 +81,23 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 			)
 		);
 
+		auto lightBuffer = mDevice->createBuffer(
+			CodeRed::ResourceInfo::GroupBuffer(
+				sizeof(SharedLight),
+				20,
+				CodeRed::MemoryHeap::Upload
+			)
+		);
+
 		descriptorHeap->bindBuffer(materialBuffer, 0);
-		descriptorHeap->bindBuffer(transformBuffer, 1);
-		descriptorHeap->bindBuffer(mViewBuffer, 2);
+		descriptorHeap->bindBuffer(lightBuffer, 1);
+		descriptorHeap->bindBuffer(transformBuffer, 2);
+		descriptorHeap->bindBuffer(mViewBuffer, 3);
 
 		frameResource.set("DescriptorHeap", descriptorHeap);
 		frameResource.set("TransformBuffer", transformBuffer);
 		frameResource.set("MaterialBuffer", materialBuffer);
+		frameResource.set("LightBuffer", lightBuffer);
 	}
 
 	mPipelineInfo = std::make_shared<CodeRed::PipelineInfo>(mDevice);
@@ -100,11 +118,19 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 
 	mPipelineInfo->setResourceLayout(mResourceLayout);
 
+	mPipelineInfo->setRasterizationState(
+		pipelineFactory->createRasterizationState(
+			CodeRed::FrontFace::Clockwise,
+			CodeRed::CullMode::None,
+			CodeRed::FillMode::Solid
+		)
+	);
+
 	if (mDevice->apiVersion() == CodeRed::APIVersion::DirectX12) {
 		const auto vShaderCode = CodeRed::ShaderCompiler::readShader(
-			"./Resources/Shaders/Systems/DirectX12/");
+			"./Resources/Shaders/Systems/DirectX12/PhysicalBasedRenderSystemVert.hlsl");
 		const auto fShaderCode = CodeRed::ShaderCompiler::readShader(
-			"./Resources/Shaders/Systems/DirectX12/");
+			"./Resources/Shaders/Systems/DirectX12/PhysicalBasedRenderSystemFrag.hlsl");
 
 		mPipelineInfo->setVertexShaderState(
 			pipelineFactory->createShaderState(
@@ -147,6 +173,7 @@ void LRTR::PhysicalBasedRenderSystem::update(const Group<Identity, std::shared_p
 	mDrawCalls.clear();
 
 	std::vector<Matrix4x4f> transforms;
+	std::vector<SharedLight> lights;
 	std::vector<SharedMaterial> materials;
 	
 	static const auto ProcessTrianglesMeshComponent = [&](
@@ -165,9 +192,9 @@ void LRTR::PhysicalBasedRenderSystem::update(const Group<Identity, std::shared_p
 		//the constant texture of material must be Vector4f
 		//for current version, the texture must be constant texture
 		//we do not support image texture
-		material.BaseColor = std::dynamic_pointer_cast<ConstantTexture<Vector4f>>(physicalBasedMaterial->baseColor())->value();
-		material.Roughness = std::dynamic_pointer_cast<ConstantTexture<Vector4f>>(physicalBasedMaterial->roughness())->value();
-		material.Metallic = std::dynamic_pointer_cast<ConstantTexture<Vector4f>>(physicalBasedMaterial->metallic())->value();
+		material.BaseColor = Vector4f(std::dynamic_pointer_cast<ConstantTexture<Vector4f>>(physicalBasedMaterial->baseColor())->value());
+		material.Roughness = Vector4f(std::dynamic_pointer_cast<ConstantTexture<Vector1f>>(physicalBasedMaterial->roughness())->value());
+		material.Metallic = Vector4f(std::dynamic_pointer_cast<ConstantTexture<Vector1f>>(physicalBasedMaterial->metallic())->value());
 
 		mDrawCalls.push_back(drawCall);
 
@@ -177,33 +204,48 @@ void LRTR::PhysicalBasedRenderSystem::update(const Group<Identity, std::shared_p
 
 	for (const auto& shape : shapes) {
 		const auto transform =
-			shape.second->hasComponent<TransformWrap>() ? shape.second->component<TransformWrap>()->transform().matrix() :
-			Matrix4x4f(1);
-
+			shape.second->hasComponent<TransformWrap>() ? shape.second->component<TransformWrap>() : nullptr;
+		
 		if (shape.second->hasComponent<PhysicalBasedMaterial>() &&
 			shape.second->hasComponent<TrianglesMesh>())
 		{
 			ProcessTrianglesMeshComponent(
 				shape.second->component<PhysicalBasedMaterial>(),
 				shape.second->component<TrianglesMesh>(),
-				transform
+				transform != nullptr ? transform->transform().matrix() : Matrix4x4f(1)
 			);
+		}
+
+		if (shape.second->hasComponent<PointLightSource>()) {
+			const auto pointLight = shape.second->component<PointLightSource>();
+
+			lights.push_back({
+				transform != nullptr ? transform->translate() : Vector3f(0),
+				pointLight->intensity()
+				});
 		}
 	}
 
 	auto transformBuffer = mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>("TransformBuffer");
 	auto materialBuffer = mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>("MaterialBuffer");
+	auto lightBuffer = mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>("LightBuffer");
 	
 	transformBuffer = CodeRed::ResourceHelper::expandBuffer(mDevice, transformBuffer, transforms.size());
 	materialBuffer = CodeRed::ResourceHelper::expandBuffer(mDevice, materialBuffer, materials.size());
+	lightBuffer = CodeRed::ResourceHelper::expandBuffer(mDevice, lightBuffer, lights.size());
 	
-	LRTR_RESET_BUFFER(transformBuffer, "TransformBuffer");
-	LRTR_RESET_BUFFER(materialBuffer, "MaterialBuffer");
+	LRTR_RESET_BUFFER(transformBuffer, "TransformBuffer", 2);
+	LRTR_RESET_BUFFER(materialBuffer, "MaterialBuffer", 0);
+	LRTR_RESET_BUFFER(lightBuffer, "LightBuffer", 1);
 
 	CodeRed::ResourceHelper::updateBuffer(transformBuffer, transforms.data(),
 		sizeof(Matrix4x4f) * transforms.size());
 	CodeRed::ResourceHelper::updateBuffer(materialBuffer, materials.data(),
 		sizeof(SharedMaterial) * materials.size());
+	CodeRed::ResourceHelper::updateBuffer(lightBuffer, lights.data(),
+		sizeof(SharedLight) * lights.size());
+
+	mLights = lights.size();
 }
 
 void LRTR::PhysicalBasedRenderSystem::render(
@@ -215,6 +257,7 @@ void LRTR::PhysicalBasedRenderSystem::render(
 	updatePipeline(frameBuffer);
 	updateCamera(camera);
 
+	const auto cameraPosition = getCameraPosition(camera);
 	const auto meshDataAssetComponent = std::static_pointer_cast<MeshDataAssetComponent>(
 		mRuntimeSharing->assetManager()->components().at("MeshData"));
 
@@ -242,7 +285,7 @@ void LRTR::PhysicalBasedRenderSystem::render(
 		});
 	
 	commandList->setIndexBuffer(meshDataAssetComponent->indices());
-
+	
 	for (size_t index = 0; index < mDrawCalls.size(); index++) {
 		const auto drawCall = mDrawCalls[index];
 		const auto meshDataInfo = meshDataAssetComponent->get(drawCall.Mesh);
@@ -253,6 +296,10 @@ void LRTR::PhysicalBasedRenderSystem::render(
 			drawCall.HasOcclusion,
 			drawCall.HasNormalMap,
 			drawCall.HasMetallic,
+			cameraPosition.x,
+			cameraPosition.y,
+			cameraPosition.z,
+			static_cast<unsigned>(mLights),
 			static_cast<unsigned>(index)
 		});
 
@@ -295,4 +342,11 @@ void LRTR::PhysicalBasedRenderSystem::updateCamera(
 		camera->component<TransformWrap>()->transform().inverseMatrix();
 
 	CodeRed::ResourceHelper::updateBuffer(mViewBuffer, &viewMatrix, sizeof(Matrix4x4f));
+}
+
+auto LRTR::PhysicalBasedRenderSystem::getCameraPosition(const std::shared_ptr<SceneCamera>& camera) const -> Vector3f
+{
+	if (camera == nullptr || !camera->hasComponent<TransformWrap>()) return Vector3f(0);
+
+	return camera->component<TransformWrap>()->translate();
 }

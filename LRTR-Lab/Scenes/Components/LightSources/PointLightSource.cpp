@@ -7,6 +7,11 @@ LRTR::PointLightSource::PointLightSource(const Vector3f& intensity) :
 {
 }
 
+auto LRTR::PointLightSource::intensity() const noexcept -> Vector3f
+{
+	return mIntensity;
+}
+
 auto LRTR::PointLightSource::typeName() const noexcept -> std::string
 {
 	return "PointLight";
@@ -23,9 +28,9 @@ void LRTR::PointLightSource::onProperty()
 	
 	ImGui::BeginPropertyTable("Intensity");
 
-	ImGui::Property("Intensity X", [&]() { ImGui::InputFloat("#X", &mIntensity.x); });
-	ImGui::Property("          Y", [&]() { ImGui::InputFloat("#Y", &mIntensity.y); });
-	ImGui::Property("          Z", [&]() { ImGui::InputFloat("#Z", &mIntensity.z); });
+	ImGui::Property("Intensity X", [&]() { ImGui::InputFloat("##X", &mIntensity.x); });
+	ImGui::Property("          Y", [&]() { ImGui::InputFloat("##Y", &mIntensity.y); });
+	ImGui::Property("          Z", [&]() { ImGui::InputFloat("##Z", &mIntensity.z); });
 
 	ImGui::EndPropertyTable();
 

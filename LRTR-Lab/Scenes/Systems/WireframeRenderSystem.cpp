@@ -11,10 +11,10 @@
 #include "../../Shared/Graphics/ResourceHelper.hpp"
 #include "../../Shared/Graphics/ShaderCompiler.hpp"
 
-#define LRTR_RESET_BUFFER(buffer, name) \
+#define LRTR_RESET_BUFFER(buffer, name, binding) \
 	if (buffer != mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>(name)) { \
 		mFrameResources[mCurrentFrameIndex].set(name, buffer); \
-		mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuDescriptorHeap>("DescriptorHeap")->bindBuffer(buffer, 0); \
+		mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuDescriptorHeap>("DescriptorHeap")->bindBuffer(buffer, binding); \
 	}
 
 LRTR::WireframeRenderSystem::WireframeRenderSystem(
@@ -158,7 +158,7 @@ void LRTR::WireframeRenderSystem::update(const Group<Identity, std::shared_ptr<S
 
 	meshBuffer = CodeRed::ResourceHelper::expandBuffer(mDevice, meshBuffer, transforms.size());
 
-	LRTR_RESET_BUFFER(meshBuffer, "MeshBuffer");
+	LRTR_RESET_BUFFER(meshBuffer, "MeshBuffer", 0);
 
 	CodeRed::ResourceHelper::updateBuffer(meshBuffer, transforms.data(),
 		sizeof(Matrix4x4f) * transforms.size());

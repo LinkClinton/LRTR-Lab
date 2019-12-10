@@ -2,7 +2,6 @@
 
 #include "../../Shared/Graphics/PipelineInfo.hpp"
 #include "../../Shared/Accelerators/Group.hpp"
-#include "../../Shared/Color.hpp"
 
 #include "../System.hpp"
 
@@ -43,12 +42,15 @@ namespace LRTR {
 		void updatePipeline(const std::shared_ptr<CodeRed::GpuFrameBuffer>& frameBuffer) const;
 
 		void updateCamera(const std::shared_ptr<SceneCamera>& camera) const;
+
+		auto getCameraPosition(const std::shared_ptr<SceneCamera>& camera) const -> Vector3f;
 	private:
 		std::shared_ptr<CodeRed::GpuResourceLayout> mResourceLayout;
 		std::shared_ptr<CodeRed::PipelineInfo> mPipelineInfo;
 		std::shared_ptr<CodeRed::GpuBuffer> mViewBuffer;
 
 		std::vector<PhysicalBasedDrawCall> mDrawCalls;
+		size_t mLights = 0;
 	};
 	
 }
