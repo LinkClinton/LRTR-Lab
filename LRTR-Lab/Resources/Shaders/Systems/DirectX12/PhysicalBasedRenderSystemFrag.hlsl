@@ -126,15 +126,18 @@ float4 main(
 
 	Material material = materials[config.Index];
 	
-	F0 = mix(F0, material.BaseColor.xyz, material.Metallic.a);
+	F0 = lerp(F0, material.BaseColor.xyz, material.Metallic.a);
 	
 	normal = normalize(normal);
-	
+    material.Roughness = max(material.Roughness, 0.05f);
+    
 	[loop]
 	for (uint index = 0; index < config.Lights; index++)
 	{
 		color = color + ComputePointLight(lights[index], material, position, normal, toEye, F0);
 	}
+	
+    color = color + 0.1f * material.BaseColor.xyz;
 	
 	color = color / (color + 1.0f);
 	color = pow(color, 1.0 / 2.2);

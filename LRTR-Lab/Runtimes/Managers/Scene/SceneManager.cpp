@@ -20,11 +20,11 @@ LRTR::SceneManager::SceneManager(
 	const std::shared_ptr<CodeRed::GpuLogicalDevice>& device) :
 	Manager(sharing), mDevice(device)
 {
-	add(AssimpLoader::loadScene(mRuntimeSharing, "Scene", "./Resources/Models/MetalRoughSpheresNoTextures.glb"));
+	add(AssimpLoader::loadScene(mRuntimeSharing, "Scene", "./Resources/Models/WaterBottle.glb"));
 
 	const auto camera = std::make_shared<PerspectiveCamera>(
 		std::make_shared<TransformWrap>(
-			Vector3f(0.002f, 0.003f, 0.025f),
+			Vector3f(0, 0, 1),
 			Vector4f(0, 0, 1, 0),
 			Vector3f(1)),
 		std::make_shared<Perspective>(
