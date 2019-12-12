@@ -143,6 +143,12 @@
     <ClCompile Include="Scenes\Components\LightSources\PointLightSource.cpp">
       <Filter>Scenes\Components\LightSources</Filter>
     </ClCompile>
+    <ClCompile Include="Extensions\TinyGLTF\TinyGLTFScene.cpp">
+      <Filter>Extensions\TinyGLTF</Filter>
+    </ClCompile>
+    <ClCompile Include="Extensions\TinyGLTF\TinyGLTFLoader.cpp">
+      <Filter>Extensions\TinyGLTF</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scenes">
@@ -255,6 +261,9 @@
     </Filter>
     <Filter Include="Scenes\Components\LightSources">
       <UniqueIdentifier>{4e3853ca-1f15-4dad-b4f3-b4b2a026bb24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Extensions\TinyGLTF">
+      <UniqueIdentifier>{d2d010d2-5220-4a9c-a808-da2b2b05deca}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -462,6 +471,15 @@
     <ClInclude Include="Scenes\Components\LightSources\PointLightSource.hpp">
       <Filter>Scenes\Components\LightSources</Filter>
     </ClInclude>
+    <ClInclude Include="Extensions\TinyGLTF\TinyGLTFScene.hpp">
+      <Filter>Extensions\TinyGLTF</Filter>
+    </ClInclude>
+    <ClInclude Include="Extensions\TinyGLTF\TinyGLTFLoader.hpp">
+      <Filter>Extensions\TinyGLTF</Filter>
+    </ClInclude>
+    <ClInclude Include="Extensions\TinyGLTF\Json.hpp">
+      <Filter>Extensions\TinyGLTF</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Resources\Fonts\Consola.ttf">
@@ -500,13 +518,7 @@
     <CopyFileToFolders Include="Resources\Models\MetalRoughSpheresNoTextures.glb">
       <Filter>Resources\Models</Filter>
     </CopyFileToFolders>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="Resources\Shaders\Systems\DirectX12\PhysicalBasedRenderSystemFrag.hlsl">
-      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\Systems\DirectX12\PhysicalBasedRenderSystemVert.hlsl">
-      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
-    </FxCompile>
+    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\PhysicalBasedRenderSystemFrag.hlsl" />
+    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\PhysicalBasedRenderSystemVert.hlsl" />
   </ItemGroup>
 </Project>

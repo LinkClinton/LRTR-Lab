@@ -3,6 +3,7 @@
 #include "../UI/Components/SceneViewUIComponent.hpp"
 #include "../UI/UIManager.hpp"
 
+#include "../../../Extensions/TinyGLTF/TinyGLTFLoader.hpp"
 #include "../../../Extensions/Assimp/AssimpLoader.hpp"
 
 #include "../../../Scenes/Systems/PhysicalBasedRenderSystem.hpp"
@@ -20,7 +21,7 @@ LRTR::SceneManager::SceneManager(
 	const std::shared_ptr<CodeRed::GpuLogicalDevice>& device) :
 	Manager(sharing), mDevice(device)
 {
-	add(AssimpLoader::loadScene(mRuntimeSharing, "Scene", "./Resources/Models/WaterBottle.glb"));
+	add(TinyGLTFLoader::loadScene(mRuntimeSharing, "Scene", "./Resources/Models/MetalRoughSpheresNoTextures.glb"));
 
 	const auto camera = std::make_shared<PerspectiveCamera>(
 		std::make_shared<TransformWrap>(

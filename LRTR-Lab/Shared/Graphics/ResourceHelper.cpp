@@ -1,7 +1,5 @@
 #include "ResourceHelper.hpp"
 
-#define STB_IMAGE_IMPLEMENTATION
-
 #include <stb_image.h>
 
 void CodeRed::ResourceHelper::updateBuffer(
