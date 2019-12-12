@@ -10,6 +10,11 @@
 
 #include "../../Shared/Textures/ConstantTexture.hpp"
 
+#define TINY_GLTF_HAS_VALUE(value) (value >= 0)
+
+#define LRTR_TRY_EXECUTE(condition, expression) if (condition) expression;
+
+
 #define TINYGLTF_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
@@ -18,14 +23,175 @@
 #include <tiny_gltf.h>
 
 namespace LRTR {
+	
+	template<typename T>
+	void readAccessor(std::vector<T>& data, const tinygltf::Accessor* accessor, const tinygltf::Model* scene) {
+		const auto& bufferView = scene->bufferViews[accessor->bufferView];
+		const auto& buffer = scene->buffers[bufferView.buffer];
 
+		data = std::vector<T>(accessor->count);
+
+		std::memcpy(data.data(), buffer.data.data() + bufferView.byteOffset + accessor->byteOffset,
+			accessor->count * sizeof(T));
+	}
+
+	void readUnsignedAccessor(std::vector<unsigned>& data, const tinygltf::Accessor* accessor, const tinygltf::Model* scene) {
+		const auto& bufferView = scene->bufferViews[accessor->bufferView];
+		const auto& buffer = scene->buffers[bufferView.buffer];
+
+		if (accessor->componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_INT) { readAccessor(data, accessor, scene); return; }
+		
+		data = std::vector<unsigned>(accessor->count);
+
+		if (accessor->componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT) {
+			std::vector<unsigned short> tempData;
+
+			readAccessor(tempData, accessor, scene);
+
+			for (size_t index = 0; index < tempData.size(); index++)
+				data[index] = tempData[index];
+		}
+	}
+	
+	void readVector3fAccessor(std::vector<Vector3f>& data, const tinygltf::Accessor* accessor, const tinygltf::Model* scene) {
+		const auto& bufferView = scene->bufferViews[accessor->bufferView];
+		const auto& buffer = scene->buffers[bufferView.buffer];
+
+		assert(accessor->componentType == TINYGLTF_COMPONENT_TYPE_FLOAT);
+
+		if (accessor->type == 3) { readAccessor(data, accessor, scene); return; }
+
+		data = std::vector<Vector3f>(accessor->count);
+		
+		if (accessor->type == 2) {
+			std::vector<Vector2f> tempData;
+			
+			readAccessor(tempData, accessor, scene);
+
+			for (size_t index = 0; index < tempData.size(); index++) 
+				data[index] = Vector3f(tempData[index], 0);
+		}
+
+		if (accessor->type == 4) {
+			std::vector<Vector4f> tempData;
+
+			readAccessor(tempData, accessor, scene);
+
+			for (size_t index = 0; index < tempData.size(); index++)
+				data[index] = Vector3f(tempData[index]);
+		}
+	}
+
+	auto readMaterialValue(const tinygltf::Parameter& parameter) -> std::shared_ptr<Texture> {
+		if (parameter.has_number_value) return std::make_shared<ConstantTexture<Vector1f>>(Vector1f(
+				static_cast<float>(parameter.number_value)));
+
+		if (!parameter.number_array.empty() && parameter.number_array.size() == 4)
+			return std::make_shared<ConstantTexture<Vector4f>>(Vector4f(
+				static_cast<float>(parameter.number_array[0]),
+				static_cast<float>(parameter.number_array[1]),
+				static_cast<float>(parameter.number_array[2]),
+				static_cast<float>(parameter.number_array[3])));
+
+		return nullptr;
+	}
+	
+	auto readMaterial(const tinygltf::Material* material) -> std::shared_ptr<PhysicalBasedMaterial>
+	{
+		auto roughness = readMaterialValue(material->values.at("roughnessFactor"));
+		auto baseColor = readMaterialValue(material->values.at("baseColorFactor"));
+		auto metallic = readMaterialValue(material->values.at("metallicFactor"));
+
+		return std::make_shared<PhysicalBasedMaterial>(metallic, baseColor, roughness);
+	}
+	
 	void TinyGLTFBuildScene(
 		const std::shared_ptr<TinyGLTFScene>& tinyGLTFScene,
 		const Matrix4x4f& transform,
 		const tinygltf::Model* scene,
 		const tinygltf::Node* node)
 	{
+		auto translation = node->translation.empty() ? Vector3f() :
+			Vector3f(
+				static_cast<float>(node->translation[0]),
+				static_cast<float>(node->translation[1]), 
+				static_cast<float>(node->translation[2]));
+
+		auto rotation = node->rotation.empty() ? QuaternionF() :
+			QuaternionF(
+				static_cast<float>(node->rotation[0]),
+				static_cast<float>(node->rotation[1]),
+				static_cast<float>(node->rotation[2]),
+				static_cast<float>(node->rotation[3]));
+
+		auto scale = node->scale.empty() ? Vector3f(1) :
+			Vector3f(
+				static_cast<float>(node->scale[0]), 
+				static_cast<float>(node->scale[2]),
+				static_cast<float>(node->scale[2]));
+
+		const auto angle = glm::angle(rotation);
+		const auto axis = glm::axis(rotation);
 		
+		const auto currentTransform = Transform(translation, glm::angleAxis(angle, 
+			Vector3f(axis.z, axis.y, axis.x)), scale).matrix() * transform;
+		
+		MathUtility::decompose(currentTransform, translation, rotation, scale);
+		
+		if (TINY_GLTF_HAS_VALUE(node->mesh)) {
+			const auto& mesh = scene->meshes[node->mesh];
+
+			for (size_t index = 0; index < mesh.primitives.size(); index++) {
+				const auto& primitives = mesh.primitives[index];
+				const auto meshShape = std::make_shared<Shape>();
+
+				std::vector<Vector3f> positions;
+				std::vector<Vector3f> texCoords;
+				std::vector<Vector3f> tangents;
+				std::vector<Vector3f> normals;
+
+				std::vector<unsigned> indices;
+
+				LRTR_TRY_EXECUTE(
+					primitives.attributes.find("TEXCOORD_0") != primitives.attributes.end(),
+					readVector3fAccessor(texCoords, &scene->accessors[primitives.attributes.at("TEXCOORD_0")], scene)
+				);
+
+				LRTR_TRY_EXECUTE(
+					primitives.attributes.find("TANGENT") != primitives.attributes.end(),
+					readVector3fAccessor(tangents, &scene->accessors[primitives.attributes.at("TANGENT")], scene)
+				);
+
+				LRTR_TRY_EXECUTE(
+					primitives.attributes.find("NORMAL") != primitives.attributes.end(),
+					readVector3fAccessor(normals, &scene->accessors[primitives.attributes.at("NORMAL")], scene)
+				);
+
+				LRTR_TRY_EXECUTE(
+					primitives.attributes.find("POSITION") != primitives.attributes.end(),
+					readVector3fAccessor(positions, &scene->accessors[primitives.attributes.at("POSITION")], scene)
+				);
+
+				readUnsignedAccessor(indices, &scene->accessors[primitives.indices], scene);
+
+				meshShape->component<CollectionLabel>()->set(node->name, mesh.name + std::to_string(index));
+
+				meshShape->addComponent(std::make_shared<TransformWrap>(
+					translation, rotation, scale));
+				//meshShape->addComponent(std::make_shared<WireframeMaterial>());
+				meshShape->addComponent(std::make_shared<TrianglesMesh>(
+					positions, texCoords, tangents, normals, indices));
+				meshShape->addComponent(
+					TINY_GLTF_HAS_VALUE(primitives.material) ? readMaterial(&scene->materials[primitives.material]) :
+					std::make_shared<PhysicalBasedMaterial>());
+
+				tinyGLTFScene->add(meshShape);
+			}
+		}
+
+		for (const auto& child : node->children) {
+			TinyGLTFBuildScene(tinyGLTFScene, currentTransform, scene, &scene->nodes[child]);
+		}
 	}
 	
 }

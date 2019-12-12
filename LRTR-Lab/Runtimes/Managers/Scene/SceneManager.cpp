@@ -25,7 +25,7 @@ LRTR::SceneManager::SceneManager(
 
 	const auto camera = std::make_shared<PerspectiveCamera>(
 		std::make_shared<TransformWrap>(
-			Vector3f(0, 0, 1),
+			Vector3f(0.002f, 0.003f, 0.025f),
 			Vector4f(0, 0, 1, 0),
 			Vector3f(1)),
 		std::make_shared<Perspective>(

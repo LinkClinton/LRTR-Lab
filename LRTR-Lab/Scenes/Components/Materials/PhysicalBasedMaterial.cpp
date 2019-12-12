@@ -5,6 +5,14 @@
 
 #include "../../../Extensions/ImGui/ImGui.hpp"
 
+LRTR::PhysicalBasedMaterial::PhysicalBasedMaterial() :
+	PhysicalBasedMaterial(
+		std::make_shared<ConstantTexture<Vector1f>>(Vector1f(0)),
+		std::make_shared<ConstantTexture<Vector4f>>(Vector4f(0)),
+		std::make_shared<ConstantTexture<Vector1f>>(Vector1f(0)))
+{
+}
+
 LRTR::PhysicalBasedMaterial::PhysicalBasedMaterial(
 	const std::shared_ptr<Texture>& metallic,
 	const std::shared_ptr<Texture>& baseColor, 

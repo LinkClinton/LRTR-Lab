@@ -295,6 +295,7 @@
     <ClInclude Include="Shared\Graphics\ShaderCompiler.hpp" />
     <ClInclude Include="Shared\Math\Math.hpp" />
     <ClInclude Include="Shared\Math\Matrix.hpp" />
+    <ClInclude Include="Shared\Math\Quaternion.hpp" />
     <ClInclude Include="Shared\Math\Vector.hpp" />
     <ClInclude Include="Shared\Rectangle.hpp" />
     <ClInclude Include="Shared\Textures\ConstantTexture.hpp" />

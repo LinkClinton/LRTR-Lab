@@ -13,8 +13,13 @@ namespace LRTR {
 		explicit Transform(const Matrix4x4f& transform, const Matrix4x4f& inverse);
 
 		explicit Transform(
-			const Vector3f& translate,
-			const Vector4f& rotate,
+			const Vector3f& translation,
+			const Vector4f& rotation,
+			const Vector3f& scale);
+
+		explicit Transform(
+			const Vector3f& translation,
+			const QuaternionF& rotation,
 			const Vector3f& scale);
 
 		Transform& operator*(const Transform& right);

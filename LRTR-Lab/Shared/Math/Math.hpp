@@ -1,14 +1,17 @@
 #pragma once
 
+#include "Quaternion.hpp"
 #include "Vector.hpp"
 #include "Matrix.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/matrix_decompose.hpp>
 
 namespace LRTR {
 
 	using Real = float;
 
+	using QuaternionF = Quaternion<float>;
 	using Vector1f = Vector1<float>;
 	using Vector2f = Vector2<float>;
 	using Vector3f = Vector3<float>;
@@ -45,6 +48,10 @@ namespace LRTR {
 
 		template<typename T>
 		static auto rotate(const Vector3<T>& from, const Vector3<T>& to) -> Vector4<T>;
+
+		template<typename T>
+		static void decompose(const Matrix4x4<T>& matrix,
+			Vector3<T>& translate, Quaternion<T>& quaternion, Vector3<T>& scale);
 	};
 
 	template <typename T>
@@ -105,5 +112,16 @@ namespace LRTR {
 		const auto rAxis = cross(normalFrom, normalTo);
 
 		return rAxis == Vector3<T>(0) ? Vector4<T>(0, 0, 0, 0) : Vector4<T>(rAxis, rAngle);
+	}
+
+	template <typename T>
+	void MathUtility::decompose(
+		const Matrix4x4<T>& matrix, 
+		Vector3<T>& translate, Quaternion<T>& quaternion, Vector3<T>& scale)
+	{
+		Vector3<T> skew;
+		Vector4<T> perspective;
+		
+		glm::decompose(matrix, scale, quaternion, translate, skew, perspective);
 	}
 }

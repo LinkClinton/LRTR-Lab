@@ -8,7 +8,7 @@ namespace LRTR {
 
 	class PhysicalBasedMaterial : public Material {
 	public:
-		explicit PhysicalBasedMaterial() = default;
+		explicit PhysicalBasedMaterial();
 
 		explicit PhysicalBasedMaterial(
 			const std::shared_ptr<Texture>& metallic,

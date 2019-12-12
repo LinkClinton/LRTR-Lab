@@ -14,14 +14,24 @@ namespace LRTR {
 			const Vector4f& rotate,
 			const Vector3f& scale);
 
+		explicit TransformWrap(
+			const Vector3f& translation,
+			const QuaternionF& rotation,
+			const Vector3f& scale);
+
 		void set(
 			const Vector3f& translate,
 			const Vector4f& rotate,
 			const Vector3f& scale);
-		
-		auto translate() const noexcept -> Vector3f;
 
-		auto rotate() const noexcept -> Vector4f;
+		void set(
+			const Vector3f& translation,
+			const QuaternionF& rotation,
+			const Vector3f& scale);
+		
+		auto translation() const noexcept -> Vector3f;
+
+		auto rotation() const noexcept -> QuaternionF;
 
 		auto scale() const noexcept -> Vector3f;
 		
@@ -35,9 +45,9 @@ namespace LRTR {
 	private:
 		Transform mTransform;
 
-		Vector3f mTranslate = Vector3f(0);
-		Vector4f mRotate = Vector4f(0, 0, 1, 0);
-		Vector3f mScale = Vector3f(1);
+		Vector3f mTranslation = Vector3f();
+		QuaternionF mRotation = QuaternionF();
+		Vector3f mScale = Vector3f(1, 1, 1);
 	};
 	
 }

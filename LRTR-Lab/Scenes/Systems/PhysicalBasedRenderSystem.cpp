@@ -220,7 +220,7 @@ void LRTR::PhysicalBasedRenderSystem::update(const Group<Identity, std::shared_p
 			const auto pointLight = shape.second->component<PointLightSource>();
 
 			lights.push_back({
-				transform != nullptr ? transform->translate() : Vector3f(0),
+				transform != nullptr ? transform->translation() : Vector3f(0),
 				pointLight->intensity()
 				});
 		}
@@ -348,5 +348,5 @@ auto LRTR::PhysicalBasedRenderSystem::getCameraPosition(const std::shared_ptr<Sc
 {
 	if (camera == nullptr || !camera->hasComponent<TransformWrap>()) return Vector3f(0);
 
-	return camera->component<TransformWrap>()->translate();
+	return camera->component<TransformWrap>()->translation();
 }

@@ -14,12 +14,24 @@ LRTR::Transform::Transform(const Matrix4x4f& transform, const Matrix4x4f& invers
 
 }
 
-LRTR::Transform::Transform(const Vector3f& translate, const Vector4f& rotate, const Vector3f& scale)
+LRTR::Transform::Transform(const Vector3f& translation, const Vector4f& rotation, const Vector3f& scale)
 {
 	//T * R * S
 	const auto I = Matrix4x4f(1);
-	const auto T = glm::translate(I, translate);
-	const auto R = Vector3f(rotate) == Vector3f(0) ? Matrix4x4f(1) : glm::rotate(I, rotate.w, Vector3f(rotate));
+	const auto T = glm::translate(I, translation);
+	const auto R = Vector3f(rotation) == Vector3f(0) ? I : glm::rotate(I, rotation.w, Vector3f(rotation));
+	const auto S = glm::scale(I, scale);
+	
+	mTransform = T * R * S;
+	mInverse = glm::inverse(mTransform);
+}
+
+LRTR::Transform::Transform(const Vector3f& translation, const QuaternionF& rotation, const Vector3f& scale)
+{
+	//T * R * S
+	const auto I = Matrix4x4f(1);
+	const auto T = glm::translate(I, translation);
+	const auto R = glm::mat4_cast(rotation);
 	const auto S = glm::scale(I, scale);
 
 	mTransform = T * R * S;

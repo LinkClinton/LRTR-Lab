@@ -480,6 +480,9 @@
     <ClInclude Include="Extensions\TinyGLTF\Json.hpp">
       <Filter>Extensions\TinyGLTF</Filter>
     </ClInclude>
+    <ClInclude Include="Shared\Math\Quaternion.hpp">
+      <Filter>Shared\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Resources\Fonts\Consola.ttf">
@@ -518,7 +521,11 @@
     <CopyFileToFolders Include="Resources\Models\MetalRoughSpheresNoTextures.glb">
       <Filter>Resources\Models</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\PhysicalBasedRenderSystemFrag.hlsl" />
-    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\PhysicalBasedRenderSystemVert.hlsl" />
+    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\PhysicalBasedRenderSystemVert.hlsl">
+      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\PhysicalBasedRenderSystemFrag.hlsl">
+      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>
