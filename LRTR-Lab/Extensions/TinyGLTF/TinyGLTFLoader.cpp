@@ -8,9 +8,18 @@
 #include "../../Scenes/Components/CollectionLabel.hpp"
 #include "../../Scenes/Cameras/Camera.hpp"
 
+#include "../../Shared/Graphics/ResourceHelper.hpp"
 #include "../../Shared/Textures/ConstantTexture.hpp"
+#include "../../Shared/Textures/ImageTexture.hpp"
 
 #define TINY_GLTF_HAS_VALUE(value) (value >= 0)
+#define TINY_GLTF_TRY_READ_MATERIAL_VALUE(texture, value) \
+	if (material->values.find(value) != material->values.end()) \
+		texture = readMaterialValue(sharing, material->values.at(value), scene);
+
+#define TINY_GLTF_TRY_READ_MATERIAL_ADDITIONAL_VALUE(texture, value) \
+	if (material->additionalValues.find(value) != material->additionalValues.end()) \
+		texture = readMaterialValue(sharing, material->additionalValues.at(value), scene);
 
 #define LRTR_TRY_EXECUTE(condition, expression) if (condition) expression;
 
@@ -82,7 +91,10 @@ namespace LRTR {
 		}
 	}
 
-	auto readMaterialValue(const tinygltf::Parameter& parameter) -> std::shared_ptr<Texture> {
+	auto readMaterialValue(
+		const std::shared_ptr<RuntimeSharing>& sharing,
+		const tinygltf::Parameter& parameter, 
+		const tinygltf::Model* scene) -> std::shared_ptr<Texture> {
 		if (parameter.has_number_value) return std::make_shared<ConstantTexture<Vector1f>>(Vector1f(
 				static_cast<float>(parameter.number_value)));
 
@@ -93,19 +105,52 @@ namespace LRTR {
 				static_cast<float>(parameter.number_array[2]),
 				static_cast<float>(parameter.number_array[3])));
 
+		if (TINY_GLTF_HAS_VALUE(parameter.TextureIndex())) {
+			const auto& texture  = scene->textures[parameter.TextureIndex()];
+			const auto& image = scene->images[texture.source];
+
+			const auto gpuTexture = sharing->device()->createTexture(
+				CodeRed::ResourceInfo::Texture2D(
+					image.width, image.height,
+					CodeRed::PixelFormat::RedGreenBlueAlpha8BitUnknown
+				)
+			);
+
+			CodeRed::ResourceHelper::updateTexture(sharing->device(), sharing->allocator(),
+				sharing->queue(), gpuTexture, image.image.data());
+
+			return std::make_shared<ImageTexture>(gpuTexture);
+		}
+		
 		return nullptr;
 	}
 	
-	auto readMaterial(const tinygltf::Material* material) -> std::shared_ptr<PhysicalBasedMaterial>
+	auto readMaterial(
+		const std::shared_ptr<RuntimeSharing>& sharing,
+		const tinygltf::Material* material, 
+		const tinygltf::Model* scene) -> std::shared_ptr<PhysicalBasedMaterial>
 	{
-		auto roughness = readMaterialValue(material->values.at("roughnessFactor"));
-		auto baseColor = readMaterialValue(material->values.at("baseColorFactor"));
-		auto metallic = readMaterialValue(material->values.at("metallicFactor"));
+		std::shared_ptr<Texture> roughness;
+		std::shared_ptr<Texture> baseColor;
+		std::shared_ptr<Texture> metallic; 
+		std::shared_ptr<Texture> occlusion;
+		std::shared_ptr<Texture> normalMap;
 
-		return std::make_shared<PhysicalBasedMaterial>(metallic, baseColor, roughness);
+		TINY_GLTF_TRY_READ_MATERIAL_VALUE(roughness, "roughnessFactor");
+		TINY_GLTF_TRY_READ_MATERIAL_VALUE(roughness, "metallicRoughnessTexture");
+		TINY_GLTF_TRY_READ_MATERIAL_VALUE(baseColor, "baseColorFactor");
+		TINY_GLTF_TRY_READ_MATERIAL_VALUE(baseColor, "baseColorTexture");
+		TINY_GLTF_TRY_READ_MATERIAL_VALUE(metallic, "metallicFactor");
+		TINY_GLTF_TRY_READ_MATERIAL_VALUE(metallic, "metallicRoughnessTexture");
+
+		TINY_GLTF_TRY_READ_MATERIAL_ADDITIONAL_VALUE(occlusion, "occlusionTexture");
+		TINY_GLTF_TRY_READ_MATERIAL_ADDITIONAL_VALUE(normalMap, "normalTexture");
+		
+		return std::make_shared<PhysicalBasedMaterial>(metallic, baseColor, roughness, occlusion, normalMap);
 	}
 	
 	void TinyGLTFBuildScene(
+		const std::shared_ptr<RuntimeSharing>& sharing,
 		const std::shared_ptr<TinyGLTFScene>& tinyGLTFScene,
 		const Matrix4x4f& transform,
 		const tinygltf::Model* scene,
@@ -134,7 +179,7 @@ namespace LRTR {
 		const auto axis = glm::axis(rotation);
 		
 		const auto currentTransform = Transform(translation, glm::angleAxis(angle, 
-			Vector3f(axis.z, axis.y, axis.x)), scale).matrix() * transform;
+			Vector3f(axis.z, axis.x, axis.y)), scale).matrix() * transform;
 		
 		MathUtility::decompose(currentTransform, translation, rotation, scale);
 		
@@ -182,7 +227,8 @@ namespace LRTR {
 				meshShape->addComponent(std::make_shared<TrianglesMesh>(
 					positions, texCoords, tangents, normals, indices));
 				meshShape->addComponent(
-					TINY_GLTF_HAS_VALUE(primitives.material) ? readMaterial(&scene->materials[primitives.material]) :
+					TINY_GLTF_HAS_VALUE(primitives.material) ? readMaterial(
+						sharing, &scene->materials[primitives.material], scene) :
 					std::make_shared<PhysicalBasedMaterial>());
 
 				tinyGLTFScene->add(meshShape);
@@ -190,7 +236,7 @@ namespace LRTR {
 		}
 
 		for (const auto& child : node->children) {
-			TinyGLTFBuildScene(tinyGLTFScene, currentTransform, scene, &scene->nodes[child]);
+			TinyGLTFBuildScene(sharing, tinyGLTFScene, currentTransform, scene, &scene->nodes[child]);
 		}
 	}
 	
@@ -224,7 +270,7 @@ auto LRTR::TinyGLTFLoader::loadScene(
 	for (size_t index = 0; index < model.nodes.size(); index++) {
 		if (!isRoot[index]) continue;
 
-		TinyGLTFBuildScene(tinyGLTFScene, transform.matrix(), &model, &model.nodes[index]);
+		TinyGLTFBuildScene(sharing, tinyGLTFScene, transform.matrix(), &model, &model.nodes[index]);
 	}
 
 	if (fileName == "./Resources/Models/MetalRoughSpheresNoTextures.glb") {

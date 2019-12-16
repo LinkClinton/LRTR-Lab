@@ -483,6 +483,9 @@
     <ClInclude Include="Shared\Math\Quaternion.hpp">
       <Filter>Shared\Math</Filter>
     </ClInclude>
+    <ClInclude Include="Shared\Textures\ImageTexture.hpp">
+      <Filter>Shared\Textures</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Resources\Fonts\Consola.ttf">

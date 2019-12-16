@@ -299,6 +299,7 @@
     <ClInclude Include="Shared\Math\Vector.hpp" />
     <ClInclude Include="Shared\Rectangle.hpp" />
     <ClInclude Include="Shared\Textures\ConstantTexture.hpp" />
+    <ClInclude Include="Shared\Textures\ImageTexture.hpp" />
     <ClInclude Include="Shared\Textures\Texture.hpp" />
     <ClInclude Include="Shared\Transform.hpp" />
     <ClInclude Include="Shared\Triangle.hpp" />
