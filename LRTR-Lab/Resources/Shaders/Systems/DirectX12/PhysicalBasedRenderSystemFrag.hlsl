@@ -7,6 +7,7 @@ struct Material
 	float4 BaseColor;
 	float4 Roughness;
 	float4 Metallic;
+    float4 Emissive;
 };
 
 struct Light
@@ -22,7 +23,10 @@ struct Config
 	uint HasOcclusion;
 	uint HasNormalMap;
 	uint HasMetallic;
-	float3 EyePosition;
+    uint HasEmissive;
+    float EyePositionX;
+	float EyePositionY;
+    float EyePositionZ;
 	uint Lights;
 	uint Index;
 };
@@ -32,14 +36,9 @@ float3 mix(float3 x, float3 y, float3 a)
 	return x * (1.0 - a) + y * a;
 }
 
-float CalcAttenuation(float d, float falloffStart, float falloffEnd)
-{
-	return saturate((falloffEnd - d) / (falloffEnd - falloffStart));
-}
-
 float3 FresnelSchlick(float cosTheta, float3 F0)
 {
-	return F0 + (1.0 - F0) * pow(1.0 - cosTheta, 5.0);
+    return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
 }
 
 float DistributionGGX(float3 normal, float3 halfVector, float roughness)
@@ -95,7 +94,7 @@ float3 CookTorranceBRDF(Material material, float3 radiance, float3 lightVector, 
 	float3 numerator = NDF * G * F;
 	float denominator = 4.0 * max(dot(normal, toEye), 0.0) * max(dot(normal, lightVector), 0.0);
 
-	return (kD * material.BaseColor.xyz / PI + numerator / max(denominator, 0.001)) * radiance;
+	return (kD * material.BaseColor.rgb / PI + numerator / max(denominator, 0.001)) * radiance;
 }
 
 float3 ComputePointLight(Light light, Material material, float3 position, float3 normal, float3 toEye, float3 F0)
@@ -109,6 +108,35 @@ float3 ComputePointLight(Light light, Material material, float3 position, float3
 	return CookTorranceBRDF(material, light.Intensity * attenuation * ndotl, lightVector, normal, toEye, F0);
 }
 
+float GammaCorrect(float value)
+{
+    if (value <= 0.0031308f) return 12.92f * value;
+	
+    return 1.055f * pow(value, 1.f / 2.4f) - 0.055f;
+}
+
+float3 GammaCorrect(float3 value)
+{
+    return float3(
+		GammaCorrect(value.x),
+		GammaCorrect(value.y),
+		GammaCorrect(value.z));
+}
+
+float InverseGammaCorrect(float value)
+{
+    if (value <= 0.04045f) return value * 1.f / 12.92f;
+    return pow((value + 0.055f) * 1.f / 1.055f, 2.4f);
+}
+
+float3 InverseGammaCorrect(float3 value)
+{
+    return float3(
+		InverseGammaCorrect(value.x),
+		InverseGammaCorrect(value.y),
+		InverseGammaCorrect(value.z));
+}
+
 StructuredBuffer<Material> materials : register(t0);
 StructuredBuffer<Light> lights : register(t1);
 
@@ -117,10 +145,11 @@ Texture2D baseColorTexture : register(t5);
 Texture2D roughnessTexture : register(t6);
 Texture2D occlusionTexture : register(t7);
 Texture2D normalMapTexture : register(t8);
+Texture2D emissiveTexture : register(t9);
 
-ConstantBuffer<Config> config : register(b9);
+ConstantBuffer<Config> config : register(b10);
 
-SamplerState materialSampler : register(s10);
+SamplerState materialSampler : register(s11);
 
 float3 getNormal(float3 normal, float2 texcoord, float3 tangent)
 {
@@ -143,7 +172,7 @@ float4 main(
 	float3 tangent : TANGENT,
 	float3 normal : NORMAL) : SV_TARGET
 {
-	float3 toEye = normalize(config.EyePosition - position);
+    float3 toEye = normalize(float3(config.EyePositionX, config.EyePositionY, config.EyePositionZ) -position);
 	float3 F0 = 0.04;
 	float3 color = float3(0.0f, 0.0f, 0.0f);
     float occlusion = 1.0f;
@@ -152,10 +181,11 @@ float4 main(
     material.Roughness = max(material.Roughness, 0.05f);
     
     if (config.HasMetallic) material.Metallic.a = material.Metallic.a * metallicTexture.Sample(materialSampler, texCoord.xy).b;
-    if (config.HasBaseColor) material.BaseColor = material.BaseColor * pow(baseColorTexture.Sample(materialSampler, texCoord.xy), 2.2);
+    if (config.HasBaseColor) material.BaseColor.rgb = material.BaseColor.rgb * InverseGammaCorrect(baseColorTexture.Sample(materialSampler, texCoord.xy).rgb);
     if (config.HasRoughness) material.Roughness.a = material.Roughness.a * roughnessTexture.Sample(materialSampler, texCoord.xy).g;
     if (config.HasOcclusion) occlusion = occlusionTexture.Sample(materialSampler, texCoord.xy).r;
-    
+    if (config.HasEmissive) material.Emissive.rgb = material.Emissive.rgb * InverseGammaCorrect(emissiveTexture.Sample(materialSampler, texCoord.xy).rgb);
+	
 	F0 = lerp(F0, material.BaseColor.xyz, material.Metallic.a);
 	
     normal = normalize(getNormal(normal, texCoord.xy, tangent));
@@ -166,10 +196,9 @@ float4 main(
 		color = color + ComputePointLight(lights[index], material, position, normal, toEye, F0);
 	}
 	
-    color = color + 0.25f * material.BaseColor.xyz * occlusion;
+    color = color + 0.03f * material.BaseColor.xyz * occlusion + material.Emissive.rgb;
 	
-	color = color / (color + 1.0f);
-	color = pow(color, 1.0 / 2.2);
+    color = GammaCorrect(color);
 	
 	return float4(color, material.BaseColor.a);
 }

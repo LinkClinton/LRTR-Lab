@@ -9,7 +9,8 @@ LRTR::PhysicalBasedMaterial::PhysicalBasedMaterial() :
 	PhysicalBasedMaterial(
 		std::make_shared<ConstantTexture4F>(Vector4f(1)),
 		std::make_shared<ConstantTexture4F>(Vector4f(1)),
-		std::make_shared<ConstantTexture4F>(Vector4f(1)))
+		std::make_shared<ConstantTexture4F>(Vector4f(1)),
+		std::make_shared<ConstantTexture4F>(Vector4f(0)))
 {
 }
 
@@ -18,17 +19,21 @@ LRTR::PhysicalBasedMaterial::PhysicalBasedMaterial(
 	const std::shared_ptr<ImageTexture>& baseColor, 
 	const std::shared_ptr<ImageTexture>& roughness,
 	const std::shared_ptr<ImageTexture>& occlusion, 
-	const std::shared_ptr<ImageTexture>& normalMap) :
-	PhysicalBasedMaterial(nullptr, nullptr, nullptr, 
-		metallic, baseColor, roughness, occlusion, normalMap)
+	const std::shared_ptr<ImageTexture>& normalMap,
+	const std::shared_ptr<ImageTexture>& emissive) :
+	PhysicalBasedMaterial(nullptr, nullptr, nullptr, nullptr,
+		metallic, baseColor, roughness, occlusion, normalMap, emissive)
 {
 }
 
 LRTR::PhysicalBasedMaterial::PhysicalBasedMaterial(
 	const std::shared_ptr<ConstantTexture4F>& metallic,
 	const std::shared_ptr<ConstantTexture4F>& baseColor, 
-	const std::shared_ptr<ConstantTexture4F>& roughness) :
-	mMetallicFactor(metallic), mBaseColorFactor(baseColor), mRoughnessFactor(roughness)
+	const std::shared_ptr<ConstantTexture4F>& roughness,
+	const std::shared_ptr<ConstantTexture4F>& emissive) :
+	PhysicalBasedMaterial(metallic, baseColor, roughness, emissive,
+		nullptr, nullptr, nullptr, nullptr, nullptr,
+		nullptr)
 {
 	
 }
@@ -37,18 +42,21 @@ LRTR::PhysicalBasedMaterial::PhysicalBasedMaterial(
 	const std::shared_ptr<ConstantTexture4F>& metallicFactor,
 	const std::shared_ptr<ConstantTexture4F>& baseColorFactor,
 	const std::shared_ptr<ConstantTexture4F>& roughnessFactor,
+	const std::shared_ptr<ConstantTexture4F>& emissiveFactor,
 	const std::shared_ptr<ImageTexture>& metallicTexture,
 	const std::shared_ptr<ImageTexture>& baseColorTexture,
 	const std::shared_ptr<ImageTexture>& roughnessTexture,
 	const std::shared_ptr<ImageTexture>& occlusionTexture,
-	const std::shared_ptr<ImageTexture>& normalMapTexture) :
+	const std::shared_ptr<ImageTexture>& normalMapTexture,
+	const std::shared_ptr<ImageTexture>& emissiveTexture) :
 	mMetallicTexture(metallicTexture), mBaseColorTexture(baseColorTexture), mRoughnessTexture(roughnessTexture),
-	mOcclusionTexture(occlusionTexture), mNormalMapTexture(normalMapTexture), mMetallicFactor(metallicFactor),
-	mBaseColorFactor(baseColorFactor), mRoughnessFactor(roughnessFactor)
+	mOcclusionTexture(occlusionTexture), mNormalMapTexture(normalMapTexture), mEmissiveTexture(emissiveTexture),
+	mMetallicFactor(metallicFactor), mBaseColorFactor(baseColorFactor), mRoughnessFactor(roughnessFactor), mEmissiveFactor(emissiveFactor)
 {
 	if (mMetallicFactor == nullptr) mMetallicFactor = std::make_shared<ConstantTexture4F>(Vector4f(1));
 	if (mBaseColorFactor == nullptr) mBaseColorFactor = std::make_shared<ConstantTexture4F>(Vector4f(1));
 	if (mRoughnessFactor == nullptr) mRoughnessFactor = std::make_shared<ConstantTexture4F>(Vector4f(1));
+	if (mEmissiveFactor == nullptr) mEmissiveFactor = std::make_shared<ConstantTexture4F>(Vector4f(0));
 }
 
 auto LRTR::PhysicalBasedMaterial::metallicFactor() const noexcept -> std::shared_ptr<ConstantTexture4F>
@@ -64,6 +72,11 @@ auto LRTR::PhysicalBasedMaterial::baseColorFactor() const noexcept -> std::share
 auto LRTR::PhysicalBasedMaterial::roughnessFactor() const noexcept -> std::shared_ptr<ConstantTexture4F>
 {
 	return mRoughnessFactor;
+}
+
+auto LRTR::PhysicalBasedMaterial::emissiveFactor() const noexcept -> std::shared_ptr<ConstantTexture4F>
+{
+	return mEmissiveFactor;
 }
 
 auto LRTR::PhysicalBasedMaterial::metallicTexture() const noexcept -> std::shared_ptr<ImageTexture>
@@ -89,6 +102,11 @@ auto LRTR::PhysicalBasedMaterial::occlusionTexture() const noexcept -> std::shar
 auto LRTR::PhysicalBasedMaterial::normalMapTexture() const noexcept -> std::shared_ptr<ImageTexture>
 {
 	return mNormalMapTexture;
+}
+
+auto LRTR::PhysicalBasedMaterial::emissiveTexture() const noexcept -> std::shared_ptr<ImageTexture>
+{
+	return mEmissiveTexture;
 }
 
 auto LRTR::PhysicalBasedMaterial::typeName() const noexcept -> std::string

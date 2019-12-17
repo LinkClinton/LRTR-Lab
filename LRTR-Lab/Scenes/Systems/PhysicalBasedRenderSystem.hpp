@@ -17,6 +17,7 @@ namespace LRTR {
 		unsigned HasOcclusion = 0;
 		unsigned HasNormalMap = 0;
 		unsigned HasMetallic = 0;
+		unsigned HasEmissive = 0;
 	};
 	
 	class PhysicalBasedRenderSystem : public RenderSystem {

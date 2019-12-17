@@ -88,7 +88,7 @@ namespace LRTR {
 			}
 		}
 		
-		return std::make_shared<PhysicalBasedMaterial>(metallic, baseColor, roughness);
+		return std::make_shared<PhysicalBasedMaterial>(metallic, baseColor, roughness, nullptr);
 	}
 	
 	void AssimpBuildScene(

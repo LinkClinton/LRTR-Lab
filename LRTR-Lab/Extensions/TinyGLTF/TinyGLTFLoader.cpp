@@ -105,6 +105,12 @@ namespace LRTR {
 				static_cast<float>(parameter.number_array[2]),
 				static_cast<float>(parameter.number_array[3])));
 
+		if (!parameter.number_array.empty() && parameter.number_array.size() == 3)
+			return std::make_shared<ConstantTexture<Vector4f>>(Vector4f(
+				static_cast<float>(parameter.number_array[0]),
+				static_cast<float>(parameter.number_array[1]),
+				static_cast<float>(parameter.number_array[2]), 1.f));
+
 		if (TINY_GLTF_HAS_VALUE(parameter.TextureIndex())) {
 			const auto& texture = scene->textures[parameter.TextureIndex()];
 			const auto& image = scene->images[texture.source];
@@ -157,16 +163,18 @@ namespace LRTR {
 		auto metallicFactor = readMaterialFactorValue(sharing, material->values, scene, "metallicFactor");
 		auto baseColorFactor = readMaterialFactorValue(sharing, material->values, scene, "baseColorFactor");
 		auto roughnessFactor = readMaterialFactorValue(sharing, material->values, scene, "roughnessFactor");
+		auto emissiveFactor = readMaterialFactorValue(sharing, material->additionalValues, scene, "emissiveFactor");
 
 		auto metallicRoughnessTexture = readMaterialTextureValue(sharing, material->values, scene, "metallicRoughnessTexture");
 		auto baseColorTexture = readMaterialTextureValue(sharing, material->values, scene, "baseColorTexture"); 
 		auto occlusionTexture = readMaterialTextureValue(sharing, material->additionalValues, scene, "occlusionTexture");
 		auto normalMapTexture = readMaterialTextureValue(sharing, material->additionalValues, scene, "normalTexture");
+		auto emissiveTexture = readMaterialTextureValue(sharing, material->additionalValues, scene, "emissiveTexture");
 
 		return std::make_shared<PhysicalBasedMaterial>(
-			metallicFactor, baseColorFactor, roughnessFactor,
+			metallicFactor, baseColorFactor, roughnessFactor, emissiveFactor,
 			metallicRoughnessTexture, baseColorTexture, metallicRoughnessTexture,
-			occlusionTexture, normalMapTexture);
+			occlusionTexture, normalMapTexture, emissiveTexture);
 	}
 	
 	void TinyGLTFBuildScene(
@@ -299,24 +307,24 @@ auto LRTR::TinyGLTFLoader::loadScene(
 		const auto light2 = std::make_shared<Shape>();
 
 		light0->addComponent(std::make_shared<TransformWrap>(
-			Vector3f(0.f, 0.5f, 1.f),
+			Vector3f(0.f, 5.f, 10.f),
 			Vector4f(0, 0, 1, 0),
 			Vector3f(1)));
-		light0->addComponent(std::make_shared<PointLightSource>(Vector3f(5)));
+		light0->addComponent(std::make_shared<PointLightSource>(Vector3f(100)));
 		light0->component<CollectionLabel>()->set("Light", "light0");
-
+		
 		light1->addComponent(std::make_shared<TransformWrap>(
-			Vector3f(1.f, 0.5f, 0.f),
+			Vector3f(10.f, 5.f, 0.f),
 			Vector4f(0, 0, 1, 0),
 			Vector3f(1)));
-		light1->addComponent(std::make_shared<PointLightSource>(Vector3f(5)));
+		light1->addComponent(std::make_shared<PointLightSource>(Vector3f(100)));
 		light1->component<CollectionLabel>()->set("Light", "light1");
 
 		light2->addComponent(std::make_shared<TransformWrap>(
-			Vector3f(-1.f, 0.5f, 0.f),
+			Vector3f(-10.f, 5.f, 0.f),
 			Vector4f(0, 0, 1, 0),
 			Vector3f(1)));
-		light2->addComponent(std::make_shared<PointLightSource>(Vector3f(5)));
+		light2->addComponent(std::make_shared<PointLightSource>(Vector3f(100)));
 		light2->component<CollectionLabel>()->set("Light", "light2");
 
 		tinyGLTFScene->add(light0);

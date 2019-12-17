@@ -25,6 +25,7 @@ namespace LRTR {
 		Vector4f BaseColor;
 		Vector4f Roughness;
 		Vector4f Metallic;
+		Vector4f Emissive;
 	};
 
 	struct SharedLight {
@@ -58,7 +59,8 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 	//resource 6 : roughness texture
 	//resource 7 : occlusion texture
 	//resource 8 : normalMap texture
-	//resource 9 : hasBaseColor, HasRoughness, HasOcclusion, HasNormalMap, HasMetallic,
+	//resource 9 : emissive texture
+	//resource 10 : hasBaseColor, HasRoughness, HasOcclusion, HasNormalMap, HasMetallic, HasEmissive,
 	//eyePosition.x, eyePosition.y, eyePosition.z, nLights, index
 	mResourceLayout = mDevice->createResourceLayout(
 		{
@@ -70,10 +72,11 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 5),
 			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 6),
 			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 7),
-			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 8)
+			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 8),
+			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 9)
 		}, {
-			CodeRed::SamplerLayoutElement(mSampler, 10)
-		}, CodeRed::Constant32Bits(10, 9));
+			CodeRed::SamplerLayoutElement(mSampler, 11)
+		}, CodeRed::Constant32Bits(11, 10));
 
 	for (auto& frameResource : mFrameResources) {
 		auto descriptorHeapPool = std::make_shared<std::vector<std::shared_ptr<CodeRed::GpuDescriptorHeap>>>();
@@ -206,18 +209,21 @@ void LRTR::PhysicalBasedRenderSystem::update(const Group<Identity, std::shared_p
 		material.BaseColor = physicalBasedMaterial->baseColorFactor()->value();
 		material.Roughness = physicalBasedMaterial->roughnessFactor()->value();
 		material.Metallic = physicalBasedMaterial->metallicFactor()->value();
-
+		material.Emissive = physicalBasedMaterial->emissiveFactor()->value();
+		
 		drawCall.HasMetallic = physicalBasedMaterial->metallicTexture() != nullptr;
 		drawCall.HasBaseColor = physicalBasedMaterial->baseColorTexture() != nullptr;
 		drawCall.HasRoughness = physicalBasedMaterial->roughnessTexture() != nullptr;
 		drawCall.HasOcclusion = physicalBasedMaterial->occlusionTexture() != nullptr;
 		drawCall.HasNormalMap = physicalBasedMaterial->normalMapTexture() != nullptr;
+		drawCall.HasEmissive = physicalBasedMaterial->emissiveTexture() != nullptr;
 
 		if (drawCall.HasMetallic) descriptorHeap->bindTexture(physicalBasedMaterial->metallicTexture()->value(), 4);
 		if (drawCall.HasBaseColor) descriptorHeap->bindTexture(physicalBasedMaterial->baseColorTexture()->value(), 5);
 		if (drawCall.HasRoughness) descriptorHeap->bindTexture(physicalBasedMaterial->roughnessTexture()->value(), 6);
 		if (drawCall.HasOcclusion) descriptorHeap->bindTexture(physicalBasedMaterial->occlusionTexture()->value(), 7);
 		if (drawCall.HasNormalMap) descriptorHeap->bindTexture(physicalBasedMaterial->normalMapTexture()->value(), 8);
+		if (drawCall.HasEmissive) descriptorHeap->bindTexture(physicalBasedMaterial->emissiveTexture()->value(), 9);
 		
 		mDrawCalls.push_back(drawCall);
 
@@ -334,6 +340,7 @@ void LRTR::PhysicalBasedRenderSystem::render(
 			drawCall.HasOcclusion,
 			drawCall.HasNormalMap,
 			drawCall.HasMetallic,
+			drawCall.HasEmissive,
 			cameraPosition.x,
 			cameraPosition.y,
 			cameraPosition.z,
