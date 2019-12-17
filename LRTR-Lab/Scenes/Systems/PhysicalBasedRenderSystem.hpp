@@ -48,7 +48,8 @@ namespace LRTR {
 		std::shared_ptr<CodeRed::GpuResourceLayout> mResourceLayout;
 		std::shared_ptr<CodeRed::PipelineInfo> mPipelineInfo;
 		std::shared_ptr<CodeRed::GpuBuffer> mViewBuffer;
-
+		std::shared_ptr<CodeRed::GpuSampler> mSampler;
+		
 		std::vector<PhysicalBasedDrawCall> mDrawCalls;
 		size_t mLights = 0;
 	};

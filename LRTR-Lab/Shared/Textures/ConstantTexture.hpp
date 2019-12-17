@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../Math/Math.hpp"
+
 #include "Texture.hpp"
 
 namespace LRTR {
@@ -25,4 +27,9 @@ namespace LRTR {
 	{
 		return mValue;
 	}
+
+	using ConstantTexture1F = ConstantTexture<Vector1f>;
+	using ConstantTexture2F = ConstantTexture<Vector2f>;
+	using ConstantTexture3F = ConstantTexture<Vector3f>;
+	using ConstantTexture4F = ConstantTexture<Vector4f>;
 }

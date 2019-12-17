@@ -1,6 +1,7 @@
 #pragma once
 
-#include "../../../Shared/Textures/Texture.hpp"
+#include "../../../Shared/Textures/ConstantTexture.hpp"
+#include "../../../Shared/Textures/ImageTexture.hpp"
 
 #include "Material.hpp"
 
@@ -11,33 +12,58 @@ namespace LRTR {
 		explicit PhysicalBasedMaterial();
 
 		explicit PhysicalBasedMaterial(
-			const std::shared_ptr<Texture>& metallic,
-			const std::shared_ptr<Texture>& baseColor,
-			const std::shared_ptr<Texture>& roughness,
-			const std::shared_ptr<Texture>& occlusion = nullptr,
-			const std::shared_ptr<Texture>& normalMap = nullptr);
+			const std::shared_ptr<ImageTexture>& metallic,
+			const std::shared_ptr<ImageTexture>& baseColor,
+			const std::shared_ptr<ImageTexture>& roughness,
+			const std::shared_ptr<ImageTexture>& occlusion = nullptr,
+			const std::shared_ptr<ImageTexture>& normalMap = nullptr);
 
-		auto metallic() const noexcept -> std::shared_ptr<Texture>;
+		explicit PhysicalBasedMaterial(
+			const std::shared_ptr<ConstantTexture4F>& metallic,
+			const std::shared_ptr<ConstantTexture4F>& baseColor,
+			const std::shared_ptr<ConstantTexture4F>& roughness);
 
-		auto baseColor() const noexcept -> std::shared_ptr<Texture>;
+		explicit PhysicalBasedMaterial(
+			const std::shared_ptr<ConstantTexture4F>& metallicFactor,
+			const std::shared_ptr<ConstantTexture4F>& baseColorFactor,
+			const std::shared_ptr<ConstantTexture4F>& roughnessFactor,
+			const std::shared_ptr<ImageTexture>& metallicTexture,
+			const std::shared_ptr<ImageTexture>& baseColorTexture,
+			const std::shared_ptr<ImageTexture>& roughnessTexture,
+			const std::shared_ptr<ImageTexture>& occlusionTexture = nullptr,
+			const std::shared_ptr<ImageTexture>& normalMapTexture = nullptr);
 
-		auto roughness() const noexcept -> std::shared_ptr<Texture>;
+		auto metallicFactor() const noexcept -> std::shared_ptr<ConstantTexture4F>;
 
-		auto occlusion() const noexcept -> std::shared_ptr<Texture>;
+		auto baseColorFactor() const noexcept -> std::shared_ptr<ConstantTexture4F>;
 
-		auto normalMap() const noexcept -> std::shared_ptr<Texture>;
+		auto roughnessFactor() const noexcept -> std::shared_ptr<ConstantTexture4F>;
 
+		auto metallicTexture() const noexcept -> std::shared_ptr<ImageTexture>;
+
+		auto baseColorTexture() const noexcept -> std::shared_ptr<ImageTexture>;
+
+		auto roughnessTexture() const noexcept -> std::shared_ptr<ImageTexture>;
+
+		auto occlusionTexture() const noexcept -> std::shared_ptr<ImageTexture>;
+
+		auto normalMapTexture() const noexcept -> std::shared_ptr<ImageTexture>;
+		
 		auto typeName() const noexcept -> std::string override;
 
 		auto typeIndex() const noexcept -> std::type_index override;
 	protected:
 		void onProperty() override;
 	private:
-		std::shared_ptr<Texture> mMetallic;
-		std::shared_ptr<Texture> mBaseColor;
-		std::shared_ptr<Texture> mRoughness;
-		std::shared_ptr<Texture> mOcclusion;
-		std::shared_ptr<Texture> mNormalMap;
+		std::shared_ptr<ImageTexture> mMetallicTexture;
+		std::shared_ptr<ImageTexture> mBaseColorTexture;
+		std::shared_ptr<ImageTexture> mRoughnessTexture;
+		std::shared_ptr<ImageTexture> mOcclusionTexture;
+		std::shared_ptr<ImageTexture> mNormalMapTexture;
+
+		std::shared_ptr<ConstantTexture4F> mMetallicFactor;
+		std::shared_ptr<ConstantTexture4F> mBaseColorFactor;
+		std::shared_ptr<ConstantTexture4F> mRoughnessFactor;
 	};
 	
 }

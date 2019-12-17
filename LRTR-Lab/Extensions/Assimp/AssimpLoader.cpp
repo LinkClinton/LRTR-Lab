@@ -42,20 +42,20 @@ namespace LRTR {
 		return data;
 	}
 
-	auto readVector1f(aiMaterialProperty* property) -> Vector1f {
+	auto readVector1f(aiMaterialProperty* property) -> Vector4f {
 		assert(property->mDataLength == 4 && property->mType == aiPTI_Float);
 
 		Vector1f data;
 
 		std::memcpy(&data, property->mData, property->mDataLength);
 
-		return data;
+		return Vector4f(data);
 	}
 
 	auto convertTo(aiMaterial* material) -> std::shared_ptr<PhysicalBasedMaterial> {
-		std::shared_ptr<Texture> roughness;
-		std::shared_ptr<Texture> baseColor;
-		std::shared_ptr<Texture> metallic;
+		std::shared_ptr<ConstantTexture4F> roughness;
+		std::shared_ptr<ConstantTexture4F> baseColor;
+		std::shared_ptr<ConstantTexture4F> metallic;
 		
 		for (unsigned index = 0; index < material->mNumProperties; index++) {
 			const auto& property = material->mProperties[index];
@@ -67,7 +67,7 @@ namespace LRTR {
 			if (key.find("roughnessFactor") != std::string::npos) {
 				//non-texture property, we will read 1 floats
 				if (property->mType == aiPTI_Float && property->mSemantic == 0) {
-					roughness = std::make_shared<ConstantTexture<Vector1f>>(readVector1f(property));
+					roughness = std::make_shared<ConstantTexture<Vector4f>>(readVector1f(property));
 				}
 			}
 			
@@ -83,7 +83,7 @@ namespace LRTR {
 			if (key.find("metallicFactor") != std::string::npos) {
 				//non-texture property, we will read 1 floats
 				if (property->mType == aiPTI_Float && property->mSemantic == 0) {
-					metallic = std::make_shared<ConstantTexture<Vector1f>>(readVector1f(property));
+					metallic = std::make_shared<ConstantTexture<Vector4f>>(readVector1f(property));
 				}
 			}
 		}

@@ -111,7 +111,30 @@ float3 ComputePointLight(Light light, Material material, float3 position, float3
 
 StructuredBuffer<Material> materials : register(t0);
 StructuredBuffer<Light> lights : register(t1);
+
+Texture2D metallicTexture : register(t4);
+Texture2D baseColorTexture : register(t5);
+Texture2D roughnessTexture : register(t6);
+Texture2D occlusionTexture : register(t7);
+Texture2D normalMapTexture : register(t8);
+
 ConstantBuffer<Config> config : register(b9);
+
+SamplerState materialSampler : register(s10);
+
+float3 getNormal(float3 normal, float2 texcoord, float3 tangent)
+{
+    if (config.HasNormalMap == 0) return normal;
+
+    float3 tangentNormal = normalMapTexture.Sample(materialSampler, texcoord).xyz * 2.0 - 1.0;
+    
+    float3 N = normalize(normal);
+    float3 T = normalize(tangent - dot(tangent, N) * N);
+    float3 B = cross(N, T);
+    float3x3 TBN = float3x3(T, B, N);
+
+    return mul(tangentNormal, TBN);
+}
 
 float4 main(
 	float4 svPosition : SV_POSITION,
@@ -123,13 +146,19 @@ float4 main(
 	float3 toEye = normalize(config.EyePosition - position);
 	float3 F0 = 0.04;
 	float3 color = float3(0.0f, 0.0f, 0.0f);
-
-	Material material = materials[config.Index];
+    float occlusion = 1.0f;
 	
+	Material material = materials[config.Index];
+    material.Roughness = max(material.Roughness, 0.05f);
+    
+    if (config.HasMetallic) material.Metallic.a = material.Metallic.a * metallicTexture.Sample(materialSampler, texCoord.xy).b;
+    if (config.HasBaseColor) material.BaseColor = material.BaseColor * pow(baseColorTexture.Sample(materialSampler, texCoord.xy), 2.2);
+    if (config.HasRoughness) material.Roughness.a = material.Roughness.a * roughnessTexture.Sample(materialSampler, texCoord.xy).g;
+    if (config.HasOcclusion) occlusion = occlusionTexture.Sample(materialSampler, texCoord.xy).r;
+    
 	F0 = lerp(F0, material.BaseColor.xyz, material.Metallic.a);
 	
-	normal = normalize(normal);
-    material.Roughness = max(material.Roughness, 0.05f);
+    normal = normalize(getNormal(normal, texCoord.xy, tangent));
     
 	[loop]
 	for (uint index = 0; index < config.Lights; index++)
@@ -137,7 +166,7 @@ float4 main(
 		color = color + ComputePointLight(lights[index], material, position, normal, toEye, F0);
 	}
 	
-    color = color + 0.1f * material.BaseColor.xyz;
+    color = color + 0.25f * material.BaseColor.xyz * occlusion;
 	
 	color = color / (color + 1.0f);
 	color = pow(color, 1.0 / 2.2);

@@ -93,10 +93,10 @@ namespace LRTR {
 
 	auto readMaterialValue(
 		const std::shared_ptr<RuntimeSharing>& sharing,
-		const tinygltf::Parameter& parameter, 
+		const tinygltf::Parameter& parameter,
 		const tinygltf::Model* scene) -> std::shared_ptr<Texture> {
 		if (parameter.has_number_value) return std::make_shared<ConstantTexture<Vector1f>>(Vector1f(
-				static_cast<float>(parameter.number_value)));
+			static_cast<float>(parameter.number_value)));
 
 		if (!parameter.number_array.empty() && parameter.number_array.size() == 4)
 			return std::make_shared<ConstantTexture<Vector4f>>(Vector4f(
@@ -106,7 +106,7 @@ namespace LRTR {
 				static_cast<float>(parameter.number_array[3])));
 
 		if (TINY_GLTF_HAS_VALUE(parameter.TextureIndex())) {
-			const auto& texture  = scene->textures[parameter.TextureIndex()];
+			const auto& texture = scene->textures[parameter.TextureIndex()];
 			const auto& image = scene->images[texture.source];
 
 			const auto gpuTexture = sharing->device()->createTexture(
@@ -121,8 +121,32 @@ namespace LRTR {
 
 			return std::make_shared<ImageTexture>(gpuTexture);
 		}
-		
+
 		return nullptr;
+	}
+	
+	auto readMaterialFactorValue(
+		const std::shared_ptr<RuntimeSharing>& sharing,
+		const tinygltf::ParameterMap& mapped,
+		const tinygltf::Model* scene,
+		const std::string& name) -> std::shared_ptr<ConstantTexture4F>
+	{
+		if (mapped.find(name) == mapped.end()) return nullptr;
+
+		return std::static_pointer_cast<ConstantTexture4F>(
+			readMaterialValue(sharing, mapped.at(name), scene));
+	}
+
+	auto readMaterialTextureValue(
+		const std::shared_ptr<RuntimeSharing>& sharing,
+		const tinygltf::ParameterMap& mapped,
+		const tinygltf::Model* scene,
+		const std::string& name) -> std::shared_ptr<ImageTexture>
+	{
+		if (mapped.find(name) == mapped.end()) return nullptr;
+
+		return std::static_pointer_cast<ImageTexture>(
+			readMaterialValue(sharing, mapped.at(name), scene));
 	}
 	
 	auto readMaterial(
@@ -130,23 +154,19 @@ namespace LRTR {
 		const tinygltf::Material* material, 
 		const tinygltf::Model* scene) -> std::shared_ptr<PhysicalBasedMaterial>
 	{
-		std::shared_ptr<Texture> roughness;
-		std::shared_ptr<Texture> baseColor;
-		std::shared_ptr<Texture> metallic; 
-		std::shared_ptr<Texture> occlusion;
-		std::shared_ptr<Texture> normalMap;
+		auto metallicFactor = readMaterialFactorValue(sharing, material->values, scene, "metallicFactor");
+		auto baseColorFactor = readMaterialFactorValue(sharing, material->values, scene, "baseColorFactor");
+		auto roughnessFactor = readMaterialFactorValue(sharing, material->values, scene, "roughnessFactor");
 
-		TINY_GLTF_TRY_READ_MATERIAL_VALUE(roughness, "roughnessFactor");
-		TINY_GLTF_TRY_READ_MATERIAL_VALUE(roughness, "metallicRoughnessTexture");
-		TINY_GLTF_TRY_READ_MATERIAL_VALUE(baseColor, "baseColorFactor");
-		TINY_GLTF_TRY_READ_MATERIAL_VALUE(baseColor, "baseColorTexture");
-		TINY_GLTF_TRY_READ_MATERIAL_VALUE(metallic, "metallicFactor");
-		TINY_GLTF_TRY_READ_MATERIAL_VALUE(metallic, "metallicRoughnessTexture");
+		auto metallicRoughnessTexture = readMaterialTextureValue(sharing, material->values, scene, "metallicRoughnessTexture");
+		auto baseColorTexture = readMaterialTextureValue(sharing, material->values, scene, "baseColorTexture"); 
+		auto occlusionTexture = readMaterialTextureValue(sharing, material->additionalValues, scene, "occlusionTexture");
+		auto normalMapTexture = readMaterialTextureValue(sharing, material->additionalValues, scene, "normalTexture");
 
-		TINY_GLTF_TRY_READ_MATERIAL_ADDITIONAL_VALUE(occlusion, "occlusionTexture");
-		TINY_GLTF_TRY_READ_MATERIAL_ADDITIONAL_VALUE(normalMap, "normalTexture");
-		
-		return std::make_shared<PhysicalBasedMaterial>(metallic, baseColor, roughness, occlusion, normalMap);
+		return std::make_shared<PhysicalBasedMaterial>(
+			metallicFactor, baseColorFactor, roughnessFactor,
+			metallicRoughnessTexture, baseColorTexture, metallicRoughnessTexture,
+			occlusionTexture, normalMapTexture);
 	}
 	
 	void TinyGLTFBuildScene(
@@ -273,6 +293,37 @@ auto LRTR::TinyGLTFLoader::loadScene(
 		TinyGLTFBuildScene(sharing, tinyGLTFScene, transform.matrix(), &model, &model.nodes[index]);
 	}
 
+	if (fileName == "./Resources/Models/WaterBottle.glb") {
+		const auto light0 = std::make_shared<Shape>();
+		const auto light1 = std::make_shared<Shape>();
+		const auto light2 = std::make_shared<Shape>();
+
+		light0->addComponent(std::make_shared<TransformWrap>(
+			Vector3f(0.f, 0.5f, 1.f),
+			Vector4f(0, 0, 1, 0),
+			Vector3f(1)));
+		light0->addComponent(std::make_shared<PointLightSource>(Vector3f(5)));
+		light0->component<CollectionLabel>()->set("Light", "light0");
+
+		light1->addComponent(std::make_shared<TransformWrap>(
+			Vector3f(1.f, 0.5f, 0.f),
+			Vector4f(0, 0, 1, 0),
+			Vector3f(1)));
+		light1->addComponent(std::make_shared<PointLightSource>(Vector3f(5)));
+		light1->component<CollectionLabel>()->set("Light", "light1");
+
+		light2->addComponent(std::make_shared<TransformWrap>(
+			Vector3f(-1.f, 0.5f, 0.f),
+			Vector4f(0, 0, 1, 0),
+			Vector3f(1)));
+		light2->addComponent(std::make_shared<PointLightSource>(Vector3f(5)));
+		light2->component<CollectionLabel>()->set("Light", "light2");
+
+		tinyGLTFScene->add(light0);
+		tinyGLTFScene->add(light1);
+		tinyGLTFScene->add(light2);
+	}
+	
 	if (fileName == "./Resources/Models/MetalRoughSpheresNoTextures.glb") {
 		const auto light0 = std::make_shared<Shape>();
 		const auto light1 = std::make_shared<Shape>();
