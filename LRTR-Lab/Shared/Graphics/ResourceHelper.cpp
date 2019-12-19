@@ -213,6 +213,56 @@ auto CodeRed::ResourceHelper::loadTexture(
 	return texture;
 }
 
+auto CodeRed::ResourceHelper::loadSkyBox(
+	const std::shared_ptr<GpuLogicalDevice>& device,
+	const std::shared_ptr<GpuCommandAllocator>& allocator, 
+	const std::shared_ptr<GpuCommandQueue>& queue,
+	const std::string& dirName) -> std::shared_ptr<GpuTexture>
+{
+	const std::string fileName[6] = {
+		"right.jpg",
+		"left.jpg",
+		"bottom.jpg",
+		"top.jpg",
+		"back.jpg",
+		"front.jpg"
+	};
+
+	stbi_uc* skyBoxImages[6];
+	
+	auto width = 0;
+	auto height = 0;
+	auto channel = 0;
+	
+	for (size_t index = 0; index < 6; index++) {
+		skyBoxImages[index] = stbi_load((dirName + "/" + fileName[index]).c_str(), &width, &height, &channel,
+			STBI_rgb_alpha);
+	}
+
+	const auto skyBoxData = new unsigned char[height * width * 24];
+	const auto depthPitch = width * height * 4;
+
+	for (size_t index = 0; index < 6; index++) {
+		std::memcpy(skyBoxData + index * depthPitch, skyBoxImages[index], depthPitch);
+		
+		stbi_image_free(skyBoxImages[index]);
+	}
+
+	const auto texture = device->createTexture(
+		ResourceInfo::CubeMap(
+			width,
+			height,
+			PixelFormat::RedGreenBlueAlpha8BitUnknown
+		)
+	);
+
+	updateTexture(device, allocator, queue, texture, skyBoxData);
+
+	delete[] skyBoxData;
+
+	return texture;
+}
+
 auto CodeRed::ResourceHelper::formatMapped(int channel) -> PixelFormat
 {
 	//we only enable the channel 1 or 4

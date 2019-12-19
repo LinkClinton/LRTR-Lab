@@ -265,6 +265,15 @@
     <Filter Include="Extensions\TinyGLTF">
       <UniqueIdentifier>{d2d010d2-5220-4a9c-a808-da2b2b05deca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources\Textures">
+      <UniqueIdentifier>{9090bf55-8232-4b82-bae5-1213be253295}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Textures\SkyBoxes">
+      <UniqueIdentifier>{ad40372b-4c5f-45c5-9021-2681e10bf844}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Textures\SkyBoxes\Sea">
+      <UniqueIdentifier>{13eaf99c-0c33-4106-9075-bc60c2948128}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Runtimes\LabApp.hpp">
@@ -530,5 +539,25 @@
     <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\PhysicalBasedRenderSystemFrag.hlsl">
       <Filter>Resources\Shaders\Systems\DirectX12</Filter>
     </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\Textures\SkyBoxes\Sea\back.jpg">
+      <Filter>Resources\Textures\SkyBoxes\Sea</Filter>
+    </Image>
+    <Image Include="Resources\Textures\SkyBoxes\Sea\bottom.jpg">
+      <Filter>Resources\Textures\SkyBoxes\Sea</Filter>
+    </Image>
+    <Image Include="Resources\Textures\SkyBoxes\Sea\front.jpg">
+      <Filter>Resources\Textures\SkyBoxes\Sea</Filter>
+    </Image>
+    <Image Include="Resources\Textures\SkyBoxes\Sea\left.jpg">
+      <Filter>Resources\Textures\SkyBoxes\Sea</Filter>
+    </Image>
+    <Image Include="Resources\Textures\SkyBoxes\Sea\right.jpg">
+      <Filter>Resources\Textures\SkyBoxes\Sea</Filter>
+    </Image>
+    <Image Include="Resources\Textures\SkyBoxes\Sea\top.jpg">
+      <Filter>Resources\Textures\SkyBoxes\Sea</Filter>
+    </Image>
   </ItemGroup>
 </Project>

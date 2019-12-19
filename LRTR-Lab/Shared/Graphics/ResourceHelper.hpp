@@ -63,6 +63,13 @@ namespace CodeRed {
 			const std::shared_ptr<GpuCommandQueue>& queue,
 			const std::string& fileName
 		) -> std::shared_ptr<GpuTexture>;
+
+		static auto loadSkyBox(
+			const std::shared_ptr<GpuLogicalDevice>& device,
+			const std::shared_ptr<GpuCommandAllocator>& allocator,
+			const std::shared_ptr<GpuCommandQueue>& queue,
+			const std::string& dirName
+		) -> std::shared_ptr<GpuTexture>;
 	private:
 		static auto formatMapped(int channel) -> PixelFormat;
 	};
