@@ -23,8 +23,6 @@ LRTR::SceneManager::SceneManager(
 	const std::shared_ptr<CodeRed::GpuLogicalDevice>& device) :
 	Manager(sharing), mDevice(device)
 {
-	CodeRed::ResourceHelper::loadSkyBox(sharing->device(), sharing->allocator(), sharing->queue(),
-		"./Resources/Textures/SkyBoxes/Sea");
 	add(TinyGLTFLoader::loadScene(mRuntimeSharing, "Scene", "./Resources/Models/WaterBottle.glb",
 		Transform::rotate(-glm::pi<float>() * 0.5f, Vector3f(0, 1, 0))));
 

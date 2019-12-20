@@ -149,6 +149,15 @@
     <ClCompile Include="Extensions\TinyGLTF\TinyGLTFLoader.cpp">
       <Filter>Extensions\TinyGLTF</Filter>
     </ClCompile>
+    <ClCompile Include="Scenes\Components\Environment\SkyBox.cpp">
+      <Filter>Scenes\Components\Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Systems\PastEffectRenderSystem.cpp">
+      <Filter>Scenes\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Components\MeshData\BoxMesh.cpp">
+      <Filter>Scenes\Components\MeshData</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scenes">
@@ -273,6 +282,9 @@
     </Filter>
     <Filter Include="Resources\Textures\SkyBoxes\Sea">
       <UniqueIdentifier>{13eaf99c-0c33-4106-9075-bc60c2948128}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes\Components\Environment">
+      <UniqueIdentifier>{f8e6fbfe-c01a-424c-986f-b28e84dfb5ba}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -495,6 +507,15 @@
     <ClInclude Include="Shared\Textures\ImageTexture.hpp">
       <Filter>Shared\Textures</Filter>
     </ClInclude>
+    <ClInclude Include="Scenes\Components\Environment\SkyBox.hpp">
+      <Filter>Scenes\Components\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Systems\PastEffectRenderSystem.hpp">
+      <Filter>Scenes\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Components\MeshData\BoxMesh.hpp">
+      <Filter>Scenes\Components\MeshData</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Resources\Fonts\Consola.ttf">
@@ -539,25 +560,11 @@
     <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\PhysicalBasedRenderSystemFrag.hlsl">
       <Filter>Resources\Shaders\Systems\DirectX12</Filter>
     </CopyFileToFolders>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Resources\Textures\SkyBoxes\Sea\back.jpg">
-      <Filter>Resources\Textures\SkyBoxes\Sea</Filter>
-    </Image>
-    <Image Include="Resources\Textures\SkyBoxes\Sea\bottom.jpg">
-      <Filter>Resources\Textures\SkyBoxes\Sea</Filter>
-    </Image>
-    <Image Include="Resources\Textures\SkyBoxes\Sea\front.jpg">
-      <Filter>Resources\Textures\SkyBoxes\Sea</Filter>
-    </Image>
-    <Image Include="Resources\Textures\SkyBoxes\Sea\left.jpg">
-      <Filter>Resources\Textures\SkyBoxes\Sea</Filter>
-    </Image>
-    <Image Include="Resources\Textures\SkyBoxes\Sea\right.jpg">
-      <Filter>Resources\Textures\SkyBoxes\Sea</Filter>
-    </Image>
-    <Image Include="Resources\Textures\SkyBoxes\Sea\top.jpg">
-      <Filter>Resources\Textures\SkyBoxes\Sea</Filter>
-    </Image>
+    <CopyFileToFolders Include="Resources\Textures\SkyBoxes\Sea\back.jpg" />
+    <CopyFileToFolders Include="Resources\Textures\SkyBoxes\Sea\bottom.jpg" />
+    <CopyFileToFolders Include="Resources\Textures\SkyBoxes\Sea\front.jpg" />
+    <CopyFileToFolders Include="Resources\Textures\SkyBoxes\Sea\left.jpg" />
+    <CopyFileToFolders Include="Resources\Textures\SkyBoxes\Sea\right.jpg" />
+    <CopyFileToFolders Include="Resources\Textures\SkyBoxes\Sea\top.jpg" />
   </ItemGroup>
 </Project>

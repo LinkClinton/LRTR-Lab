@@ -107,6 +107,13 @@ auto LRTR::MeshDataAssetComponent::get(const std::shared_ptr<MeshData>& meshData
 	return mMeshDataInfos[meshData->identity()];
 }
 
+auto LRTR::MeshDataAssetComponent::get(const std::string& meshName) -> MeshDataInfo
+{
+	assert(mMeshes.find(meshName) != mMeshes.end());
+	
+	return get(mMeshes[meshName]);
+}
+
 auto LRTR::MeshDataAssetComponent::positions() const noexcept -> std::shared_ptr<CodeRed::GpuBuffer>
 {
 	return mProperties[0];

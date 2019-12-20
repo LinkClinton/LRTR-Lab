@@ -5,7 +5,10 @@
 LRTR::AssetManager::AssetManager(const std::shared_ptr<RuntimeSharing>& sharing) :
 	Manager(sharing)
 {
-	addComponent("MeshData", std::make_shared<MeshDataAssetComponent>(sharing, sharing->device()));
+	const auto meshDataAssetComponent = std::make_shared<MeshDataAssetComponent>(sharing, sharing->device());
+
+	addComponent("MeshData", meshDataAssetComponent);
+
 }
 
 void LRTR::AssetManager::update(float delta)

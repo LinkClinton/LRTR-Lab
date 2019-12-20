@@ -27,6 +27,8 @@ namespace LRTR {
 		void allocate(const std::shared_ptr<MeshData>& meshData);
 		
 		auto get(const std::shared_ptr<MeshData>& meshData) -> MeshDataInfo;
+
+		auto get(const std::string& meshName) -> MeshDataInfo;
 		
 		auto positions() const noexcept -> std::shared_ptr<CodeRed::GpuBuffer>;
 
@@ -46,6 +48,8 @@ namespace LRTR {
 		std::vector<unsigned> mIndicesAllocateCache;
 		size_t mVertexLocation = 0;
 		size_t mIndexLocation = 0;
+
+		Group<std::string, std::shared_ptr<MeshData>> mMeshes;
 		
 		Group<Identity, MeshDataInfo> mMeshDataInfos;
 	};

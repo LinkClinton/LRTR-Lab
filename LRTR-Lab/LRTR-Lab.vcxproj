@@ -198,12 +198,14 @@
     <ClCompile Include="Scenes\Component.cpp" />
     <ClCompile Include="Scenes\Components\CameraGroup.cpp" />
     <ClCompile Include="Scenes\Components\CollectionLabel.cpp" />
+    <ClCompile Include="Scenes\Components\Environment\SkyBox.cpp" />
     <ClCompile Include="Scenes\Components\LightSources\PointLightSource.cpp" />
     <ClCompile Include="Scenes\Components\LinesMesh\CoordinateSystem.cpp" />
     <ClCompile Include="Scenes\Components\LinesMesh\LinesGrid.cpp" />
     <ClCompile Include="Scenes\Components\LinesMesh\LinesMesh.cpp" />
     <ClCompile Include="Scenes\Components\Materials\PhysicalBasedMaterial.cpp" />
     <ClCompile Include="Scenes\Components\Materials\WireframeMaterial.cpp" />
+    <ClCompile Include="Scenes\Components\MeshData\BoxMesh.cpp" />
     <ClCompile Include="Scenes\Components\MeshData\MeshData.cpp" />
     <ClCompile Include="Scenes\Components\MeshData\TrianglesMesh.cpp" />
     <ClCompile Include="Scenes\Components\TransformWrap.cpp" />
@@ -213,6 +215,7 @@
     <ClCompile Include="Scenes\System.cpp" />
     <ClCompile Include="Scenes\Systems\CollectionUpdateSystem.cpp" />
     <ClCompile Include="Scenes\Systems\LinesMeshRenderSystem.cpp" />
+    <ClCompile Include="Scenes\Systems\PastEffectRenderSystem.cpp" />
     <ClCompile Include="Scenes\Systems\PhysicalBasedRenderSystem.cpp" />
     <ClCompile Include="Scenes\Systems\WireframeRenderSystem.cpp" />
     <ClCompile Include="Shared\FrameResources.cpp" />
@@ -268,6 +271,7 @@
     <ClInclude Include="Scenes\Component.hpp" />
     <ClInclude Include="Scenes\Components\CameraGroup.hpp" />
     <ClInclude Include="Scenes\Components\CollectionLabel.hpp" />
+    <ClInclude Include="Scenes\Components\Environment\SkyBox.hpp" />
     <ClInclude Include="Scenes\Components\LightSources\LightSource.hpp" />
     <ClInclude Include="Scenes\Components\LightSources\PointLightSource.hpp" />
     <ClInclude Include="Scenes\Components\LinesMesh\CoordinateSystem.hpp" />
@@ -276,6 +280,7 @@
     <ClInclude Include="Scenes\Components\Materials\Material.hpp" />
     <ClInclude Include="Scenes\Components\Materials\PhysicalBasedMaterial.hpp" />
     <ClInclude Include="Scenes\Components\Materials\WireframeMaterial.hpp" />
+    <ClInclude Include="Scenes\Components\MeshData\BoxMesh.hpp" />
     <ClInclude Include="Scenes\Components\MeshData\MeshData.hpp" />
     <ClInclude Include="Scenes\Components\MeshData\TrianglesMesh.hpp" />
     <ClInclude Include="Scenes\Components\TransformWrap.hpp" />
@@ -285,6 +290,7 @@
     <ClInclude Include="Scenes\System.hpp" />
     <ClInclude Include="Scenes\Systems\CollectionUpdateSystem.hpp" />
     <ClInclude Include="Scenes\Systems\LinesMeshRenderSystem.hpp" />
+    <ClInclude Include="Scenes\Systems\PastEffectRenderSystem.hpp" />
     <ClInclude Include="Scenes\Systems\PhysicalBasedRenderSystem.hpp" />
     <ClInclude Include="Scenes\Systems\WireframeRenderSystem.hpp" />
     <ClInclude Include="Shared\Accelerators\Group.hpp" />
