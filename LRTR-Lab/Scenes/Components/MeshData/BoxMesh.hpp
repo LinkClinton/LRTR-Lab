@@ -4,7 +4,7 @@
 
 namespace LRTR {
 
-	class BoxMesh : TrianglesMesh {
+	class BoxMesh : public TrianglesMesh {
 	public:
 		explicit BoxMesh(const float width, const float height, const float depth);
 

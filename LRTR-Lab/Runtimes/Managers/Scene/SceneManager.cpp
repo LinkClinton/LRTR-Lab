@@ -7,11 +7,13 @@
 #include "../../../Extensions/Assimp/AssimpLoader.hpp"
 
 #include "../../../Scenes/Systems/PhysicalBasedRenderSystem.hpp"
+#include "../../../Scenes/Systems/PastEffectRenderSystem.hpp"
 #include "../../../Scenes/Systems/CollectionUpdateSystem.hpp"
 #include "../../../Scenes/Systems/LinesMeshRenderSystem.hpp"
 #include "../../../Scenes/Systems/WireframeRenderSystem.hpp"
 
 #include "../../../Scenes/Components/MeshData/TrianglesMesh.hpp"
+#include "../../../Scenes/Components/Environment/SkyBox.hpp"
 #include "../../../Scenes/Components/CollectionLabel.hpp"
 #include "../../../Scenes/Components/CameraGroup.hpp"
 #include "../../../Scenes/Scene.hpp"
@@ -39,12 +41,21 @@ LRTR::SceneManager::SceneManager(
 			1000.0f));
 
 	camera->component<CollectionLabel>()->set("Collection", "Camera");
+
+	mScenes["Scene"]->property()->addComponent(std::make_shared<SkyBox>(
+		CodeRed::ResourceHelper::loadSkyBox(
+			sharing->device(),
+			sharing->allocator(),
+			sharing->queue(),
+			"./Resources/Textures/SkyBoxes/Sea"
+		)));
 	
 	mScenes["Scene"]->add(camera);
 
 	mScenes["Scene"]->addSystem(std::make_shared<LinesMeshRenderSystem>(mRuntimeSharing, mDevice));
 	//mScenes["Scene"]->addSystem(std::make_shared<WireframeRenderSystem>(mRuntimeSharing, mDevice));
 	mScenes["Scene"]->addSystem(std::make_shared<PhysicalBasedRenderSystem>(mRuntimeSharing, mDevice));
+	mScenes["Scene"]->addSystem(std::make_shared<PastEffectRenderSystem>(mRuntimeSharing, device));
 	mScenes["Scene"]->addSystem(std::make_shared<CollectionUpdateSystem>(mRuntimeSharing));
 }
 

@@ -560,11 +560,31 @@
     <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\PhysicalBasedRenderSystemFrag.hlsl">
       <Filter>Resources\Shaders\Systems\DirectX12</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Resources\Textures\SkyBoxes\Sea\back.jpg" />
-    <CopyFileToFolders Include="Resources\Textures\SkyBoxes\Sea\bottom.jpg" />
-    <CopyFileToFolders Include="Resources\Textures\SkyBoxes\Sea\front.jpg" />
-    <CopyFileToFolders Include="Resources\Textures\SkyBoxes\Sea\left.jpg" />
-    <CopyFileToFolders Include="Resources\Textures\SkyBoxes\Sea\right.jpg" />
-    <CopyFileToFolders Include="Resources\Textures\SkyBoxes\Sea\top.jpg" />
+    <CopyFileToFolders Include="Resources\Textures\SkyBoxes\Sea\left.jpg">
+      <Filter>Resources\Textures\SkyBoxes\Sea</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Textures\SkyBoxes\Sea\back.jpg">
+      <Filter>Resources\Textures\SkyBoxes\Sea</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Textures\SkyBoxes\Sea\bottom.jpg">
+      <Filter>Resources\Textures\SkyBoxes\Sea</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Textures\SkyBoxes\Sea\front.jpg">
+      <Filter>Resources\Textures\SkyBoxes\Sea</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Textures\SkyBoxes\Sea\top.jpg">
+      <Filter>Resources\Textures\SkyBoxes\Sea</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Textures\SkyBoxes\Sea\right.jpg">
+      <Filter>Resources\Textures\SkyBoxes\Sea</Filter>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Resources\Shaders\Systems\DirectX12\PastEffectRenderSystemFrag.hlsl">
+      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Systems\DirectX12\PastEffectRenderSystemVert.hlsl">
+      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

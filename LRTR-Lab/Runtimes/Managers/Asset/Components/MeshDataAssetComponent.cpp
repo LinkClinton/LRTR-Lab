@@ -2,6 +2,7 @@
 
 #include <CodeRed/Core/CodeRedGraphics.hpp>
 
+#include "../../../../Scenes/Components/MeshData/BoxMesh.hpp"
 #include "../../../../Shared/Graphics/ResourceHelper.hpp"
 
 #define LRTR_INSERT_VERTEX_PROPERTY(condition, dest, source0, source1) \
@@ -9,8 +10,8 @@
 	else dest.insert(dest.end(), source1.begin(), source1.end());
 
 LRTR::MeshDataAssetComponent::MeshDataAssetComponent(
-	const std::shared_ptr<RuntimeSharing>& sharing,
-	const std::shared_ptr<CodeRed::GpuLogicalDevice>& device) :
+	const std::shared_ptr<RuntimeSharing> & sharing,
+	const std::shared_ptr<CodeRed::GpuLogicalDevice> & device) :
 	AssetComponent(sharing), mDevice(device)
 {
 	mProperties = std::vector<std::shared_ptr<CodeRed::GpuBuffer>>(4);
@@ -32,6 +33,12 @@ LRTR::MeshDataAssetComponent::MeshDataAssetComponent(
 			CodeRed::MemoryHeap::Upload
 		)
 	);
+
+	beginAllocating();
+	
+	allocate(mMeshes["SkyBox"] = std::make_shared<BoxMesh>(2.0f, 2.0f, 2.0f));
+	
+	endAllocating();
 }
 
 void LRTR::MeshDataAssetComponent::beginAllocating()
