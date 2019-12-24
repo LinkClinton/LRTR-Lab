@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Cameras">
+      <UniqueIdentifier>{e770c3cf-3c8c-4028-97d5-d671534f72e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components">
+      <UniqueIdentifier>{c1d679b8-d02b-43f3-8f27-5a39d5e52379}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shapes">
+      <UniqueIdentifier>{0aa542e6-164f-4d8d-9784-e3b8616f1c41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Systems">
+      <UniqueIdentifier>{c258069a-64f2-4872-868a-0608fcc29db7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Cameras\Components">
+      <UniqueIdentifier>{563322d9-3fe0-43af-aae2-f81edeae8f7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Environment">
+      <UniqueIdentifier>{0a909f8f-1c1c-4116-a670-1532fd50b75c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\LightSources">
+      <UniqueIdentifier>{292053d9-58b4-4a9c-8107-03220f7c1cba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\LinesMesh">
+      <UniqueIdentifier>{f8ba6a60-b7c0-4471-88d3-6ac1b36e387d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Materials">
+      <UniqueIdentifier>{d7ade1ff-5e91-4371-8baa-40787abd6088}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\MeshData">
+      <UniqueIdentifier>{07e10c8f-067f-4129-9c5c-728394679022}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Cameras\Components\Perspective.cpp">
+      <Filter>Cameras\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Cameras\Camera.cpp">
+      <Filter>Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Environment\SkyBox.cpp">
+      <Filter>Components\Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\LightSources\PointLightSource.cpp">
+      <Filter>Components\LightSources</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\LinesMesh\CoordinateSystem.cpp">
+      <Filter>Components\LinesMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\LinesMesh\LinesGrid.cpp">
+      <Filter>Components\LinesMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\LinesMesh\LinesMesh.cpp">
+      <Filter>Components\LinesMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Materials\PhysicalBasedMaterial.cpp">
+      <Filter>Components\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Materials\WireframeMaterial.cpp">
+      <Filter>Components\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\MeshData\BoxMesh.cpp">
+      <Filter>Components\MeshData</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\MeshData\MeshData.cpp">
+      <Filter>Components\MeshData</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\MeshData\TrianglesMesh.cpp">
+      <Filter>Components\MeshData</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\CameraGroup.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\CollectionLabel.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\TransformWrap.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\CollectionUpdateSystem.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\LinesMeshRenderSystem.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\PastEffectRenderSystem.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\PhysicalBasedRenderSystem.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\WireframeRenderSystem.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Shapes\SceneProperty.cpp">
+      <Filter>Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Shape.cpp" />
+    <ClCompile Include="System.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Cameras\Components\Perspective.hpp">
+      <Filter>Cameras\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Cameras\Components\Projective.hpp">
+      <Filter>Cameras\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Cameras\Camera.hpp">
+      <Filter>Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Environment\SkyBox.hpp">
+      <Filter>Components\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\LightSources\LightSource.hpp">
+      <Filter>Components\LightSources</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\LightSources\PointLightSource.hpp">
+      <Filter>Components\LightSources</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\LinesMesh\CoordinateSystem.hpp">
+      <Filter>Components\LinesMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\LinesMesh\LinesGrid.hpp">
+      <Filter>Components\LinesMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\LinesMesh\LinesMesh.hpp">
+      <Filter>Components\LinesMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Materials\Material.hpp">
+      <Filter>Components\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Materials\PhysicalBasedMaterial.hpp">
+      <Filter>Components\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Materials\WireframeMaterial.hpp">
+      <Filter>Components\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\MeshData\BoxMesh.hpp">
+      <Filter>Components\MeshData</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\MeshData\MeshData.hpp">
+      <Filter>Components\MeshData</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\MeshData\TrianglesMesh.hpp">
+      <Filter>Components\MeshData</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\CameraGroup.hpp">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\CollectionLabel.hpp">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\TransformWrap.hpp">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\CollectionUpdateSystem.hpp">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\LinesMeshRenderSystem.hpp">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\PastEffectRenderSystem.hpp">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\PhysicalBasedRenderSystem.hpp">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\WireframeRenderSystem.hpp">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Shapes\SceneProperty.hpp">
+      <Filter>Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.hpp" />
+    <ClInclude Include="Scene.hpp" />
+    <ClInclude Include="Shape.hpp" />
+    <ClInclude Include="System.hpp" />
+  </ItemGroup>
+</Project>

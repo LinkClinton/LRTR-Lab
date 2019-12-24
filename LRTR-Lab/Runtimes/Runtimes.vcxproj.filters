@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Managers">
+      <UniqueIdentifier>{4c509745-29e2-480a-819b-efbb64207000}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Managers\Asset">
+      <UniqueIdentifier>{3b08a802-2a10-46c8-afb8-28fe662aad7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Managers\Scene">
+      <UniqueIdentifier>{396f5df1-deaa-4a70-8ad6-6b19f3073555}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Managers\Asset\Components">
+      <UniqueIdentifier>{e86a524f-e986-4439-b889-e4e7bb24b5b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Managers\UI">
+      <UniqueIdentifier>{d0e48ec8-c36e-41e2-8de2-8b48e11d0d09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Managers\UI\Components">
+      <UniqueIdentifier>{16a7da4d-faf8-46d0-aed4-c64df1b71150}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{3aa8d38e-7380-40c6-9814-a82335158233}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Fonts">
+      <UniqueIdentifier>{ee83ba77-4705-40de-b3b8-ad6d787b6e90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Models">
+      <UniqueIdentifier>{b54cb329-cc6d-42a0-9020-66f015e206b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Shaders">
+      <UniqueIdentifier>{da45af58-6598-4e0c-9171-d71e20932a02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Textures">
+      <UniqueIdentifier>{30302296-c058-4aa1-9e77-4a309e0d5177}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Textures\SkyBoxes">
+      <UniqueIdentifier>{fe35ad23-7916-404e-9365-e596217d2a79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Textures\SkyBoxes\Sea">
+      <UniqueIdentifier>{7a9f75e8-fcc9-4558-9fcf-ef9ef430c7cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Shaders\Systems">
+      <UniqueIdentifier>{1a03108c-879d-4a14-884c-cf3eac8ea68a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Shaders\Systems\DirectX12">
+      <UniqueIdentifier>{35cdfd90-b352-44a1-ae7c-16c919c9de1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Shaders\Systems\Vulkan">
+      <UniqueIdentifier>{8e97320c-8d2d-4e77-a75f-55bde18b7aae}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Managers\Asset\Components\AssetComponent.hpp">
+      <Filter>Managers\Asset\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Managers\Asset\Components\MeshDataAssetComponent.hpp">
+      <Filter>Managers\Asset\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Managers\Asset\AssetManager.hpp">
+      <Filter>Managers\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Managers\Scene\SceneManager.hpp">
+      <Filter>Managers\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Managers\UI\Components\ConsoleUIComponent.hpp">
+      <Filter>Managers\UI\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Managers\UI\Components\LoggingUIComponent.hpp">
+      <Filter>Managers\UI\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Managers\UI\Components\MainMenuUIComponent.hpp">
+      <Filter>Managers\UI\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Managers\UI\Components\PropertyUIComponent.hpp">
+      <Filter>Managers\UI\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Managers\UI\Components\SceneShapeUIComponent.hpp">
+      <Filter>Managers\UI\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Managers\UI\Components\SceneViewUIComponent.hpp">
+      <Filter>Managers\UI\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Managers\UI\Components\UIComponent.hpp">
+      <Filter>Managers\UI\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Managers\UI\UIManager.hpp">
+      <Filter>Managers\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Managers\Manager.hpp">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="LabApp.hpp" />
+    <ClInclude Include="Runtime.hpp" />
+    <ClInclude Include="RuntimeSharing.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Managers\Asset\Components\MeshDataAssetComponent.cpp">
+      <Filter>Managers\Asset\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Managers\Asset\AssetManager.cpp">
+      <Filter>Managers\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Managers\Scene\SceneManager.cpp">
+      <Filter>Managers\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Managers\UI\Components\ConsoleUIComponent.cpp">
+      <Filter>Managers\UI\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Managers\UI\Components\LoggingUIComponent.cpp">
+      <Filter>Managers\UI\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Managers\UI\Components\MainMenuUIComponent.cpp">
+      <Filter>Managers\UI\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Managers\UI\Components\PropertyUIComponent.cpp">
+      <Filter>Managers\UI\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Managers\UI\Components\SceneShapeUIComponent.cpp">
+      <Filter>Managers\UI\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Managers\UI\Components\SceneViewUIComponent.cpp">
+      <Filter>Managers\UI\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Managers\UI\UIManager.cpp">
+      <Filter>Managers\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="LabApp.cpp" />
+    <ClCompile Include="Runtime.cpp" />
+    <ClCompile Include="RuntimeSharing.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="Resources\Fonts\Consola.ttf">
+      <Filter>Resources\Fonts</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Models\MetalRoughSpheresNoTextures.glb">
+      <Filter>Resources\Models</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Models\WaterBottle.glb">
+      <Filter>Resources\Models</Filter>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\Textures\SkyBoxes\Sea\back.jpg">
+      <Filter>Resources\Textures\SkyBoxes\Sea</Filter>
+    </Image>
+    <Image Include="Resources\Textures\SkyBoxes\Sea\bottom.jpg">
+      <Filter>Resources\Textures\SkyBoxes\Sea</Filter>
+    </Image>
+    <Image Include="Resources\Textures\SkyBoxes\Sea\front.jpg">
+      <Filter>Resources\Textures\SkyBoxes\Sea</Filter>
+    </Image>
+    <Image Include="Resources\Textures\SkyBoxes\Sea\left.jpg">
+      <Filter>Resources\Textures\SkyBoxes\Sea</Filter>
+    </Image>
+    <Image Include="Resources\Textures\SkyBoxes\Sea\right.jpg">
+      <Filter>Resources\Textures\SkyBoxes\Sea</Filter>
+    </Image>
+    <Image Include="Resources\Textures\SkyBoxes\Sea\top.jpg">
+      <Filter>Resources\Textures\SkyBoxes\Sea</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Resources\Shaders\Systems\DirectX12\LinesMeshRenderSystemFrag.hlsl">
+      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Systems\DirectX12\LinesMeshRenderSystemVert.hlsl">
+      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Systems\DirectX12\PastEffectRenderSystemFrag.hlsl">
+      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Systems\DirectX12\PastEffectRenderSystemVert.hlsl">
+      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Systems\DirectX12\PhysicalBasedRenderSystemFrag.hlsl">
+      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Systems\DirectX12\PhysicalBasedRenderSystemVert.hlsl">
+      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Systems\DirectX12\WireframeRenderSystemFrag.hlsl">
+      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Systems\DirectX12\WireframeRenderSystemVert.hlsl">
+      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Shaders\Systems\Vulkan\LinesMeshRenderSystemFrag.frag">
+      <Filter>Resources\Shaders\Systems\Vulkan</Filter>
+    </None>
+    <None Include="Resources\Shaders\Systems\Vulkan\LinesMeshRenderSystemVert.vert">
+      <Filter>Resources\Shaders\Systems\Vulkan</Filter>
+    </None>
+    <None Include="Resources\Shaders\Systems\Vulkan\WireframeRenderSystemFrag.frag">
+      <Filter>Resources\Shaders\Systems\Vulkan</Filter>
+    </None>
+    <None Include="Resources\Shaders\Systems\Vulkan\WireframeRenderSystemVert.vert">
+      <Filter>Resources\Shaders\Systems\Vulkan</Filter>
+    </None>
+  </ItemGroup>
+</Project>

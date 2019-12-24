@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Assimp">
+      <UniqueIdentifier>{26295dfd-96f2-4600-877c-c2be8c042fe6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SpdLog">
+      <UniqueIdentifier>{c2270c0b-e686-4ed2-841f-8df7f5d552a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui">
+      <UniqueIdentifier>{714abb2f-6176-4f90-852d-166aaa613fcf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TinyGLTF">
+      <UniqueIdentifier>{b92a09ff-8221-4e27-97dd-a5fb7f7fbe78}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Assimp\AssimpLoader.cpp">
+      <Filter>Assimp</Filter>
+    </ClCompile>
+    <ClCompile Include="Assimp\AssimpScene.cpp">
+      <Filter>Assimp</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\ImGui.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_win32.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="TinyGLTF\TinyGLTFLoader.cpp">
+      <Filter>TinyGLTF</Filter>
+    </ClCompile>
+    <ClCompile Include="TinyGLTF\TinyGLTFScene.cpp">
+      <Filter>TinyGLTF</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Assimp\AssimpLoader.hpp">
+      <Filter>Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="Assimp\AssimpScene.hpp">
+      <Filter>Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\ImGui.hpp">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_impl_win32.hpp">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="TinyGLTF\Json.hpp">
+      <Filter>TinyGLTF</Filter>
+    </ClInclude>
+    <ClInclude Include="TinyGLTF\TinyGLTFLoader.hpp">
+      <Filter>TinyGLTF</Filter>
+    </ClInclude>
+    <ClInclude Include="TinyGLTF\TinyGLTFScene.hpp">
+      <Filter>TinyGLTF</Filter>
+    </ClInclude>
+    <ClInclude Include="SpdLog\SinkStorage.hpp">
+      <Filter>SpdLog</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
