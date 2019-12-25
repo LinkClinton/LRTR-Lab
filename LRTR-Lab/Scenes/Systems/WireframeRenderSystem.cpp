@@ -11,6 +11,8 @@
 #include "../../Shared/Graphics/ResourceHelper.hpp"
 #include "../../Shared/Graphics/ShaderCompiler.hpp"
 
+#include "../../Workflow/Shaders/CompileShaderWorkflow.hpp"
+
 #define LRTR_RESET_BUFFER(buffer, name, binding) \
 	if (buffer != mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>(name)) { \
 		mFrameResources[mCurrentFrameIndex].set(name, buffer); \
@@ -75,46 +77,39 @@ LRTR::WireframeRenderSystem::WireframeRenderSystem(
 
 	mPipelineInfo->setResourceLayout(mResourceLayout);
 
-	if (mDevice->apiVersion() == CodeRed::APIVersion::DirectX12) {
-		const auto vShaderCode = CodeRed::ShaderCompiler::readShader(
-			"./Resources/Shaders/Systems/DirectX12/WireframeRenderSystemVert.hlsl");
-		const auto fShaderCode = CodeRed::ShaderCompiler::readShader(
-			"./Resources/Shaders/Systems/DirectX12/WireframeRenderSystemFrag.hlsl");
+	CompileShaderWorkflow workflow;
 
-		mPipelineInfo->setVertexShaderState(
-			pipelineFactory->createShaderState(
-				CodeRed::ShaderType::Vertex,
-				CodeRed::ShaderCompiler::compileToCso(CodeRed::ShaderType::Vertex, vShaderCode)
-			)
-		);
+	const auto vShaderFile =
+		mDevice->apiVersion() == CodeRed::APIVersion::DirectX12 ?
+		"./Resources/Shaders/Systems/DirectX12/WireframeRenderSystemVert.hlsl" :
+		"./Resources/Shaders/Systems/Vulkan/WireframeRenderSystemVert.vert";
 
-		mPipelineInfo->setPixelShaderState(
-			pipelineFactory->createShaderState(
-				CodeRed::ShaderType::Pixel,
-				CodeRed::ShaderCompiler::compileToCso(CodeRed::ShaderType::Pixel, fShaderCode)
-			)
-		);
-	}
-	else {
-		const auto vShaderCode = CodeRed::ShaderCompiler::readShader(
-			"./Resources/Shaders/Systems/Vulkan/WireframeRenderSystemVert.vert");
-		const auto fShaderCode = CodeRed::ShaderCompiler::readShader(
-			"./Resources/Shaders/Systems/Vulkan/WireframeRenderSystemFrag.frag");
+	const auto fShaderFile =
+		mDevice->apiVersion() == CodeRed::APIVersion::DirectX12 ?
+		"./Resources/Shaders/Systems/DirectX12/WireframeRenderSystemFrag.hlsl" :
+		"./Resources/Shaders/Systems/Vulkan/WireframeRenderSystemFrag.frag";
 
-		mPipelineInfo->setVertexShaderState(
-			pipelineFactory->createShaderState(
-				CodeRed::ShaderType::Vertex,
-				CodeRed::ShaderCompiler::compileToSpv(CodeRed::ShaderType::Vertex, vShaderCode)
-			)
-		);
+	mPipelineInfo->setVertexShaderState(
+		pipelineFactory->createShaderState(
+			CodeRed::ShaderType::Vertex,
+			workflow.start({ CompileShaderInput(
+				vShaderFile,
+				mDevice->apiVersion(),
+				CodeRed::ShaderType::Vertex
+			) })
+		)
+	);
 
-		mPipelineInfo->setPixelShaderState(
-			pipelineFactory->createShaderState(
-				CodeRed::ShaderType::Pixel,
-				CodeRed::ShaderCompiler::compileToSpv(CodeRed::ShaderType::Pixel, fShaderCode)
-			)
-		);
-	}
+	mPipelineInfo->setPixelShaderState(
+		pipelineFactory->createShaderState(
+			CodeRed::ShaderType::Pixel,
+			workflow.start({ CompileShaderInput(
+				fShaderFile,
+				mDevice->apiVersion(),
+				CodeRed::ShaderType::Pixel
+			) })
+		)
+	);
 }
 
 void LRTR::WireframeRenderSystem::update(const Group<Identity, std::shared_ptr<Shape>>& shapes, float delta)

@@ -140,65 +140,23 @@
     <CopyFileToFolders Include="Resources\Models\WaterBottle.glb">
       <Filter>Resources\Models</Filter>
     </CopyFileToFolders>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Resources\Textures\SkyBoxes\Sea\back.jpg">
-      <Filter>Resources\Textures\SkyBoxes\Sea</Filter>
-    </Image>
-    <Image Include="Resources\Textures\SkyBoxes\Sea\bottom.jpg">
-      <Filter>Resources\Textures\SkyBoxes\Sea</Filter>
-    </Image>
-    <Image Include="Resources\Textures\SkyBoxes\Sea\front.jpg">
-      <Filter>Resources\Textures\SkyBoxes\Sea</Filter>
-    </Image>
-    <Image Include="Resources\Textures\SkyBoxes\Sea\left.jpg">
-      <Filter>Resources\Textures\SkyBoxes\Sea</Filter>
-    </Image>
-    <Image Include="Resources\Textures\SkyBoxes\Sea\right.jpg">
-      <Filter>Resources\Textures\SkyBoxes\Sea</Filter>
-    </Image>
-    <Image Include="Resources\Textures\SkyBoxes\Sea\top.jpg">
-      <Filter>Resources\Textures\SkyBoxes\Sea</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="Resources\Shaders\Systems\DirectX12\LinesMeshRenderSystemFrag.hlsl">
-      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\Systems\DirectX12\LinesMeshRenderSystemVert.hlsl">
-      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\Systems\DirectX12\PastEffectRenderSystemFrag.hlsl">
-      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\Systems\DirectX12\PastEffectRenderSystemVert.hlsl">
-      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\Systems\DirectX12\PhysicalBasedRenderSystemFrag.hlsl">
-      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\Systems\DirectX12\PhysicalBasedRenderSystemVert.hlsl">
-      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\Systems\DirectX12\WireframeRenderSystemFrag.hlsl">
-      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\Systems\DirectX12\WireframeRenderSystemVert.hlsl">
-      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
-    </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Shaders\Systems\Vulkan\LinesMeshRenderSystemFrag.frag">
-      <Filter>Resources\Shaders\Systems\Vulkan</Filter>
-    </None>
-    <None Include="Resources\Shaders\Systems\Vulkan\LinesMeshRenderSystemVert.vert">
-      <Filter>Resources\Shaders\Systems\Vulkan</Filter>
-    </None>
-    <None Include="Resources\Shaders\Systems\Vulkan\WireframeRenderSystemFrag.frag">
-      <Filter>Resources\Shaders\Systems\Vulkan</Filter>
-    </None>
-    <None Include="Resources\Shaders\Systems\Vulkan\WireframeRenderSystemVert.vert">
-      <Filter>Resources\Shaders\Systems\Vulkan</Filter>
-    </None>
+    <CopyFileToFolders Include="Resources\Textures\SkyBoxes\Sea\back.jpg" />
+    <CopyFileToFolders Include="Resources\Textures\SkyBoxes\Sea\bottom.jpg" />
+    <CopyFileToFolders Include="Resources\Textures\SkyBoxes\Sea\front.jpg" />
+    <CopyFileToFolders Include="Resources\Textures\SkyBoxes\Sea\left.jpg" />
+    <CopyFileToFolders Include="Resources\Textures\SkyBoxes\Sea\right.jpg" />
+    <CopyFileToFolders Include="Resources\Textures\SkyBoxes\Sea\top.jpg" />
+    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\LinesMeshRenderSystemFrag.hlsl" />
+    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\LinesMeshRenderSystemVert.hlsl" />
+    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\PastEffectRenderSystemFrag.hlsl" />
+    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\PastEffectRenderSystemVert.hlsl" />
+    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\PhysicalBasedRenderSystemFrag.hlsl" />
+    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\PhysicalBasedRenderSystemVert.hlsl" />
+    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\WireframeRenderSystemFrag.hlsl" />
+    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\WireframeRenderSystemVert.hlsl" />
+    <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\LinesMeshRenderSystemFrag.frag" />
+    <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\LinesMeshRenderSystemVert.vert" />
+    <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\WireframeRenderSystemFrag.frag" />
+    <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\WireframeRenderSystemVert.vert" />
   </ItemGroup>
 </Project>

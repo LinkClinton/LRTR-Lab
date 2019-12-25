@@ -377,6 +377,9 @@
     <ProjectReference Include="..\Shared\Shared.vcxproj">
       <Project>{5785ee73-6673-4944-bb88-c7a53f146eeb}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\Workflow\Workflow.vcxproj">
+      <Project>{004f5fe5-e754-4e81-96a7-a1abf5f668e6}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

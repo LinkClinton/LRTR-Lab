@@ -6,7 +6,10 @@
 #include "../../Shared/Graphics/ResourceHelper.hpp"
 #include "../../Shared/Graphics/ShaderCompiler.hpp"
 
+#include "../../Workflow/Shaders/CompileShaderWorkflow.hpp"
+
 #include "../Components/Environment/SkyBox.hpp"
+
 
 LRTR::PastEffectRenderSystem::PastEffectRenderSystem(
 	const std::shared_ptr<RuntimeSharing>& sharing,
@@ -64,47 +67,39 @@ LRTR::PastEffectRenderSystem::PastEffectRenderSystem(
 
 	mPipelineInfo->setResourceLayout(mResourceLayout);
 
+	CompileShaderWorkflow workflow;
 
-	if (mDevice->apiVersion() == CodeRed::APIVersion::DirectX12) {
-		const auto vShaderCode = CodeRed::ShaderCompiler::readShader(
-			"./Resources/Shaders/Systems/DirectX12/PastEffectRenderSystemVert.hlsl");
-		const auto fShaderCode = CodeRed::ShaderCompiler::readShader(
-			"./Resources/Shaders/Systems/DirectX12/PastEffectRenderSystemFrag.hlsl");
+	const auto vShaderFile =
+		mDevice->apiVersion() == CodeRed::APIVersion::DirectX12 ?
+		"./Resources/Shaders/Systems/DirectX12/PastEffectRenderSystemVert.hlsl" :
+		"./Resources/Shaders/Systems/Vulkan/.vert";
 
-		mPipelineInfo->setVertexShaderState(
-			pipelineFactory->createShaderState(
-				CodeRed::ShaderType::Vertex,
-				CodeRed::ShaderCompiler::compileToCso(CodeRed::ShaderType::Vertex, vShaderCode)
-			)
-		);
+	const auto fShaderFile =
+		mDevice->apiVersion() == CodeRed::APIVersion::DirectX12 ?
+		"./Resources/Shaders/Systems/DirectX12/PastEffectRenderSystemFrag.hlsl" :
+		"./Resources/Shaders/Systems/Vulkan/.frag";
 
-		mPipelineInfo->setPixelShaderState(
-			pipelineFactory->createShaderState(
-				CodeRed::ShaderType::Pixel,
-				CodeRed::ShaderCompiler::compileToCso(CodeRed::ShaderType::Pixel, fShaderCode)
-			)
-		);
-	}
-	else {
-		const auto vShaderCode = CodeRed::ShaderCompiler::readShader(
-			"./Resources/Shaders/Systems/Vulkan/.vert");
-		const auto fShaderCode = CodeRed::ShaderCompiler::readShader(
-			"./Resources/Shaders/Systems/Vulkan/.frag");
+	mPipelineInfo->setVertexShaderState(
+		pipelineFactory->createShaderState(
+			CodeRed::ShaderType::Vertex,
+			workflow.start({ CompileShaderInput(
+				vShaderFile,
+				mDevice->apiVersion(),
+				CodeRed::ShaderType::Vertex
+			) })
+		)
+	);
 
-		mPipelineInfo->setVertexShaderState(
-			pipelineFactory->createShaderState(
-				CodeRed::ShaderType::Vertex,
-				CodeRed::ShaderCompiler::compileToSpv(CodeRed::ShaderType::Vertex, vShaderCode)
-			)
-		);
-
-		mPipelineInfo->setPixelShaderState(
-			pipelineFactory->createShaderState(
-				CodeRed::ShaderType::Pixel,
-				CodeRed::ShaderCompiler::compileToSpv(CodeRed::ShaderType::Pixel, fShaderCode)
-			)
-		);
-	}
+	mPipelineInfo->setPixelShaderState(
+		pipelineFactory->createShaderState(
+			CodeRed::ShaderType::Pixel,
+			workflow.start({ CompileShaderInput(
+				fShaderFile,
+				mDevice->apiVersion(),
+				CodeRed::ShaderType::Pixel
+			) })
+		)
+	);
 }
 
 void LRTR::PastEffectRenderSystem::update(const Group<Identity, std::shared_ptr<Shape>>& shapes, float delta)

@@ -23,6 +23,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Shared", "LRTR-Lab\Shared\S
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Runtimes", "LRTR-Lab\Runtimes\Runtimes.vcxproj", "{3C91815C-B01E-4E83-8AF3-027EBF261A33}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Workflow", "LRTR-Lab\Workflow\Workflow.vcxproj", "{004F5FE5-E754-4E81-96A7-A1ABF5F668E6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -87,6 +89,14 @@ Global
 		{3C91815C-B01E-4E83-8AF3-027EBF261A33}.Release|x64.Build.0 = Release|x64
 		{3C91815C-B01E-4E83-8AF3-027EBF261A33}.Release|x86.ActiveCfg = Release|Win32
 		{3C91815C-B01E-4E83-8AF3-027EBF261A33}.Release|x86.Build.0 = Release|Win32
+		{004F5FE5-E754-4E81-96A7-A1ABF5F668E6}.Debug|x64.ActiveCfg = Debug|x64
+		{004F5FE5-E754-4E81-96A7-A1ABF5F668E6}.Debug|x64.Build.0 = Debug|x64
+		{004F5FE5-E754-4E81-96A7-A1ABF5F668E6}.Debug|x86.ActiveCfg = Debug|Win32
+		{004F5FE5-E754-4E81-96A7-A1ABF5F668E6}.Debug|x86.Build.0 = Debug|Win32
+		{004F5FE5-E754-4E81-96A7-A1ABF5F668E6}.Release|x64.ActiveCfg = Release|x64
+		{004F5FE5-E754-4E81-96A7-A1ABF5F668E6}.Release|x64.Build.0 = Release|x64
+		{004F5FE5-E754-4E81-96A7-A1ABF5F668E6}.Release|x86.ActiveCfg = Release|Win32
+		{004F5FE5-E754-4E81-96A7-A1ABF5F668E6}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

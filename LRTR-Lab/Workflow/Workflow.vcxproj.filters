@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Workflow.cpp" />
+    <ClCompile Include="Shaders\CompileShaderWorkflow.cpp">
+      <Filter>Shaders</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Workflow.hpp" />
+    <ClInclude Include="WorkflowStartup.hpp" />
+    <ClInclude Include="Shaders\CompileShaderWorkflow.hpp">
+      <Filter>Shaders</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{f2cab37d-f58a-4007-891e-771542f174af}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

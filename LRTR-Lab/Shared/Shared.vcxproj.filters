@@ -13,6 +13,9 @@
     <Filter Include="Textures">
       <UniqueIdentifier>{8e9ea5e8-a1f5-4fd1-aeec-093669934aa9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Files">
+      <UniqueIdentifier>{30a49a5d-a8a7-42df-a5ac-5220fee2b5d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Accelerators\Group.hpp">
@@ -53,6 +56,10 @@
     <ClInclude Include="Rectangle.hpp" />
     <ClInclude Include="Transform.hpp" />
     <ClInclude Include="Triangle.hpp" />
+    <ClInclude Include="Hash.hpp" />
+    <ClInclude Include="Files\FileSystem.hpp">
+      <Filter>Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\PipelineInfo.cpp">
@@ -66,5 +73,9 @@
     </ClCompile>
     <ClCompile Include="FrameResources.cpp" />
     <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="Hash.cpp" />
+    <ClCompile Include="Files\FileSystem.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
