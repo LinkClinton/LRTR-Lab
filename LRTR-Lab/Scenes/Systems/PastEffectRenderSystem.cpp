@@ -115,7 +115,8 @@ void LRTR::PastEffectRenderSystem::update(const Group<Identity, std::shared_ptr<
 
 	if (mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuTexture>("SkyBox") != nullptr) {
 		mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuDescriptorHeap>("DescriptorHeap")
-			->bindTexture(mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuTexture>("SkyBox"), 1);
+			->bindTexture(mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuTexture>("SkyBox")
+				->reference(CodeRed::TextureRefUsage::CubeMap), 1);
 	}
 }
 

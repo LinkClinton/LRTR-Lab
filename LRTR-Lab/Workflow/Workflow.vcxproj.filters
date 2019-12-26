@@ -5,6 +5,9 @@
     <ClCompile Include="Shaders\CompileShaderWorkflow.cpp">
       <Filter>Shaders</Filter>
     </ClCompile>
+    <ClCompile Include="PBR\ImageBasedLightingWorkflow.cpp">
+      <Filter>PBR</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Workflow.hpp" />
@@ -12,10 +15,16 @@
     <ClInclude Include="Shaders\CompileShaderWorkflow.hpp">
       <Filter>Shaders</Filter>
     </ClInclude>
+    <ClInclude Include="PBR\ImageBasedLightingWorkflow.hpp">
+      <Filter>PBR</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">
       <UniqueIdentifier>{f2cab37d-f58a-4007-891e-771542f174af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PBR">
+      <UniqueIdentifier>{83c95bab-f808-4cfe-8f96-4e21b2658c31}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

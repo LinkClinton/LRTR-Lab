@@ -162,10 +162,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="PBR\ImageBasedLightingWorkflow.cpp" />
     <ClCompile Include="Shaders\CompileShaderWorkflow.cpp" />
     <ClCompile Include="Workflow.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="PBR\ImageBasedLightingWorkflow.hpp" />
     <ClInclude Include="Shaders\CompileShaderWorkflow.hpp" />
     <ClInclude Include="Workflow.hpp" />
     <ClInclude Include="WorkflowStartup.hpp" />

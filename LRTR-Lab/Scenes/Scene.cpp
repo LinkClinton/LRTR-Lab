@@ -110,7 +110,7 @@ auto LRTR::Scene::render(
 
 void LRTR::Scene::setTarget(const std::shared_ptr<CodeRed::GpuTexture>& texture)
 {
-	if (mFrameBuffer != nullptr && mFrameBuffer->renderTarget(0) == texture)
+	if (mFrameBuffer != nullptr && mFrameBuffer->renderTarget(0)->source() == texture)
 		return;
 
 	LRTR_ERROR_IF(
