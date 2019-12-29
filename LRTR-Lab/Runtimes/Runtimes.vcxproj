@@ -391,14 +391,14 @@
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="Resources\Shaders\Workflow\DirectX12\EnvironmentMapFrag.hlsl">
+    <CopyFileToFolders Include="Resources\Shaders\Workflow\DirectX12\ImageBasedLightingFrag.hlsl">
       <FileType>Document</FileType>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)/Resources/Shaders/Workflow/DirectX12</DestinationFolders>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)/Resources/Shaders/Workflow/DirectX12</DestinationFolders>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Resources/Shaders/Workflow/DirectX12</DestinationFolders>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/Resources/Shaders/Workflow/DirectX12</DestinationFolders>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Resources\Shaders\Workflow\DirectX12\EnvironmentMapVert.hlsl">
+    <CopyFileToFolders Include="Resources\Shaders\Workflow\DirectX12\ImageBasedLightingVert.hlsl">
       <FileType>Document</FileType>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)/Resources/Shaders/Workflow/DirectX12</DestinationFolders>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)/Resources/Shaders/Workflow/DirectX12</DestinationFolders>

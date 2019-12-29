@@ -36,6 +36,8 @@ namespace LRTR {
 			const std::shared_ptr<SceneCamera>& camera, 
 			float delta) override;
 
+		void setIrradiance(const std::shared_ptr<CodeRed::GpuTexture>& map);
+		
 		auto typeName() const noexcept -> std::string override;
 
 		auto typeIndex() const noexcept -> std::type_index override;
@@ -46,6 +48,8 @@ namespace LRTR {
 
 		auto getCameraPosition(const std::shared_ptr<SceneCamera>& camera) const -> Vector3f;
 	private:
+		std::shared_ptr<CodeRed::GpuTexture> mIrradianceMap;
+		
 		std::shared_ptr<CodeRed::GpuResourceLayout> mResourceLayout;
 		std::shared_ptr<CodeRed::PipelineInfo> mPipelineInfo;
 		std::shared_ptr<CodeRed::GpuBuffer> mViewBuffer;

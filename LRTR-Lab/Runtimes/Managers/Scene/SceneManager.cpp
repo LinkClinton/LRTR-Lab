@@ -29,7 +29,7 @@ LRTR::SceneManager::SceneManager(
 {
 	ImageBasedLightingWorkflow workflow(mDevice);
 
-	auto output = workflow.start({ ImageBasedLightingInput(mRuntimeSharing->queue(), mRuntimeSharing, 
+	static auto output = workflow.start({ ImageBasedLightingInput(mRuntimeSharing->queue(), mRuntimeSharing, 
 		"./Resources/Textures/HDR/newport_loft.hdr") });
 	
 	add(TinyGLTFLoader::loadScene(mRuntimeSharing, "Scene", "./Resources/Models/MetalRoughSpheresNoTextures.glb",
@@ -66,6 +66,14 @@ LRTR::SceneManager::SceneManager(
 	mScenes["Scene"]->addSystem(std::make_shared<PhysicalBasedRenderSystem>(mRuntimeSharing, mDevice));
 	mScenes["Scene"]->addSystem(std::make_shared<PastEffectRenderSystem>(mRuntimeSharing, device));
 	mScenes["Scene"]->addSystem(std::make_shared<CollectionUpdateSystem>(mRuntimeSharing));
+
+	for (auto& system : mScenes["Scene"]->systems()) {
+		if (std::dynamic_pointer_cast<PhysicalBasedRenderSystem>(system) != nullptr) {
+			auto pbrSystem = std::dynamic_pointer_cast<PhysicalBasedRenderSystem>(system);
+
+			pbrSystem->setIrradiance(output.IrradianceMap);
+		}
+	}
 }
 
 void LRTR::SceneManager::update(float delta)

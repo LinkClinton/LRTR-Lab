@@ -206,17 +206,15 @@
     <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\WireframeRenderSystemVert.vert">
       <Filter>Resources\Shaders\Systems\Vulkan</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Textures\HDR\newport_loft.hdr" />
+    <CopyFileToFolders Include="Resources\Shaders\Workflow\DirectX12\EnvironmentMapFrag.hlsl" />
+    <CopyFileToFolders Include="Resources\Shaders\Workflow\DirectX12\EnvironmentMapVert.hlsl" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Textures\HDR\newport_loft.hdr">
-      <Filter>Resources\Textures\HDR</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="Resources\Shaders\Workflow\DirectX12\EnvironmentMapFrag.hlsl">
+    <FxCompile Include="Resources\Shaders\Workflow\DirectX12\ImageBasedLightingFrag.hlsl">
       <Filter>Resources\Shaders\Workflow\DirectX12</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\Workflow\DirectX12\EnvironmentMapVert.hlsl">
+    <FxCompile Include="Resources\Shaders\Workflow\DirectX12\ImageBasedLightingVert.hlsl">
       <Filter>Resources\Shaders\Workflow\DirectX12</Filter>
     </FxCompile>
   </ItemGroup>

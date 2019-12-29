@@ -15,6 +15,7 @@ namespace LRTR {
 		std::string FileName = "";
 
 		size_t EnvironmentMapSize = 512;
+		size_t EnvironmentMipLevels = 5;
 		size_t IrradianceMapSize = 32;
 		size_t PreFilteringMapSize = 128;
 		size_t PreFilteringMipLevels = 5;
@@ -62,9 +63,10 @@ namespace LRTR {
 		std::shared_ptr<CodeRed::GpuLogicalDevice> mDevice;
 		std::shared_ptr<CodeRed::GpuCommandAllocator> mAllocator;
 
-		std::shared_ptr<CodeRed::GpuShaderState> mEnvironmentMapVShader;
-		std::shared_ptr<CodeRed::GpuShaderState> mEnvironmentMapFShader;
-		std::shared_ptr<CodeRed::GpuRenderPass> mEnvironmentMapRenderPass;
+		std::shared_ptr<CodeRed::GpuRenderPass> mRenderPass;
+
+		std::shared_ptr<CodeRed::GpuShaderState> mVertShader;
+		std::shared_ptr<CodeRed::GpuShaderState> mFragShader;
 		
 		std::shared_ptr<CodeRed::GpuDescriptorHeap> mDescriptorHeap;
 		std::shared_ptr<CodeRed::GpuResourceLayout> mResourceLayout;

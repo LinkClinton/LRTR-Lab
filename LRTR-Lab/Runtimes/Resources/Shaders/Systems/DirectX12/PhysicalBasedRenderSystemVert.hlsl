@@ -12,6 +12,7 @@ struct View
 
 struct Config
 {
+    uint HasIrradiance;
     uint HasBaseColor;
     uint HasRoughness;
     uint HasOcclusion;
@@ -36,7 +37,7 @@ struct Output
 
 StructuredBuffer<Transform> transforms : register(t2);
 ConstantBuffer<View> view : register(b3);
-ConstantBuffer<Config> config : register(b10);
+ConstantBuffer<Config> config : register(b11);
 
 Output main(
     float3 position : POSITION,

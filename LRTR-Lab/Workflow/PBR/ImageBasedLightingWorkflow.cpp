@@ -17,10 +17,15 @@
 
 const static auto PBRCacheLocation = "./Resources/Caches/PBR/";
 
+#define IBL_BUILD_ENVIRONMENT_MAP 0
+#define IBL_BUILD_IRRADIANCE_MAP 1
+#define IBL_BUILD_PRE_FILTERING_MAP 2
+
 auto LRTR::ImageBasedLightingInput::string() const noexcept -> std::string
 {
 	return FileName +
 		std::to_string(EnvironmentMapSize) +
+		std::to_string(EnvironmentMipLevels) +
 		std::to_string(IrradianceMapSize) +
 		std::to_string(PreFilteringMapSize) +
 		std::to_string(PreFilteringMipLevels) +
@@ -37,13 +42,18 @@ LRTR::ImageBasedLightingWorkflow::ImageBasedLightingWorkflow(const std::shared_p
 	
 	mSampler = mDevice->createSampler(CodeRed::SamplerInfo(16));
 
+	// resource 0 : view buffer with six face
+	// resource 1 : hdr texture
+	// resource 2 : environment map
+	// resource 5 : build type, face index, size of environment map, roughness
 	mResourceLayout = mDevice->createResourceLayout(
 		{
 			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Buffer, 0, 0),
-			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 1, 0)
+			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 1, 0),
+			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 2, 0)
 		}, {
 			CodeRed::SamplerLayoutElement(mSampler, 0, 1)
-		}, CodeRed::Constant32Bits(1, 0, 2)
+		}, CodeRed::Constant32Bits(4, 0, 2)
 	);
 
 	mDescriptorHeap = mDevice->createDescriptorHeap(mResourceLayout);
@@ -55,7 +65,8 @@ LRTR::ImageBasedLightingWorkflow::ImageBasedLightingWorkflow(const std::shared_p
 	mPipelineInfo->setInputAssemblyState(
 		pipelineFactory->createInputAssemblyState(
 			{
-				CodeRed::InputLayoutElement("POSITION", CodeRed::PixelFormat::RedGreenBlue32BitFloat)
+				CodeRed::InputLayoutElement("POSITION", CodeRed::PixelFormat::RedGreenBlue32BitFloat, 0),
+				CodeRed::InputLayoutElement("TEXCOORD", CodeRed::PixelFormat::RedGreenBlue32BitFloat, 1)
 			},
 			CodeRed::PrimitiveTopology::TriangleList
 		)
@@ -68,7 +79,7 @@ LRTR::ImageBasedLightingWorkflow::ImageBasedLightingWorkflow(const std::shared_p
 	mPipelineInfo->setResourceLayout(mResourceLayout);
 
 	//Build Render Pass
-	mEnvironmentMapRenderPass = mDevice->createRenderPass(
+	mRenderPass = mDevice->createRenderPass(
 		CodeRed::Attachment::RenderTarget(CodeRed::PixelFormat::RedGreenBlueAlpha32BitFloat,
 			CodeRed::ResourceLayout::RenderTarget,
 			CodeRed::ResourceLayout::GeneralRead));
@@ -78,14 +89,14 @@ LRTR::ImageBasedLightingWorkflow::ImageBasedLightingWorkflow(const std::shared_p
 	
 	const auto EnvironmentMapVShaderFile =
 		mDevice->apiVersion() == CodeRed::APIVersion::DirectX12 ?
-		"./Resources/Shaders/Workflow/DirectX12/EnvironmentMapVert.hlsl" :
+		"./Resources/Shaders/Workflow/DirectX12/ImageBasedLightingVert.hlsl" :
 		"";
 	const auto EnvironmentMapFShaderFile =
 		mDevice->apiVersion() == CodeRed::APIVersion::DirectX12 ?
-		"./Resources/Shaders/Workflow/DirectX12/EnvironmentMapFrag.hlsl" :
+		"./Resources/Shaders/Workflow/DirectX12/ImageBasedLightingFrag.hlsl" :
 		"";
 
-	mEnvironmentMapVShader = pipelineFactory->createShaderState(
+	mVertShader = pipelineFactory->createShaderState(
 		CodeRed::ShaderType::Vertex,
 		workflow.start({ CompileShaderInput(
 			EnvironmentMapVShaderFile,
@@ -94,7 +105,7 @@ LRTR::ImageBasedLightingWorkflow::ImageBasedLightingWorkflow(const std::shared_p
 		) })
 	);
 
-	mEnvironmentMapFShader = pipelineFactory->createShaderState(
+	mFragShader = pipelineFactory->createShaderState(
 		CodeRed::ShaderType::Pixel,
 		workflow.start({ CompileShaderInput(
 			EnvironmentMapFShaderFile,
@@ -102,6 +113,12 @@ LRTR::ImageBasedLightingWorkflow::ImageBasedLightingWorkflow(const std::shared_p
 			CodeRed::ShaderType::Pixel
 		) })
 	);
+
+	mPipelineInfo->setVertexShaderState(mVertShader);
+	mPipelineInfo->setPixelShaderState(mFragShader);
+	mPipelineInfo->setRenderPass(mRenderPass);
+
+	mPipelineInfo->updateState();
 }
 
 auto LRTR::ImageBasedLightingWorkflow::readCache(const WorkflowStartup<ImageBasedLightingInput>& startup)
@@ -111,22 +128,9 @@ auto LRTR::ImageBasedLightingWorkflow::readCache(const WorkflowStartup<ImageBase
 
 	if (!std::filesystem::exists(PBRCacheLocation + mSha256Key))
 		return std::nullopt;
-
-	const auto data = FileSystem::read<CodeRed::Byte>(PBRCacheLocation + mSha256Key);
-
+	
 	IBLOutput output;
 
-	output.EnvironmentMap = mDevice->createTexture(
-		CodeRed::ResourceInfo::CubeMap(
-			startup.InputData.EnvironmentMapSize,
-			startup.InputData.EnvironmentMapSize,
-			CodeRed::PixelFormat::RedGreenBlueAlpha32BitFloat
-		)
-	);
-
-	CodeRed::ResourceHelper::updateTexture(mDevice, mAllocator, startup.InputData.Queue,
-		output.EnvironmentMap, data.data());
-	
 	return output;
 }
 
@@ -156,7 +160,27 @@ auto LRTR::ImageBasedLightingWorkflow::work(
 			startup.InputData.EnvironmentMapSize,
 			startup.InputData.EnvironmentMapSize,
 			CodeRed::PixelFormat::RedGreenBlueAlpha32BitFloat,
+			startup.InputData.EnvironmentMipLevels,
+			CodeRed::ResourceUsage::RenderTarget
+		)
+	);
+
+	output.IrradianceMap = mDevice->createTexture(
+		CodeRed::ResourceInfo::CubeMap(
+			startup.InputData.IrradianceMapSize,
+			startup.InputData.IrradianceMapSize,
+			CodeRed::PixelFormat::RedGreenBlueAlpha32BitFloat,
 			1,
+			CodeRed::ResourceUsage::RenderTarget
+		)
+	);
+
+	output.PreFilteringMap = mDevice->createTexture(
+		CodeRed::ResourceInfo::CubeMap(
+			startup.InputData.PreFilteringMapSize,
+			startup.InputData.PreFilteringMapSize,
+			CodeRed::PixelFormat::RedGreenBlueAlpha32BitFloat,
+			startup.InputData.PreFilteringMipLevels,
 			CodeRed::ResourceUsage::RenderTarget
 		)
 	);
@@ -177,15 +201,8 @@ auto LRTR::ImageBasedLightingWorkflow::work(
 
 	mDescriptorHeap->bindBuffer(mViewBuffer, 0);
 	mDescriptorHeap->bindTexture(hdrTexture, 1);
+	mDescriptorHeap->bindTexture(output.EnvironmentMap->reference(CodeRed::TextureRefUsage::CubeMap), 2);
 
-	//Pipeline Build Stage
-	mPipelineInfo->setVertexShaderState(mEnvironmentMapVShader);
-	mPipelineInfo->setPixelShaderState(mEnvironmentMapFShader);
-	mPipelineInfo->setRenderPass(mEnvironmentMapRenderPass);
-
-	mPipelineInfo->updateState();
-
-	//Generate Environment Map
 	const auto commandList = mDevice->createGraphicsCommandList(mAllocator);
 	const auto meshDataAssetComponent = std::static_pointer_cast<MeshDataAssetComponent>(
 		startup.InputData.mRuntimeSharing->assetManager()->components().at("MeshData"));
@@ -196,27 +213,91 @@ auto LRTR::ImageBasedLightingWorkflow::work(
 	commandList->setResourceLayout(mResourceLayout);
 	commandList->setDescriptorHeap(mDescriptorHeap);
 	
-	commandList->setVertexBuffer(meshDataAssetComponent->positions());
+	commandList->setVertexBuffers({ meshDataAssetComponent->positions(), meshDataAssetComponent->texCoords() });
 	commandList->setIndexBuffer(meshDataAssetComponent->indices());
 
+	// generate Environment Map with mip levels
+	for (size_t arraySlice = 0; arraySlice < 6; arraySlice++) {
+		for (size_t mipSlice = 0; mipSlice < startup.InputData.EnvironmentMipLevels; mipSlice++) {
+			
+			const auto drawProperty = meshDataAssetComponent->get("SkyBox");
+			const auto frameBuffer = mDevice->createFrameBuffer(
+				output.EnvironmentMap->reference(
+					CodeRed::TextureRefInfo(
+						CodeRed::ValueRange<size_t>(mipSlice, mipSlice + 1),
+						CodeRed::ValueRange<size_t>(arraySlice, arraySlice + 1))));
+
+			commandList->beginRenderPass(mRenderPass, frameBuffer);
+
+			commandList->setViewPort(frameBuffer->fullViewPort());
+			commandList->setScissorRect(frameBuffer->fullScissorRect());
+			commandList->setConstant32Bits({
+				IBL_BUILD_ENVIRONMENT_MAP,
+				static_cast<unsigned>(arraySlice),
+				static_cast<unsigned>(startup.InputData.EnvironmentMapSize),
+				0.0f
+				});
+
+			commandList->drawIndexed(drawProperty.IndexCount, 1,
+				drawProperty.StartIndexLocation, drawProperty.StartVertexLocation);
+
+			commandList->endRenderPass();
+		}
+	}
+
+	// generate irradiance map for ambient diffuse light
 	for (size_t index = 0; index < 6; index++) {
 		const auto drawProperty = meshDataAssetComponent->get("SkyBox");
 		const auto frameBuffer = mDevice->createFrameBuffer(
-			output.EnvironmentMap->reference(
+			output.IrradianceMap->reference(
 				CodeRed::TextureRefInfo(
 					CodeRed::ValueRange<size_t>(0, 1),
 					CodeRed::ValueRange<size_t>(index, index + 1))));
-		
-		commandList->beginRenderPass(mEnvironmentMapRenderPass, frameBuffer);
+
+		commandList->beginRenderPass(mRenderPass, frameBuffer);
 
 		commandList->setViewPort(frameBuffer->fullViewPort());
 		commandList->setScissorRect(frameBuffer->fullScissorRect());
-		commandList->setConstant32Bits({ static_cast<unsigned>(index) });
+		commandList->setConstant32Bits({
+			IBL_BUILD_IRRADIANCE_MAP,
+			static_cast<unsigned>(index),
+			static_cast<unsigned>(startup.InputData.EnvironmentMapSize),
+			0.0f
+			});
 
 		commandList->drawIndexed(drawProperty.IndexCount, 1,
 			drawProperty.StartIndexLocation, drawProperty.StartVertexLocation);
 
 		commandList->endRenderPass();
+	}
+
+	//generate pre-filter map for ambient specular light
+	for (size_t arraySlice = 0; arraySlice < 6; arraySlice++) {
+		for (size_t mipSlice = 0; mipSlice < startup.InputData.PreFilteringMipLevels; mipSlice++) {
+
+			const auto drawProperty = meshDataAssetComponent->get("SkyBox");
+			const auto frameBuffer = mDevice->createFrameBuffer(
+				output.PreFilteringMap->reference(
+					CodeRed::TextureRefInfo(
+						CodeRed::ValueRange<size_t>(mipSlice, mipSlice + 1),
+						CodeRed::ValueRange<size_t>(arraySlice, arraySlice + 1))));
+
+			commandList->beginRenderPass(mRenderPass, frameBuffer);
+
+			commandList->setViewPort(frameBuffer->fullViewPort());
+			commandList->setScissorRect(frameBuffer->fullScissorRect());
+			commandList->setConstant32Bits({
+				IBL_BUILD_PRE_FILTERING_MAP,
+				static_cast<unsigned>(arraySlice),
+				static_cast<unsigned>(startup.InputData.EnvironmentMapSize),
+				static_cast<float>(mipSlice) / static_cast<float>(startup.InputData.PreFilteringMipLevels - 1)
+				});
+
+			commandList->drawIndexed(drawProperty.IndexCount, 1,
+				drawProperty.StartIndexLocation, drawProperty.StartVertexLocation);
+
+			commandList->endRenderPass();
+		}
 	}
 	
 	commandList->endRecording();

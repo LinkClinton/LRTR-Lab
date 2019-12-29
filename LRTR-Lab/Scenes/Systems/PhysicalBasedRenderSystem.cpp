@@ -62,7 +62,8 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 	//resource 7 : occlusion texture
 	//resource 8 : normalMap texture
 	//resource 9 : emissive texture
-	//resource 10 : hasBaseColor, HasRoughness, HasOcclusion, HasNormalMap, HasMetallic, HasEmissive,
+	//resource 10 : irradiance map
+	//resource 11 : hasIrradiance, hasBaseColor, HasRoughness, HasOcclusion, HasNormalMap, HasMetallic, HasEmissive,
 	//eyePosition.x, eyePosition.y, eyePosition.z, nLights, index
 	mResourceLayout = mDevice->createResourceLayout(
 		{
@@ -75,10 +76,11 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 6),
 			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 7),
 			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 8),
-			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 9)
+			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 9),
+			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 10)
 		}, {
-			CodeRed::SamplerLayoutElement(mSampler, 11)
-		}, CodeRed::Constant32Bits(11, 10));
+			CodeRed::SamplerLayoutElement(mSampler, 12)
+		}, CodeRed::Constant32Bits(12, 11));
 
 	for (auto& frameResource : mFrameResources) {
 		auto descriptorHeapPool = std::make_shared<std::vector<std::shared_ptr<CodeRed::GpuDescriptorHeap>>>();
@@ -219,6 +221,10 @@ void LRTR::PhysicalBasedRenderSystem::update(const Group<Identity, std::shared_p
 		if (drawCall.HasOcclusion) descriptorHeap->bindTexture(physicalBasedMaterial->occlusionTexture()->value(), 7);
 		if (drawCall.HasNormalMap) descriptorHeap->bindTexture(physicalBasedMaterial->normalMapTexture()->value(), 8);
 		if (drawCall.HasEmissive) descriptorHeap->bindTexture(physicalBasedMaterial->emissiveTexture()->value(), 9);
+
+		// only for test, we need find a good way to support 
+		if (mIrradianceMap != nullptr) descriptorHeap->bindTexture(
+			mIrradianceMap->reference(CodeRed::TextureRefUsage::CubeMap), 10);
 		
 		mDrawCalls.push_back(drawCall);
 
@@ -330,6 +336,7 @@ void LRTR::PhysicalBasedRenderSystem::render(
 		commandList->setDescriptorHeap((*descriptorHeapPool)[index]);
 
 		commandList->setConstant32Bits({
+			mIrradianceMap != nullptr,
 			drawCall.HasBaseColor,
 			drawCall.HasRoughness,
 			drawCall.HasOcclusion,
@@ -350,6 +357,11 @@ void LRTR::PhysicalBasedRenderSystem::render(
 	}
 
 	mCurrentFrameIndex = (mCurrentFrameIndex + 1) % mFrameResources.size();
+}
+
+void LRTR::PhysicalBasedRenderSystem::setIrradiance(const std::shared_ptr<CodeRed::GpuTexture>& map)
+{
+	mIrradianceMap = map;
 }
 
 auto LRTR::PhysicalBasedRenderSystem::typeName() const noexcept -> std::string

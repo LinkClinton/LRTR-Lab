@@ -18,6 +18,7 @@ struct Light
 
 struct Config
 {
+    uint HasIrradiance;
 	uint HasBaseColor;
 	uint HasRoughness;
 	uint HasOcclusion;
@@ -146,10 +147,11 @@ Texture2D roughnessTexture : register(t6);
 Texture2D occlusionTexture : register(t7);
 Texture2D normalMapTexture : register(t8);
 Texture2D emissiveTexture : register(t9);
+TextureCube irradianceMap : register(t10);
 
-ConstantBuffer<Config> config : register(b10);
+ConstantBuffer<Config> config : register(b11);
 
-SamplerState materialSampler : register(s11);
+SamplerState materialSampler : register(s12);
 
 float3 getNormal(float3 normal, float2 texcoord, float3 tangent)
 {
@@ -172,7 +174,7 @@ float4 main(
 	float3 tangent : TANGENT,
 	float3 normal : NORMAL) : SV_TARGET
 {
-    float3 toEye = normalize(float3(config.EyePositionX, config.EyePositionY, config.EyePositionZ) -position);
+    float3 toEye = normalize(float3(config.EyePositionX, config.EyePositionY, config.EyePositionZ) - position);
 	float3 F0 = 0.04;
 	float3 color = float3(0.0f, 0.0f, 0.0f);
     float occlusion = 1.0f;
@@ -196,7 +198,22 @@ float4 main(
 		color = color + ComputePointLight(lights[index], material, position, normal, toEye, F0);
 	}
 	
-    color = color + 0.03f * material.BaseColor.xyz * occlusion + material.Emissive.rgb;
+	//ambient lighting
+    if (config.HasIrradiance)
+    {
+        float3 N = normal;
+        float3 V = toEye;
+        float3 R = reflect(-V, N);
+		
+        float3 kS = FresnelSchlick(max(dot(N, V), 0.0f), F0);
+        float3 kD = (1.0 - kS) * (1.0 - material.Metallic.a);
+        float3 irradiance = irradianceMap.Sample(materialSampler, N).rgb;
+        float3 diffuse = irradiance * material.BaseColor.rgb;
+		
+        color = color + kD * diffuse * occlusion;
+    }
+	
+    color = color + material.Emissive.rgb;
 	
     color = GammaCorrect(color);
 	
