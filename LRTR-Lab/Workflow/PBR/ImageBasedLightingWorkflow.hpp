@@ -64,7 +64,7 @@ namespace LRTR {
 		std::shared_ptr<CodeRed::GpuCommandAllocator> mAllocator;
 
 		std::shared_ptr<CodeRed::GpuRenderPass> mRenderPass;
-
+		
 		std::shared_ptr<CodeRed::GpuShaderState> mVertShader;
 		std::shared_ptr<CodeRed::GpuShaderState> mFragShader;
 		

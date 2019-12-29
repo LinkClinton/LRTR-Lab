@@ -176,6 +176,7 @@
     <ClCompile Include="Components\Materials\WireframeMaterial.cpp" />
     <ClCompile Include="Components\MeshData\BoxMesh.cpp" />
     <ClCompile Include="Components\MeshData\MeshData.cpp" />
+    <ClCompile Include="Components\MeshData\QuadMesh.cpp" />
     <ClCompile Include="Components\MeshData\TrianglesMesh.cpp" />
     <ClCompile Include="Components\TransformWrap.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -206,6 +207,7 @@
     <ClInclude Include="Components\Materials\WireframeMaterial.hpp" />
     <ClInclude Include="Components\MeshData\BoxMesh.hpp" />
     <ClInclude Include="Components\MeshData\MeshData.hpp" />
+    <ClInclude Include="Components\MeshData\QuadMesh.hpp" />
     <ClInclude Include="Components\MeshData\TrianglesMesh.hpp" />
     <ClInclude Include="Components\TransformWrap.hpp" />
     <ClInclude Include="Scene.hpp" />

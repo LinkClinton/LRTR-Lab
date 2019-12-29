@@ -12,7 +12,7 @@ struct View
 
 struct Config
 {
-    uint HasIrradiance;
+    uint HasEnvironmentLight;
     uint HasBaseColor;
     uint HasRoughness;
     uint HasOcclusion;
@@ -22,6 +22,7 @@ struct Config
     float EyePositionX;
     float EyePositionY;
     float EyePositionZ;
+    uint MipLevels;
     uint Lights;
     uint Index;
 };
@@ -37,7 +38,8 @@ struct Output
 
 StructuredBuffer<Transform> transforms : register(t2);
 ConstantBuffer<View> view : register(b3);
-ConstantBuffer<Config> config : register(b11);
+
+ConstantBuffer<Config> config : register(b14);
 
 Output main(
     float3 position : POSITION,

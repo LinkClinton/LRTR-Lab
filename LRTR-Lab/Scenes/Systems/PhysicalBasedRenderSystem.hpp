@@ -19,6 +19,20 @@ namespace LRTR {
 		unsigned HasMetallic = 0;
 		unsigned HasEmissive = 0;
 	};
+
+	struct EnvironmentLight {
+		std::shared_ptr<CodeRed::GpuTexture> Irradiance;
+		std::shared_ptr<CodeRed::GpuTexture> PreFiltering;
+		std::shared_ptr<CodeRed::GpuTexture> PreComputingBRDF;
+
+		EnvironmentLight() = default;
+		
+		EnvironmentLight(
+			const std::shared_ptr<CodeRed::GpuTexture>& irradiance,
+			const std::shared_ptr<CodeRed::GpuTexture>& preFiltering,
+			const std::shared_ptr<CodeRed::GpuTexture>& preComputingBRDF) :
+			Irradiance(irradiance), PreFiltering(preFiltering), PreComputingBRDF(preComputingBRDF) {}
+	};
 	
 	class PhysicalBasedRenderSystem : public RenderSystem {
 	public:
@@ -36,7 +50,7 @@ namespace LRTR {
 			const std::shared_ptr<SceneCamera>& camera, 
 			float delta) override;
 
-		void setIrradiance(const std::shared_ptr<CodeRed::GpuTexture>& map);
+		void setEnvironmentLight(const EnvironmentLight& light);
 		
 		auto typeName() const noexcept -> std::string override;
 
@@ -47,15 +61,18 @@ namespace LRTR {
 		void updateCamera(const std::shared_ptr<SceneCamera>& camera) const;
 
 		auto getCameraPosition(const std::shared_ptr<SceneCamera>& camera) const -> Vector3f;
+
+		auto hasEnvironmentLight() const noexcept -> bool;
 	private:
-		std::shared_ptr<CodeRed::GpuTexture> mIrradianceMap;
-		
 		std::shared_ptr<CodeRed::GpuResourceLayout> mResourceLayout;
 		std::shared_ptr<CodeRed::PipelineInfo> mPipelineInfo;
 		std::shared_ptr<CodeRed::GpuBuffer> mViewBuffer;
 		std::shared_ptr<CodeRed::GpuSampler> mSampler;
 		
 		std::vector<PhysicalBasedDrawCall> mDrawCalls;
+
+		EnvironmentLight mEnvironmentLight;
+		
 		size_t mLights = 0;
 	};
 	

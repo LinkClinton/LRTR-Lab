@@ -18,7 +18,7 @@ struct Light
 
 struct Config
 {
-    uint HasIrradiance;
+    uint HasEnvironmentLight;
 	uint HasBaseColor;
 	uint HasRoughness;
 	uint HasOcclusion;
@@ -28,6 +28,7 @@ struct Config
     float EyePositionX;
 	float EyePositionY;
     float EyePositionZ;
+    uint MipLevels;
 	uint Lights;
 	uint Index;
 };
@@ -40,6 +41,11 @@ float3 mix(float3 x, float3 y, float3 a)
 float3 FresnelSchlick(float cosTheta, float3 F0)
 {
     return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
+}
+
+float3 FresnelSchlickRoughness(float cosTheta, float3 F0, float roughness)
+{
+    return F0 + (max(1.0 - roughness, F0) - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
 }
 
 float DistributionGGX(float3 normal, float3 halfVector, float roughness)
@@ -148,10 +154,11 @@ Texture2D occlusionTexture : register(t7);
 Texture2D normalMapTexture : register(t8);
 Texture2D emissiveTexture : register(t9);
 TextureCube irradianceMap : register(t10);
+TextureCube preFilteringMap : register(t11);
+Texture2D preComputingBRDF : register(t12);
 
-ConstantBuffer<Config> config : register(b11);
-
-SamplerState materialSampler : register(s12);
+SamplerState materialSampler : register(s13);
+ConstantBuffer<Config> config : register(b14);
 
 float3 getNormal(float3 normal, float2 texcoord, float3 tangent)
 {
@@ -199,18 +206,28 @@ float4 main(
 	}
 	
 	//ambient lighting
-    if (config.HasIrradiance)
+    if (config.HasEnvironmentLight)
     {
         float3 N = normal;
         float3 V = toEye;
         float3 R = reflect(-V, N);
 		
-        float3 kS = FresnelSchlick(max(dot(N, V), 0.0f), F0);
+        float3 F = FresnelSchlickRoughness(max(dot(N, V), 0.0), F0, material.Roughness.a);
+		
+        float3 kS = F;
         float3 kD = (1.0 - kS) * (1.0 - material.Metallic.a);
+		
         float3 irradiance = irradianceMap.Sample(materialSampler, N).rgb;
         float3 diffuse = irradiance * material.BaseColor.rgb;
 		
-        color = color + kD * diffuse * occlusion;
+        float MaxLod = config.MipLevels - 1.0;
+        float NdotV = max(dot(N, V), 0.0);
+
+        float3 preFilteringColor = preFilteringMap.SampleLevel(materialSampler, R, material.Roughness.a * MaxLod).rgb;
+        float2 brdf = preComputingBRDF.Sample(materialSampler, float2(NdotV, material.Roughness.a)).rg;
+        float3 specular = preFilteringColor * (F * brdf.x + brdf.y);
+		
+        color = color + (kD * diffuse + specular) * occlusion;
     }
 	
     color = color + material.Emissive.rgb;

@@ -20,6 +20,7 @@ const static auto PBRCacheLocation = "./Resources/Caches/PBR/";
 #define IBL_BUILD_ENVIRONMENT_MAP 0
 #define IBL_BUILD_IRRADIANCE_MAP 1
 #define IBL_BUILD_PRE_FILTERING_MAP 2
+#define IBL_BUILD_PRE_COMPUTING_BRDF 3
 
 auto LRTR::ImageBasedLightingInput::string() const noexcept -> std::string
 {
@@ -83,7 +84,7 @@ LRTR::ImageBasedLightingWorkflow::ImageBasedLightingWorkflow(const std::shared_p
 		CodeRed::Attachment::RenderTarget(CodeRed::PixelFormat::RedGreenBlueAlpha32BitFloat,
 			CodeRed::ResourceLayout::RenderTarget,
 			CodeRed::ResourceLayout::GeneralRead));
-	
+
 	//Compile Shaders 
 	CompileShaderWorkflow workflow;
 	
@@ -131,6 +132,70 @@ auto LRTR::ImageBasedLightingWorkflow::readCache(const WorkflowStartup<ImageBase
 	
 	IBLOutput output;
 
+	output.EnvironmentMap = mDevice->createTexture(
+		CodeRed::ResourceInfo::CubeMap(
+			startup.InputData.EnvironmentMapSize,
+			startup.InputData.EnvironmentMapSize,
+			CodeRed::PixelFormat::RedGreenBlueAlpha32BitFloat,
+			startup.InputData.EnvironmentMipLevels,
+			CodeRed::ResourceUsage::RenderTarget
+		)
+	);
+
+	output.IrradianceMap = mDevice->createTexture(
+		CodeRed::ResourceInfo::CubeMap(
+			startup.InputData.IrradianceMapSize,
+			startup.InputData.IrradianceMapSize,
+			CodeRed::PixelFormat::RedGreenBlueAlpha32BitFloat,
+			1,
+			CodeRed::ResourceUsage::RenderTarget
+		)
+	);
+
+	output.PreFilteringMap = mDevice->createTexture(
+		CodeRed::ResourceInfo::CubeMap(
+			startup.InputData.PreFilteringMapSize,
+			startup.InputData.PreFilteringMapSize,
+			CodeRed::PixelFormat::RedGreenBlueAlpha32BitFloat,
+			startup.InputData.PreFilteringMipLevels,
+			CodeRed::ResourceUsage::RenderTarget
+		)
+	);
+
+	output.PreComputingBRDF = mDevice->createTexture(
+		CodeRed::ResourceInfo::Texture2D(
+			startup.InputData.PreComputingBRDFSize,
+			startup.InputData.PreComputingBRDFSize,
+			CodeRed::PixelFormat::RedGreenBlueAlpha32BitFloat,
+			1,
+			CodeRed::ResourceUsage::RenderTarget)
+	);
+	
+	const auto data = FileSystem::read(PBRCacheLocation + mSha256Key);
+
+	size_t offset = 0;
+
+	CodeRed::ResourceHelper::updateTexture(mDevice, mAllocator, startup.InputData.Queue,
+		output.EnvironmentMap, data.data() + offset);
+
+	for (size_t mipSlice = 0; mipSlice < output.EnvironmentMap->mipLevels(); mipSlice++)
+		offset = offset + output.EnvironmentMap->size(mipSlice) * 6;
+
+	CodeRed::ResourceHelper::updateTexture(mDevice, mAllocator, startup.InputData.Queue,
+		output.IrradianceMap, data.data() + offset);
+
+	for (size_t mipSlice = 0; mipSlice < output.IrradianceMap->mipLevels(); mipSlice++)
+		offset = offset + output.IrradianceMap->size(mipSlice) * 6;
+
+	CodeRed::ResourceHelper::updateTexture(mDevice, mAllocator, startup.InputData.Queue,
+		output.PreFilteringMap, data.data() + offset);
+
+	for (size_t mipSlice = 0; mipSlice < output.PreFilteringMap->mipLevels(); mipSlice++)
+		offset = offset + output.PreFilteringMap->size(mipSlice) * 6;
+
+	CodeRed::ResourceHelper::updateTexture(mDevice, mAllocator, startup.InputData.Queue,
+		output.PreComputingBRDF, data.data() + offset);
+
 	return output;
 }
 
@@ -138,9 +203,19 @@ void LRTR::ImageBasedLightingWorkflow::writeCache(
 	const WorkflowStartup<ImageBasedLightingInput>& startup,
 	const ImageBasedLightingOutput& output)
 {
-	//const auto data = CodeRed::ResourceHelper::readTexture(mDevice, mAllocator, startup.InputData.Queue, output.EnvironmentMap);
+	const auto environmentData = CodeRed::ResourceHelper::readTexture(mDevice, mAllocator, startup.InputData.Queue, output.EnvironmentMap);
+	const auto irradianceData = CodeRed::ResourceHelper::readTexture(mDevice, mAllocator, startup.InputData.Queue, output.IrradianceMap);
+	const auto preFilteringData = CodeRed::ResourceHelper::readTexture(mDevice, mAllocator, startup.InputData.Queue, output.PreFilteringMap);
+	const auto preComputingBRDFData = CodeRed::ResourceHelper::readTexture(mDevice, mAllocator, startup.InputData.Queue, output.PreComputingBRDF);
 
-	//FileSystem::write<CodeRed::Byte>(PBRCacheLocation + mSha256Key, data);
+	auto data = std::vector<CodeRed::Byte>();
+
+	data.insert(data.end(), environmentData.begin(), environmentData.end());
+	data.insert(data.end(), irradianceData.begin(), irradianceData.end());
+	data.insert(data.end(), preFilteringData.begin(), preFilteringData.end());
+	data.insert(data.end(), preComputingBRDFData.begin(), preComputingBRDFData.end());
+	
+	FileSystem::write<CodeRed::Byte>(PBRCacheLocation + mSha256Key, data);
 }
 
 auto LRTR::ImageBasedLightingWorkflow::work(
@@ -183,6 +258,15 @@ auto LRTR::ImageBasedLightingWorkflow::work(
 			startup.InputData.PreFilteringMipLevels,
 			CodeRed::ResourceUsage::RenderTarget
 		)
+	);
+
+	output.PreComputingBRDF = mDevice->createTexture(
+		CodeRed::ResourceInfo::Texture2D(
+			startup.InputData.PreComputingBRDFSize,
+			startup.InputData.PreComputingBRDFSize,
+			CodeRed::PixelFormat::RedGreenBlueAlpha32BitFloat,
+			1,
+			CodeRed::ResourceUsage::RenderTarget)
 	);
 
 	Matrix4x4f views[8] = {
@@ -298,6 +382,29 @@ auto LRTR::ImageBasedLightingWorkflow::work(
 
 			commandList->endRenderPass();
 		}
+	}
+
+	//generate brdf map for ambient specular light
+	{
+		const auto drawProperty = meshDataAssetComponent->get("Quad");
+
+		const auto frameBuffer = mDevice->createFrameBuffer(output.PreComputingBRDF);
+
+		commandList->beginRenderPass(mRenderPass, frameBuffer);
+
+		commandList->setViewPort(frameBuffer->fullViewPort());
+		commandList->setScissorRect(frameBuffer->fullScissorRect());
+		commandList->setConstant32Bits({
+			IBL_BUILD_PRE_COMPUTING_BRDF,
+			0,
+			static_cast<unsigned>(startup.InputData.EnvironmentMapSize),
+			0.0f
+			});
+
+		commandList->drawIndexed(drawProperty.IndexCount, 1,
+			drawProperty.StartIndexLocation, drawProperty.StartVertexLocation);
+
+		commandList->endRenderPass();
 	}
 	
 	commandList->endRecording();

@@ -63,8 +63,11 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 	//resource 8 : normalMap texture
 	//resource 9 : emissive texture
 	//resource 10 : irradiance map
-	//resource 11 : hasIrradiance, hasBaseColor, HasRoughness, HasOcclusion, HasNormalMap, HasMetallic, HasEmissive,
-	//eyePosition.x, eyePosition.y, eyePosition.z, nLights, index
+	//resource 11 : pre filtering map
+	//resource 12 : pre computingBRDF map
+	//resource 13 : sampler
+	//resource 14 : hasEnvironmentLight, hasBaseColor, HasRoughness, HasOcclusion, HasNormalMap, HasMetallic, HasEmissive,
+	//eyePosition.x, eyePosition.y, eyePosition.z, MipLevels, nLights, index
 	mResourceLayout = mDevice->createResourceLayout(
 		{
 			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::GroupBuffer, 0),
@@ -77,10 +80,12 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 7),
 			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 8),
 			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 9),
-			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 10)
+			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 10),
+			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 11),
+			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 12)
 		}, {
-			CodeRed::SamplerLayoutElement(mSampler, 12)
-		}, CodeRed::Constant32Bits(12, 11));
+			CodeRed::SamplerLayoutElement(mSampler, 13)
+		}, CodeRed::Constant32Bits(13, 14));
 
 	for (auto& frameResource : mFrameResources) {
 		auto descriptorHeapPool = std::make_shared<std::vector<std::shared_ptr<CodeRed::GpuDescriptorHeap>>>();
@@ -223,8 +228,14 @@ void LRTR::PhysicalBasedRenderSystem::update(const Group<Identity, std::shared_p
 		if (drawCall.HasEmissive) descriptorHeap->bindTexture(physicalBasedMaterial->emissiveTexture()->value(), 9);
 
 		// only for test, we need find a good way to support 
-		if (mIrradianceMap != nullptr) descriptorHeap->bindTexture(
-			mIrradianceMap->reference(CodeRed::TextureRefUsage::CubeMap), 10);
+		if (mEnvironmentLight.Irradiance != nullptr) descriptorHeap->bindTexture(
+			mEnvironmentLight.Irradiance->reference(CodeRed::TextureRefUsage::CubeMap), 10);
+
+		if (mEnvironmentLight.PreFiltering != nullptr) descriptorHeap->bindTexture(
+			mEnvironmentLight.PreFiltering->reference(CodeRed::TextureRefUsage::CubeMap), 11);
+
+		if (mEnvironmentLight.PreComputingBRDF != nullptr) descriptorHeap->bindTexture(
+			mEnvironmentLight.PreComputingBRDF, 12);
 		
 		mDrawCalls.push_back(drawCall);
 
@@ -328,15 +339,16 @@ void LRTR::PhysicalBasedRenderSystem::render(
 		});
 	
 	commandList->setIndexBuffer(meshDataAssetComponent->indices());
-	
+
 	for (size_t index = 0; index < mDrawCalls.size(); index++) {
 		const auto drawCall = mDrawCalls[index];
 		const auto meshDataInfo = meshDataAssetComponent->get(drawCall.Mesh);
-
+		const auto mipLevels = hasEnvironmentLight() ? mEnvironmentLight.PreFiltering->mipLevels() : 0;
+		
 		commandList->setDescriptorHeap((*descriptorHeapPool)[index]);
 
 		commandList->setConstant32Bits({
-			mIrradianceMap != nullptr,
+			hasEnvironmentLight(),
 			drawCall.HasBaseColor,
 			drawCall.HasRoughness,
 			drawCall.HasOcclusion,
@@ -346,6 +358,7 @@ void LRTR::PhysicalBasedRenderSystem::render(
 			cameraPosition.x,
 			cameraPosition.y,
 			cameraPosition.z,
+			static_cast<unsigned>(mipLevels),
 			static_cast<unsigned>(mLights),
 			static_cast<unsigned>(index)
 		});
@@ -359,9 +372,9 @@ void LRTR::PhysicalBasedRenderSystem::render(
 	mCurrentFrameIndex = (mCurrentFrameIndex + 1) % mFrameResources.size();
 }
 
-void LRTR::PhysicalBasedRenderSystem::setIrradiance(const std::shared_ptr<CodeRed::GpuTexture>& map)
+void LRTR::PhysicalBasedRenderSystem::setEnvironmentLight(const EnvironmentLight& light)
 {
-	mIrradianceMap = map;
+	mEnvironmentLight = light;
 }
 
 auto LRTR::PhysicalBasedRenderSystem::typeName() const noexcept -> std::string
@@ -401,4 +414,11 @@ auto LRTR::PhysicalBasedRenderSystem::getCameraPosition(const std::shared_ptr<Sc
 	if (camera == nullptr || !camera->hasComponent<TransformWrap>()) return Vector3f(0);
 
 	return camera->component<TransformWrap>()->translation();
+}
+
+auto LRTR::PhysicalBasedRenderSystem::hasEnvironmentLight() const noexcept -> bool
+{
+	return mEnvironmentLight.Irradiance != nullptr && 
+		mEnvironmentLight.PreFiltering != nullptr &&
+		mEnvironmentLight.PreComputingBRDF != nullptr;
 }

@@ -3,6 +3,7 @@
 #define IBL_BUILD_ENVIRONMENT_MAP 0
 #define IBL_BUILD_IRRADIANCE_MAP 1
 #define IBL_BUILD_PRE_FILTERING_MAP 2
+#define IBL_BUILD_PRE_COMPUTING_BRDF 3
 
 #define PI 3.14159265359
 
@@ -172,6 +173,65 @@ float4 BuildPreFilteringMap(float3 position)
     return float4(prefilteringColor, 1.0);
 }
 
+float GeometrySchlickGGX(float NdotV, float roughness)
+{
+    float a = roughness;
+    float k = (a * a) / 2.0;
+    
+    float numerator = NdotV;
+    float denominator = NdotV * (1.0 - k) + k;
+
+    return numerator / denominator;
+}
+
+float GeometrySmith(float3 normal, float3 toEye, float3 lightVector, float roughness)
+{
+    float normalDotEye = max(dot(normal, toEye), 0.0);
+    float normalDotLight = max(dot(normal, lightVector), 0.0);
+    float ggx2 = GeometrySchlickGGX(normalDotEye, roughness);
+    float ggx1 = GeometrySchlickGGX(normalDotLight, roughness);
+
+    return ggx1 * ggx2;
+}
+
+float4 BuildPreComputingBRDF(float NdotV, float roughness)
+{
+    float3 V = float3(sqrt(1.0 - NdotV * NdotV), 0.0, NdotV);
+
+    float A = 0.0;
+    float B = 0.0;
+    
+    float3 N = float3(0.0, 0.0, 1.0);
+    
+    uint SampleCount = 1024;
+    
+    for (uint index = 0; index < SampleCount; index++)
+    {
+        float2 xi = Hammersley(index, SampleCount);
+        float3 H = ImportanceSampleGGX(xi, N, roughness);
+        float3 L = normalize(2.0 * dot(V, H) * H - V);
+        
+        float NdotL = max(L.z, 0.0);
+        float NdotH = max(H.z, 0.0);
+        float VdotH = max(dot(V, H), 0.0);
+        
+        if (NdotL > 0.0)
+        {
+            float G = GeometrySmith(N, V, L, roughness);
+            float GVis = (G * VdotH) / (NdotH * NdotV);
+            float F = pow(1.0 - VdotH, 5.0);
+            
+            A = A + (1.0 - F) * GVis;
+            B = B + F * GVis;
+        }
+    }
+
+    A = A / float(SampleCount);
+    B = B / float(SampleCount);
+    
+    return float4(A, B, 0, 0);
+}
+
 float4 main(float4 svPosition : SV_POSITION, float3 position : POSITION, float3 texcoord : TEXCOORD) : SV_TARGET
 {
     if (config.BuildType == IBL_BUILD_ENVIRONMENT_MAP) 
@@ -182,6 +242,9 @@ float4 main(float4 svPosition : SV_POSITION, float3 position : POSITION, float3 
     
     if (config.BuildType == IBL_BUILD_PRE_FILTERING_MAP)
         return BuildPreFilteringMap(position);
+    
+    if (config.BuildType == IBL_BUILD_PRE_COMPUTING_BRDF)
+        return BuildPreComputingBRDF(texcoord.x, texcoord.y);
     
     return float4(1, 0, 0, 1);
 }

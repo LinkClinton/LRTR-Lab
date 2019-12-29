@@ -100,6 +100,9 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shape.cpp" />
     <ClCompile Include="System.cpp" />
+    <ClCompile Include="Components\MeshData\QuadMesh.cpp">
+      <Filter>Components\MeshData</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cameras\Components\Perspective.hpp">
@@ -178,5 +181,8 @@
     <ClInclude Include="Scene.hpp" />
     <ClInclude Include="Shape.hpp" />
     <ClInclude Include="System.hpp" />
+    <ClInclude Include="Components\MeshData\QuadMesh.hpp">
+      <Filter>Components\MeshData</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

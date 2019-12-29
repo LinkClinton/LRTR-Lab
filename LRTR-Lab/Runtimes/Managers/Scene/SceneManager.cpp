@@ -29,12 +29,14 @@ LRTR::SceneManager::SceneManager(
 {
 	ImageBasedLightingWorkflow workflow(mDevice);
 
-	static auto output = workflow.start({ ImageBasedLightingInput(mRuntimeSharing->queue(), mRuntimeSharing, 
-		"./Resources/Textures/HDR/newport_loft.hdr") });
+	auto input = ImageBasedLightingInput(mRuntimeSharing->queue(), mRuntimeSharing,
+		"./Resources/Textures/HDR/newport_loft.hdr");
+	
+	auto output = workflow.start({ input });
 	
 	add(TinyGLTFLoader::loadScene(mRuntimeSharing, "Scene", "./Resources/Models/MetalRoughSpheresNoTextures.glb",
 		Transform::rotate(-glm::pi<float>() * 0.0f, Vector3f(0, 1, 0))));
-
+	
 	const auto camera = std::make_shared<PerspectiveCamera>(
 		std::make_shared<TransformWrap>(
 			Vector3f(0.003f, 0.003f, 0.013f),
@@ -70,8 +72,12 @@ LRTR::SceneManager::SceneManager(
 	for (auto& system : mScenes["Scene"]->systems()) {
 		if (std::dynamic_pointer_cast<PhysicalBasedRenderSystem>(system) != nullptr) {
 			auto pbrSystem = std::dynamic_pointer_cast<PhysicalBasedRenderSystem>(system);
-
-			pbrSystem->setIrradiance(output.IrradianceMap);
+			
+			pbrSystem->setEnvironmentLight({
+				output.IrradianceMap,
+				output.PreFilteringMap,
+				output.PreComputingBRDF
+			});
 		}
 	}
 }
