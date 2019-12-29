@@ -29,14 +29,14 @@ LRTR::PastEffectRenderSystem::PastEffectRenderSystem(
 	// resource 0 : view buffer
 	// resource 1 : cube map for sky box
 	// resource 2 : sampler for sampling
-	// resource 3 : isSkyBox
+	// resource 3 : isSkyBox, isHDR
 	mResourceLayout = mDevice->createResourceLayout(
 		{
 			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Buffer,0),
 			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 1)
 		}, {
 			CodeRed::SamplerLayoutElement(mSampler, 2)
-		}, CodeRed::Constant32Bits(1, 3));
+		}, CodeRed::Constant32Bits(2, 3));
 
 	for (auto& frameResource : mFrameResources) {
 		auto descriptorHeap = mDevice->createDescriptorHeap(mResourceLayout);
@@ -134,15 +134,16 @@ void LRTR::PastEffectRenderSystem::render(
 	
 	const auto descriptorHeap = mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuDescriptorHeap>("DescriptorHeap");
 	const auto skyBox = mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuTexture>("SkyBox");
-
+	const auto isHDR = skyBox == nullptr ? 0 : CodeRed::PixelFormatSizeOf::get(skyBox->format()) > 4;
+	
 	commandList->setGraphicsPipeline(mPipelineInfo->graphicsPipeline());
 	commandList->setResourceLayout(mResourceLayout);
 	commandList->setDescriptorHeap(descriptorHeap);
 
 	commandList->setVertexBuffer(meshDataAssetComponent->positions());
 	commandList->setIndexBuffer(meshDataAssetComponent->indices());
-
-	commandList->setConstant32Bits({ 1 });
+	
+	commandList->setConstant32Bits({ 1, isHDR });
 
 	//just render when the sky box is existed
 	if (skyBox != nullptr) {

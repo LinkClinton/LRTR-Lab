@@ -57,11 +57,18 @@ namespace CodeRed {
 			const void* data
 		);
 
+		static auto readTexture(
+			const std::shared_ptr<GpuLogicalDevice>& device,
+			const std::shared_ptr<GpuCommandAllocator>& allocator,
+			const std::shared_ptr<GpuCommandQueue>& queue,
+			const std::shared_ptr<GpuTexture>& texture) -> std::vector<Byte>;
+		
 		static auto loadTexture(
 			const std::shared_ptr<GpuLogicalDevice>& device,
 			const std::shared_ptr<GpuCommandAllocator>& allocator,
 			const std::shared_ptr<GpuCommandQueue>& queue,
-			const std::string& fileName
+			const std::string& fileName,
+			const PixelFormat format = PixelFormat::RedGreenBlueAlpha8BitUnknown
 		) -> std::shared_ptr<GpuTexture>;
 
 		static auto loadSkyBox(

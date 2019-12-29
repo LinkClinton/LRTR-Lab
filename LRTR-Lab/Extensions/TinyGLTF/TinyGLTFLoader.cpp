@@ -95,7 +95,7 @@ namespace LRTR {
 		const std::shared_ptr<RuntimeSharing>& sharing,
 		const tinygltf::Parameter& parameter,
 		const tinygltf::Model* scene) -> std::shared_ptr<Texture> {
-		if (parameter.has_number_value) return std::make_shared<ConstantTexture<Vector1f>>(Vector1f(
+		if (parameter.has_number_value) return std::make_shared<ConstantTexture<Vector4f>>(Vector4f(
 			static_cast<float>(parameter.number_value)));
 
 		if (!parameter.number_array.empty() && parameter.number_array.size() == 4)
@@ -206,8 +206,8 @@ namespace LRTR {
 		const auto angle = glm::angle(rotation);
 		const auto axis = glm::axis(rotation);
 		
-		const auto currentTransform = Transform(translation, glm::angleAxis(angle, 
-			Vector3f(axis.z, axis.x, axis.y)), scale).matrix() * transform;
+		const auto currentTransform = transform * Transform(translation, glm::angleAxis(angle,
+			Vector3f(axis.z, axis.x, axis.y)), scale).matrix();
 		
 		MathUtility::decompose(currentTransform, translation, rotation, scale);
 		

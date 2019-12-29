@@ -8,6 +8,7 @@ struct View
 struct Config
 {
     uint IsSkyBox;
+    uint IsHDR;
 };
 
 struct Output

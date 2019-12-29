@@ -1,9 +1,9 @@
 #pragma once
 
-#include <CodeRed/Interface/GpuResource/GpuTexture.hpp>
-#include <CodeRed/Interface/GpuCommandAllocator.hpp>
-#include <CodeRed/Interface/GpuCommandQueue.hpp>
+#include <CodeRed/Core/CodeRedGraphics.hpp>
 
+#include "../../Shared/Graphics/PipelineInfo.hpp"
+#include "../../Runtimes/RuntimeSharing.hpp"
 #include "../Workflow.hpp"
 
 #include <string>
@@ -12,7 +12,7 @@
 namespace LRTR {
 
 	struct ImageBasedLightingInput {
-		std::string FileName;
+		std::string FileName = "";
 
 		size_t EnvironmentMapSize = 512;
 		size_t IrradianceMapSize = 32;
@@ -20,8 +20,17 @@ namespace LRTR {
 		size_t PreFilteringMipLevels = 5;
 		size_t PreComputingBRDFSize = 512;
 
-		std::shared_ptr<CodeRed::GpuCommandQueue> Queue;
+		std::shared_ptr<CodeRed::GpuCommandQueue> Queue = nullptr;
+		std::shared_ptr<RuntimeSharing> mRuntimeSharing = nullptr;
+		
+		ImageBasedLightingInput() = default;
 
+		ImageBasedLightingInput(
+			const std::shared_ptr<CodeRed::GpuCommandQueue> queue,
+			const std::shared_ptr<RuntimeSharing>& sharing,
+			const std::string fileName) :
+			FileName(fileName), Queue(queue), mRuntimeSharing(sharing) {}
+		
 		auto string() const noexcept -> std::string;
 	};
 
@@ -53,6 +62,17 @@ namespace LRTR {
 		std::shared_ptr<CodeRed::GpuLogicalDevice> mDevice;
 		std::shared_ptr<CodeRed::GpuCommandAllocator> mAllocator;
 
+		std::shared_ptr<CodeRed::GpuShaderState> mEnvironmentMapVShader;
+		std::shared_ptr<CodeRed::GpuShaderState> mEnvironmentMapFShader;
+		std::shared_ptr<CodeRed::GpuRenderPass> mEnvironmentMapRenderPass;
+		
+		std::shared_ptr<CodeRed::GpuDescriptorHeap> mDescriptorHeap;
+		std::shared_ptr<CodeRed::GpuResourceLayout> mResourceLayout;
+		std::shared_ptr<CodeRed::PipelineInfo> mPipelineInfo;
+
+		std::shared_ptr<CodeRed::GpuBuffer> mViewBuffer;
+		std::shared_ptr<CodeRed::GpuSampler> mSampler;
+		
 		std::string mSha256Key;
 	};
 	

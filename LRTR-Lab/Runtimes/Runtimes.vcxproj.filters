@@ -49,6 +49,18 @@
     <Filter Include="Resources\Shaders\Systems\Vulkan">
       <UniqueIdentifier>{8e97320c-8d2d-4e77-a75f-55bde18b7aae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources\Textures\HDR">
+      <UniqueIdentifier>{32555bb5-9660-4926-93ff-a4ec82c5fcb1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Shaders\Workflow">
+      <UniqueIdentifier>{fbf64e7b-1d06-43b6-9fd7-b29cfc33ee64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Shaders\Workflow\DirectX12">
+      <UniqueIdentifier>{8772b5d0-ceab-49ac-be49-f262da52f5ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Shaders\Workflow\Vulkan">
+      <UniqueIdentifier>{28452f56-365b-4ac9-96fa-00658abc701c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Managers\Asset\Components\AssetComponent.hpp">
@@ -194,5 +206,18 @@
     <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\WireframeRenderSystemVert.vert">
       <Filter>Resources\Shaders\Systems\Vulkan</Filter>
     </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Textures\HDR\newport_loft.hdr">
+      <Filter>Resources\Textures\HDR</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Resources\Shaders\Workflow\DirectX12\EnvironmentMapFrag.hlsl">
+      <Filter>Resources\Shaders\Workflow\DirectX12</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Workflow\DirectX12\EnvironmentMapVert.hlsl">
+      <Filter>Resources\Shaders\Workflow\DirectX12</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

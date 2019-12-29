@@ -20,21 +20,28 @@
 
 #include "../../../Shared/Graphics/ResourceHelper.hpp"
 
+#include "../../../Workflow/PBR/ImageBasedLightingWorkflow.hpp"
+
 LRTR::SceneManager::SceneManager(
 	const std::shared_ptr<RuntimeSharing>& sharing,
 	const std::shared_ptr<CodeRed::GpuLogicalDevice>& device) :
 	Manager(sharing), mDevice(device)
 {
-	add(TinyGLTFLoader::loadScene(mRuntimeSharing, "Scene", "./Resources/Models/WaterBottle.glb",
-		Transform::rotate(-glm::pi<float>() * 0.5f, Vector3f(0, 1, 0))));
+	ImageBasedLightingWorkflow workflow(mDevice);
+
+	auto output = workflow.start({ ImageBasedLightingInput(mRuntimeSharing->queue(), mRuntimeSharing, 
+		"./Resources/Textures/HDR/newport_loft.hdr") });
+	
+	add(TinyGLTFLoader::loadScene(mRuntimeSharing, "Scene", "./Resources/Models/MetalRoughSpheresNoTextures.glb",
+		Transform::rotate(-glm::pi<float>() * 0.0f, Vector3f(0, 1, 0))));
 
 	const auto camera = std::make_shared<PerspectiveCamera>(
 		std::make_shared<TransformWrap>(
-			Vector3f(0, 0, 1),
+			Vector3f(0.003f, 0.003f, 0.013f),
 			Vector4f(0, 0, 1, 0),
 			Vector3f(1)),
 		std::make_shared<Perspective>(
-			MathUtility::pi<float>() * 0.125f,
+			MathUtility::pi<float>() * 0.25f,
 			1920.0f,
 			1080.0f,
 			0.001f,
@@ -42,13 +49,15 @@ LRTR::SceneManager::SceneManager(
 
 	camera->component<CollectionLabel>()->set("Collection", "Camera");
 
-	mScenes["Scene"]->property()->addComponent(std::make_shared<SkyBox>(
+	mScenes["Scene"]->property()->addComponent(std::make_shared<SkyBox>(output.EnvironmentMap));
+	
+	/*mScenes["Scene"]->property()->addComponent(std::make_shared<SkyBox>(
 		CodeRed::ResourceHelper::loadSkyBox(
 			sharing->device(),
 			sharing->allocator(),
 			sharing->queue(),
 			"./Resources/Textures/SkyBoxes/Sea"
-		)));
+		)));*/
 	
 	mScenes["Scene"]->add(camera);
 

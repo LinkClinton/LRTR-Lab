@@ -163,8 +163,8 @@ void LRTR::LabApp::initializeManagerComponents()
 	//initialize Layers
 	LRTR_DEBUG_INFO("Initialize Managers.");
 
-	initializeSceneManager();
 	initializeAssetManager();
+	initializeSceneManager();
 	initializeUIManager();
 
 	LRTR_DEBUG_INFO("Finish initialize Managers.");

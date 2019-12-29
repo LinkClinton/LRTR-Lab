@@ -165,6 +165,10 @@ void CodeRed::ResourceHelper::updateTexture(
 	auto commandList = device->createGraphicsCommandList(allocator);
 	auto commandQueue = queue;
 
+	size_t offset = 0;
+
+	auto bufferPool = std::vector<std::shared_ptr<GpuTextureBuffer>>();
+
 	auto oldLayout = texture->layout();
 
 	CODE_RED_TRY_EXECUTE(
@@ -173,36 +177,110 @@ void CodeRed::ResourceHelper::updateTexture(
 	);
 	
 	commandList->beginRecording();
-
 	commandList->layoutTransition(texture, ResourceLayout::CopyDestination);
+	
+	for (size_t arraySlice = 0; arraySlice < texture->arrays(); arraySlice++) {
+		for (size_t mipSlice = 0; mipSlice < texture->mipLevels(); mipSlice++) {
+			const auto buffer = device->createTextureBuffer(texture, mipSlice);
 
-	commandList->copyMemoryToTexture(texture, data);
+			buffer->write(static_cast<const unsigned char*>(data) + offset);
 
+			offset = offset + buffer->size();
+
+			commandList->layoutTransition(buffer, ResourceLayout::CopySource);
+			commandList->copyBufferToTexture(
+				TextureBufferCopyInfo(buffer),
+				TextureCopyInfo(texture, texture->index(mipSlice, arraySlice)),
+				buffer->width(), buffer->height(), buffer->depth());
+
+			bufferPool.push_back(buffer);
+		}
+	}
+	
 	commandList->layoutTransition(texture, oldLayout);
-
 	commandList->endRecording();
+
 	commandQueue->execute({ commandList });
 	commandQueue->waitIdle();
+}
+
+auto CodeRed::ResourceHelper::readTexture(
+	const std::shared_ptr<GpuLogicalDevice>& device,
+	const std::shared_ptr<GpuCommandAllocator>& allocator, 
+	const std::shared_ptr<GpuCommandQueue>& queue,
+	const std::shared_ptr<GpuTexture>& texture)
+	-> std::vector<Byte>
+{
+	auto commandList = device->createGraphicsCommandList(allocator);
+	auto commandQueue = queue;
+
+	auto bufferPool = std::vector<std::shared_ptr<GpuTextureBuffer>>();
+
+	auto oldLayout = texture->layout();
+
+	CODE_RED_TRY_EXECUTE(
+		oldLayout == ResourceLayout::Undefined,
+		oldLayout = ResourceLayout::GeneralRead
+	);
+
+	commandList->beginRecording();
+	commandList->layoutTransition(texture, ResourceLayout::CopySource);
+	
+	for (size_t arraySlice = 0; arraySlice < texture->arrays(); arraySlice++) {
+		for (size_t mipSlice = 0; mipSlice < texture->mipLevels(); mipSlice++) {
+			const auto buffer = device->createTextureBuffer(texture, mipSlice);
+
+			commandList->layoutTransition(buffer, ResourceLayout::CopyDestination);
+			commandList->copyTextureToBuffer(
+				TextureCopyInfo(texture, texture->index(mipSlice, arraySlice)),
+				TextureBufferCopyInfo(buffer), 
+				buffer->width(), buffer->height(), buffer->depth());
+
+			bufferPool.push_back(buffer);
+		}
+	}
+
+	commandList->layoutTransition(texture, oldLayout);
+	commandList->endRecording();
+
+	commandQueue->execute({ commandList });
+	commandQueue->waitIdle();
+
+	auto result = std::vector<Byte>();
+	
+	for (const auto& buffer : bufferPool) {
+		const auto data = buffer->read();
+
+		result.insert(result.end(), data.begin(), data.end());
+	}
+
+	return result;
 }
 
 auto CodeRed::ResourceHelper::loadTexture(
 	const std::shared_ptr<GpuLogicalDevice>& device,
 	const std::shared_ptr<GpuCommandAllocator>& allocator, 
 	const std::shared_ptr<GpuCommandQueue>& queue,
-	const std::string& fileName)
+	const std::string& fileName,
+	const PixelFormat format)
 	-> std::shared_ptr<GpuTexture>
 {
 	auto width = 0;
 	auto height = 0;
 	auto channel = 0;
-	
-	const auto data = stbi_load(fileName.c_str(), &width, &height, &channel, STBI_rgb_alpha);
 
+	void* data = nullptr;
+
+	if (PixelFormatSizeOf::get(format) == 4)
+		data = stbi_load(fileName.c_str(), &width, &height, &channel, STBI_rgb_alpha);
+	if (PixelFormatSizeOf::get(format) == 16)
+		data = stbi_loadf(fileName.c_str(), &width, &height, &channel, STBI_rgb_alpha);
+	
 	auto texture = device->createTexture(
 		ResourceInfo::Texture2D(
 			width,
 			height,
-			PixelFormat::RedGreenBlueAlpha8BitUnknown
+			format
 		)
 	);
 
