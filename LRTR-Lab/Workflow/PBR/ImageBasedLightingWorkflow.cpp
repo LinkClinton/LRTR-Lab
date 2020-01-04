@@ -91,11 +91,11 @@ LRTR::ImageBasedLightingWorkflow::ImageBasedLightingWorkflow(const std::shared_p
 	const auto EnvironmentMapVShaderFile =
 		mDevice->apiVersion() == CodeRed::APIVersion::DirectX12 ?
 		"./Resources/Shaders/Workflow/DirectX12/ImageBasedLightingVert.hlsl" :
-		"";
+		"./Resources/Shaders/Workflow/Vulkan/ImageBasedLightingVert.vert";
 	const auto EnvironmentMapFShaderFile =
 		mDevice->apiVersion() == CodeRed::APIVersion::DirectX12 ?
 		"./Resources/Shaders/Workflow/DirectX12/ImageBasedLightingFrag.hlsl" :
-		"";
+		"./Resources/Shaders/Workflow/Vulkan/ImageBasedLightingFrag.frag";
 
 	mVertShader = pipelineFactory->createShaderState(
 		CodeRed::ShaderType::Vertex,

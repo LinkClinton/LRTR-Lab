@@ -72,12 +72,12 @@ LRTR::PastEffectRenderSystem::PastEffectRenderSystem(
 	const auto vShaderFile =
 		mDevice->apiVersion() == CodeRed::APIVersion::DirectX12 ?
 		"./Resources/Shaders/Systems/DirectX12/PastEffectRenderSystemVert.hlsl" :
-		"./Resources/Shaders/Systems/Vulkan/.vert";
+		"./Resources/Shaders/Systems/Vulkan/PastEffectRenderSystemVert.vert";
 
 	const auto fShaderFile =
 		mDevice->apiVersion() == CodeRed::APIVersion::DirectX12 ?
 		"./Resources/Shaders/Systems/DirectX12/PastEffectRenderSystemFrag.hlsl" :
-		"./Resources/Shaders/Systems/Vulkan/.frag";
+		"./Resources/Shaders/Systems/Vulkan/PastEffectRenderSystemFrag.frag";
 
 	mPipelineInfo->setVertexShaderState(
 		pipelineFactory->createShaderState(

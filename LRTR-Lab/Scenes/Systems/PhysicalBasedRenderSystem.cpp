@@ -31,8 +31,8 @@ namespace LRTR {
 	};
 
 	struct SharedLight {
-		Vector3f Position;
-		Vector3f Intensity;
+		Vector4f Position;
+		Vector4f Intensity;
 	};
 	
 }
@@ -47,7 +47,7 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 			sizeof(Matrix4x4f)
 		)
 	);
-
+	
 	mSampler = mDevice->createSampler(
 		CodeRed::SamplerInfo(16)
 	);
@@ -151,12 +151,12 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 	const auto vShaderFile = 
 		mDevice->apiVersion() == CodeRed::APIVersion::DirectX12 ? 
 		"./Resources/Shaders/Systems/DirectX12/PhysicalBasedRenderSystemVert.hlsl" :
-		"./Resources/Shaders/Systems/Vulkan/";
+		"./Resources/Shaders/Systems/Vulkan/PhysicalBasedRenderSystemVert.vert";
 
 	const auto fShaderFile =
 		mDevice->apiVersion() == CodeRed::APIVersion::DirectX12 ?
 		"./Resources/Shaders/Systems/DirectX12/PhysicalBasedRenderSystemFrag.hlsl" :
-		"./Resources/Shaders/Systems/Vulkan/";
+		"./Resources/Shaders/Systems/Vulkan/PhysicalBasedRenderSystemFrag.frag";
 
 	mPipelineInfo->setVertexShaderState(
 		pipelineFactory->createShaderState(
@@ -265,8 +265,8 @@ void LRTR::PhysicalBasedRenderSystem::update(const Group<Identity, std::shared_p
 			const auto pointLight = shape.second->component<PointLightSource>();
 
 			lights.push_back({
-				transform != nullptr ? transform->translation() : Vector3f(0),
-				pointLight->intensity()
+				transform != nullptr ? Vector4f(transform->translation(), 1.0f) : Vector4f(0),
+				Vector4f(pointLight->intensity(), 1.0f)
 				});
 		}
 	}

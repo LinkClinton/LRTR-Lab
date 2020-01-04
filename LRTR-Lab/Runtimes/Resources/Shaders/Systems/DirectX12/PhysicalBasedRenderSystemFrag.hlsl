@@ -12,8 +12,8 @@ struct Material
 
 struct Light
 {
-	float3 Position;
-	float3 Intensity;
+	float4 Position;
+	float4 Intensity;
 };
 
 struct Config
@@ -106,13 +106,13 @@ float3 CookTorranceBRDF(Material material, float3 radiance, float3 lightVector, 
 
 float3 ComputePointLight(Light light, Material material, float3 position, float3 normal, float3 toEye, float3 F0)
 {
-	float3 lightVector = normalize(light.Position - position);
+	float3 lightVector = normalize(light.Position.xyz - position);
 	
 	float ndotl = max(dot(lightVector, normal), 0.0f);
-	float distance = length(light.Position - position);
+	float distance = length(light.Position.xyz - position);
 	float attenuation = 1.0f / (distance * distance);
 	
-	return CookTorranceBRDF(material, light.Intensity * attenuation * ndotl, lightVector, normal, toEye, F0);
+	return CookTorranceBRDF(material, light.Intensity.xyz * attenuation * ndotl, lightVector, normal, toEye, F0);
 }
 
 float GammaCorrect(float value)

@@ -34,12 +34,13 @@ LRTR::SceneManager::SceneManager(
 	
 	auto output = workflow.start({ input });
 	
-	add(TinyGLTFLoader::loadScene(mRuntimeSharing, "Scene", "./Resources/Models/MetalRoughSpheresNoTextures.glb",
-		Transform::rotate(-glm::pi<float>() * 0.0f, Vector3f(0, 1, 0))));
+	add(TinyGLTFLoader::loadScene(mRuntimeSharing, "Scene", "./Resources/Models/WaterBottle.glb",
+		Transform::rotate(-glm::pi<float>() * 0.5f, Vector3f(0, 1, 0))));
+	
 	
 	const auto camera = std::make_shared<PerspectiveCamera>(
 		std::make_shared<TransformWrap>(
-			Vector3f(0.003f, 0.003f, 0.013f),
+			Vector3f(0.003f, 0.003f, 0.513f),
 			Vector4f(0, 0, 1, 0),
 			Vector3f(1)),
 		std::make_shared<Perspective>(

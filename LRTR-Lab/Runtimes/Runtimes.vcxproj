@@ -406,6 +406,54 @@
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/Resources/Shaders/Workflow/DirectX12</DestinationFolders>
     </CopyFileToFolders>
   </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\PastEffectRenderSystemFrag.frag">
+      <FileType>Document</FileType>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)/Resources/Shaders/Systems/Vulkan</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)/Resources/Shaders/Systems/Vulkan</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Resources/Shaders/Systems/Vulkan</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/Resources/Shaders/Systems/Vulkan</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\PastEffectRenderSystemVert.vert">
+      <FileType>Document</FileType>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)/Resources/Shaders/Systems/Vulkan</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)/Resources/Shaders/Systems/Vulkan</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Resources/Shaders/Systems/Vulkan</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/Resources/Shaders/Systems/Vulkan</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\PhysicalBasedRenderSystemFrag.frag">
+      <FileType>Document</FileType>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)/Resources/Shaders/Systems/Vulkan</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)/Resources/Shaders/Systems/Vulkan</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Resources/Shaders/Systems/Vulkan</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/Resources/Shaders/Systems/Vulkan</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\PhysicalBasedRenderSystemVert.vert">
+      <FileType>Document</FileType>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)/Resources/Shaders/Systems/Vulkan</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)/Resources/Shaders/Systems/Vulkan</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Resources/Shaders/Systems/Vulkan</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/Resources/Shaders/Systems/Vulkan</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="Resources\Shaders\Workflow\Vulkan\ImageBasedLightingFrag.frag">
+      <FileType>Document</FileType>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)/Resources/Shaders/Workflow/Vulkan/</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)/Resources/Shaders/Workflow/Vulkan/</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Resources/Shaders/Workflow/Vulkan/</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/Resources/Shaders/Workflow/Vulkan/</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Shaders\Workflow\Vulkan\ImageBasedLightingVert.vert">
+      <FileType>Document</FileType>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)/Resources/Shaders/Workflow/Vulkan/</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)/Resources/Shaders/Workflow/Vulkan/</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Resources/Shaders/Workflow/Vulkan/</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/Resources/Shaders/Workflow/Vulkan/</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
