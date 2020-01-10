@@ -301,7 +301,8 @@ auto LRTR::TinyGLTFLoader::loadScene(
 		TinyGLTFBuildScene(sharing, tinyGLTFScene, transform.matrix(), &model, &model.nodes[index]);
 	}
 
-	if (fileName == "./Resources/Models/WaterBottle.glb") {
+	if (fileName == "./Resources/Models/WaterBottle.glb" || 
+		fileName == "./Resources/Models/DamagedHelmet.glb") {
 		const auto light0 = std::make_shared<Shape>();
 		const auto light1 = std::make_shared<Shape>();
 		const auto light2 = std::make_shared<Shape>();

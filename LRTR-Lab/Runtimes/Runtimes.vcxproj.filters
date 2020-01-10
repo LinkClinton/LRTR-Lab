@@ -215,25 +215,24 @@
     <CopyFileToFolders Include="Resources\Shaders\Workflow\DirectX12\ImageBasedLightingVert.hlsl">
       <Filter>Resources\Shaders\Workflow\DirectX12</Filter>
     </CopyFileToFolders>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Shaders\Systems\Vulkan\PastEffectRenderSystemFrag.frag">
-      <Filter>Resources\Shaders\Systems\Vulkan</Filter>
-    </None>
-    <None Include="Resources\Shaders\Systems\Vulkan\PastEffectRenderSystemVert.vert">
-      <Filter>Resources\Shaders\Systems\Vulkan</Filter>
-    </None>
-    <None Include="Resources\Shaders\Systems\Vulkan\PhysicalBasedRenderSystemFrag.frag">
-      <Filter>Resources\Shaders\Systems\Vulkan</Filter>
-    </None>
-    <None Include="Resources\Shaders\Systems\Vulkan\PhysicalBasedRenderSystemVert.vert">
-      <Filter>Resources\Shaders\Systems\Vulkan</Filter>
-    </None>
-    <None Include="Resources\Shaders\Workflow\Vulkan\ImageBasedLightingFrag.frag">
+    <CopyFileToFolders Include="Resources\Models\DamagedHelmet.glb" />
+    <CopyFileToFolders Include="Resources\Shaders\Workflow\Vulkan\ImageBasedLightingFrag.frag">
       <Filter>Resources\Shaders\Workflow\Vulkan</Filter>
-    </None>
-    <None Include="Resources\Shaders\Workflow\Vulkan\ImageBasedLightingVert.vert">
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Shaders\Workflow\Vulkan\ImageBasedLightingVert.vert">
       <Filter>Resources\Shaders\Workflow\Vulkan</Filter>
-    </None>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\PastEffectRenderSystemFrag.frag">
+      <Filter>Resources\Shaders\Systems\Vulkan</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\PastEffectRenderSystemVert.vert">
+      <Filter>Resources\Shaders\Systems\Vulkan</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\PhysicalBasedRenderSystemFrag.frag">
+      <Filter>Resources\Shaders\Systems\Vulkan</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\PhysicalBasedRenderSystemVert.vert">
+      <Filter>Resources\Shaders\Systems\Vulkan</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>
