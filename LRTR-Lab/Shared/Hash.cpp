@@ -1,18 +1,8 @@
 #include "Hash.hpp"
 
-#include <cryptopp/sha.h>
-#include <cryptopp/hex.h>
-
-using namespace CryptoPP;
+#include "../Extensions/Cryptopp/Cryptopp.hpp"
 
 auto LRTR::Hash::sha256(const std::string& string) -> std::string
 {
-	auto digest = std::string();
-
-	SHA256 sha256;
-
-	const StringSource src(string, true, new HashFilter(
-		sha256, new HexEncoder(new StringSink(digest))));
-
-	return digest;
+	return Cryptopp::sha256(string);
 }

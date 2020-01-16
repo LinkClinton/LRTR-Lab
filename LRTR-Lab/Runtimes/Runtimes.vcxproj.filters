@@ -215,7 +215,6 @@
     <CopyFileToFolders Include="Resources\Shaders\Workflow\DirectX12\ImageBasedLightingVert.hlsl">
       <Filter>Resources\Shaders\Workflow\DirectX12</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Resources\Models\DamagedHelmet.glb" />
     <CopyFileToFolders Include="Resources\Shaders\Workflow\Vulkan\ImageBasedLightingFrag.frag">
       <Filter>Resources\Shaders\Workflow\Vulkan</Filter>
     </CopyFileToFolders>
@@ -233,6 +232,9 @@
     </CopyFileToFolders>
     <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\PhysicalBasedRenderSystemVert.vert">
       <Filter>Resources\Shaders\Systems\Vulkan</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Models\DamagedHelmet.glb">
+      <Filter>Resources\Models</Filter>
     </CopyFileToFolders>
   </ItemGroup>
 </Project>

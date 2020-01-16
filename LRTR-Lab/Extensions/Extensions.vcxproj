@@ -162,16 +162,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Assimp\AssimpLoader.cpp" />
-    <ClCompile Include="Assimp\AssimpScene.cpp" />
+    <ClCompile Include="Cryptopp\Cryptopp.cpp" />
     <ClCompile Include="ImGui\ImGui.cpp" />
     <ClCompile Include="ImGui\imgui_impl_win32.cpp" />
     <ClCompile Include="TinyGLTF\TinyGLTFLoader.cpp" />
     <ClCompile Include="TinyGLTF\TinyGLTFScene.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Assimp\AssimpLoader.hpp" />
-    <ClInclude Include="Assimp\AssimpScene.hpp" />
+    <ClInclude Include="Cryptopp\Cryptopp.hpp" />
     <ClInclude Include="ImGui\ImGui.hpp" />
     <ClInclude Include="ImGui\imgui_impl_win32.hpp" />
     <ClInclude Include="SpdLog\SinkStorage.hpp" />

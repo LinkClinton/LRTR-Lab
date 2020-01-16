@@ -4,7 +4,6 @@
 #include "../UI/UIManager.hpp"
 
 #include "../../../Extensions/TinyGLTF/TinyGLTFLoader.hpp"
-#include "../../../Extensions/Assimp/AssimpLoader.hpp"
 
 #include "../../../Scenes/Systems/PhysicalBasedRenderSystem.hpp"
 #include "../../../Scenes/Systems/PastEffectRenderSystem.hpp"

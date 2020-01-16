@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Assimp">
-      <UniqueIdentifier>{26295dfd-96f2-4600-877c-c2be8c042fe6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="SpdLog">
       <UniqueIdentifier>{c2270c0b-e686-4ed2-841f-8df7f5d552a7}</UniqueIdentifier>
     </Filter>
@@ -13,14 +10,11 @@
     <Filter Include="TinyGLTF">
       <UniqueIdentifier>{b92a09ff-8221-4e27-97dd-a5fb7f7fbe78}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Cryptopp">
+      <UniqueIdentifier>{2f272c38-8780-4169-b754-0886e32d8e84}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Assimp\AssimpLoader.cpp">
-      <Filter>Assimp</Filter>
-    </ClCompile>
-    <ClCompile Include="Assimp\AssimpScene.cpp">
-      <Filter>Assimp</Filter>
-    </ClCompile>
     <ClCompile Include="ImGui\ImGui.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
@@ -33,14 +27,11 @@
     <ClCompile Include="TinyGLTF\TinyGLTFScene.cpp">
       <Filter>TinyGLTF</Filter>
     </ClCompile>
+    <ClCompile Include="Cryptopp\Cryptopp.cpp">
+      <Filter>Cryptopp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Assimp\AssimpLoader.hpp">
-      <Filter>Assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="Assimp\AssimpScene.hpp">
-      <Filter>Assimp</Filter>
-    </ClInclude>
     <ClInclude Include="ImGui\ImGui.hpp">
       <Filter>ImGui</Filter>
     </ClInclude>
@@ -58,6 +49,9 @@
     </ClInclude>
     <ClInclude Include="SpdLog\SinkStorage.hpp">
       <Filter>SpdLog</Filter>
+    </ClInclude>
+    <ClInclude Include="Cryptopp\Cryptopp.hpp">
+      <Filter>Cryptopp</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
