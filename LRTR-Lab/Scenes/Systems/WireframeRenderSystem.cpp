@@ -157,6 +157,16 @@ void LRTR::WireframeRenderSystem::update(const Group<Identity, std::shared_ptr<S
 
 	CodeRed::ResourceHelper::updateBuffer(meshBuffer, transforms.data(),
 		sizeof(Matrix4x4f) * transforms.size());
+
+	const auto meshDataAssetComponent = std::static_pointer_cast<MeshDataAssetComponent>(
+		mRuntimeSharing->assetManager()->components().at("MeshData"));
+	
+	meshDataAssetComponent->beginAllocating();
+
+	for (const auto& drawCall : mDrawCalls)
+		meshDataAssetComponent->allocate(drawCall.Mesh);
+
+	meshDataAssetComponent->endAllocating();
 }
 
 void LRTR::WireframeRenderSystem::render(
@@ -170,16 +180,6 @@ void LRTR::WireframeRenderSystem::render(
 
 	const auto meshDataAssetComponent = std::static_pointer_cast<MeshDataAssetComponent>(
 		mRuntimeSharing->assetManager()->components().at("MeshData"));
-
-	//update the vertex buffer we use,
-	//in render function, we do not render anything
-	//so we can update vertex buffer directly
-	meshDataAssetComponent->beginAllocating();
-	
-	for (const auto& drawCall : mDrawCalls) 
-		meshDataAssetComponent->allocate(drawCall.Mesh);
-
-	meshDataAssetComponent->endAllocating();
 	
 	const auto descriptorHeap = mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuDescriptorHeap>("DescriptorHeap");
 	const auto vertexBuffer = meshDataAssetComponent->positions();

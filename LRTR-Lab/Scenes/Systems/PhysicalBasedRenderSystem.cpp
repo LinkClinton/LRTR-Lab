@@ -300,6 +300,20 @@ void LRTR::PhysicalBasedRenderSystem::update(const Group<Identity, std::shared_p
 		sizeof(SharedLight) * lights.size());
 
 	mLights = lights.size();
+
+	//update the vertex buffer we use
+	//we update the buffer to avoid issue 1
+	//we will update all systems before rendering
+	//https://github.com/LinkClinton/LRTR-Lab/issues/1
+	const auto meshDataAssetComponent = std::static_pointer_cast<MeshDataAssetComponent>(
+		mRuntimeSharing->assetManager()->components().at("MeshData"));
+
+	meshDataAssetComponent->beginAllocating();
+
+	for (const auto& drawCall : mDrawCalls)
+		meshDataAssetComponent->allocate(drawCall.Mesh);
+
+	meshDataAssetComponent->endAllocating();
 }
 
 void LRTR::PhysicalBasedRenderSystem::render(

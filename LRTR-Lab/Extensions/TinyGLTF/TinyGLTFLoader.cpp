@@ -251,7 +251,6 @@ namespace LRTR {
 
 				meshShape->addComponent(std::make_shared<TransformWrap>(
 					translation, rotation, scale));
-				//meshShape->addComponent(std::make_shared<WireframeMaterial>());
 				meshShape->addComponent(std::make_shared<TrianglesMesh>(
 					positions, texCoords, tangents, normals, indices));
 				meshShape->addComponent(
