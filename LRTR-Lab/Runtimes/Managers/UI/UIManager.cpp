@@ -13,15 +13,17 @@ LRTR::UIManager::UIManager(
 	const std::shared_ptr<CodeRed::GpuRenderPass>& renderPass,
 	const std::shared_ptr<CodeRed::GpuCommandAllocator>& allocator,
 	const std::shared_ptr<CodeRed::GpuCommandQueue>& queue,
-	const size_t width, const size_t height) : Manager(sharing),
+	const size_t width, const size_t height, const size_t font) : Manager(sharing),
 	mDevice(device), mRenderPass(renderPass),
 	mCommandAllocator(allocator), mCommandQueue(queue),
-	mWidth(width), mHeight(height)
+	mWidth(width), mHeight(height), mFont(font)
 {
 	mCommandList = mDevice->createGraphicsCommandList(mCommandAllocator);
 
-	ImGui::GetIO().Fonts->AddFontFromFileTTF("./Resources/Fonts/Consola.ttf", 20);
-
+	ImGui::StyleColorsLight();
+	
+	ImGui::GetIO().Fonts->AddFontFromFileTTF("./Resources/Fonts/Consola.ttf", static_cast<float>(mFont));
+	
 	mImGuiWindows = std::make_shared<CodeRed::ImGuiWindows>(
 		mDevice,
 		mRenderPass,

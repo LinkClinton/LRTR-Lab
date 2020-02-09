@@ -18,7 +18,7 @@ namespace LRTR {
 			const std::shared_ptr<CodeRed::GpuRenderPass>& renderPass,
 			const std::shared_ptr<CodeRed::GpuCommandAllocator>& allocator,
 			const std::shared_ptr<CodeRed::GpuCommandQueue>& queue,
-			const size_t width, const size_t height);
+			const size_t width, const size_t height, const size_t font);
 
 		void update(float delta) override;
 		
@@ -51,6 +51,6 @@ namespace LRTR {
 
 		StringOrderGroup<std::shared_ptr<UIComponent>> mUIComponents;
 
-		size_t mWidth, mHeight;
+		size_t mWidth, mHeight, mFont;
 	};
 }

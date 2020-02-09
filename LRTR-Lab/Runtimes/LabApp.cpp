@@ -38,8 +38,8 @@ LRESULT DefaultWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
-LRTR::LabApp::LabApp(const std::string& name, size_t width, size_t height)
-	: mName(name), mWidth(width), mHeight(height), mHwnd(nullptr), mExisted(false)
+LRTR::LabApp::LabApp(const AppStartup& startup)
+	: mStartup(startup), mHwnd(nullptr), mExisted(false)
 {
 	mRuntimeSharing = std::make_shared<RuntimeSharing>(this);
 	
@@ -78,7 +78,7 @@ LRTR::LabApp::LabApp(const std::string& name, size_t width, size_t height)
 
 	mExisted = true;
 
-	LRTR_DEBUG_INFO("Initialize LRTRApp with [{0}, {1}].", mWidth, mHeight);
+	LRTR_DEBUG_INFO("Initialize LRTRApp with [{0}, {1}].", width(), height());
 	
 	ImGui::CreateContext();
 	ImGui_ImplWin32_Init(mHwnd);
@@ -217,7 +217,7 @@ void LRTR::LabApp::initializeSwapChain()
 {
 	mSwapChain = mDevice->createSwapChain(
 		mCommandQueue,
-		{ mWidth, mHeight, mHwnd },
+		{ width(), height(), mHwnd },
 		CodeRed::PixelFormat::BlueGreenRedAlpha8BitUnknown,
 		2
 	);
@@ -259,15 +259,13 @@ void LRTR::LabApp::initializeUIManager()
 {
 	LRTR_DEBUG_INFO("Initialize UI Manager.");
 
-	ImGui::StyleColorsLight();
-	
 	mUIManager = std::make_shared<UIManager>(
 		mRuntimeSharing,
 		mDevice,
 		mRenderPass,
 		mCommandAllocator,
 		mCommandQueue,
-		width(), height());
+		width(), height(), mStartup.Font);
 }
 
 void LRTR::LabApp::processMessage(LabApp* app, const MSG& message)

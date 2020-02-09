@@ -15,13 +15,26 @@ namespace LRTR {
 	class SceneManager;
 	class AssetManager;
 	class UIManager;
+
+	struct AppStartup {
+		std::string Name = "LabApp";
+		size_t Width = 1920;
+		size_t Height = 1080;
+		size_t Font = 20;
+
+		AppStartup() = default;
+
+		AppStartup(
+			const std::string& name,
+			const size_t width,
+			const size_t height,
+			const size_t font) :
+			Name(name), Width(width), Height(height), Font(font) {}
+	};
 	
 	class LabApp final : public Noncopyable {
 	public:
-		explicit LabApp(
-			const std::string& name,
-			const size_t width,
-			const size_t height);
+		explicit LabApp(const AppStartup& startup);
 
 		~LabApp();
 
@@ -31,11 +44,11 @@ namespace LRTR {
 
 		void runLoop();
 
-		auto width() const noexcept -> size_t { return mWidth; }
+		auto width() const noexcept -> size_t { return mStartup.Width; }
 
-		auto height() const noexcept -> size_t { return mHeight; }
+		auto height() const noexcept -> size_t { return mStartup.Height; }
 
-		auto name() const noexcept -> std::string { return mName; }
+		auto name() const noexcept -> std::string { return mStartup.Name; }
 
 		auto handle() const noexcept -> void* { return mHwnd; }
 	private:
@@ -80,11 +93,8 @@ namespace LRTR {
 		
 		std::shared_ptr<RuntimeSharing> mRuntimeSharing;
 		
-		std::string mName;
-
-		size_t mWidth;
-		size_t mHeight;
-
+		AppStartup mStartup;
+		
 		HWND mHwnd;
 
 		bool mExisted;
