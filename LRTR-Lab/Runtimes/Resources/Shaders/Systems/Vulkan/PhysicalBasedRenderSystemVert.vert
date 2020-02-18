@@ -46,5 +46,4 @@ void main()
     outNormal = mat3(transforms.Transform[config.Index]) * inNormal;
 
     gl_Position = view.View * vec4(outPosition, 1.0f);
-    gl_Position.y = -gl_Position.y;
 }

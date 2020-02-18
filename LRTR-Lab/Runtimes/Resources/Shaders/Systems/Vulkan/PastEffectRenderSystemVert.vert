@@ -20,7 +20,6 @@ void main()
     gl_Position = vec4(position, 1.0f);
     gl_Position = (view.ViewWithoutTranslation * gl_Position);
     gl_Position = gl_Position.xyww;
-    gl_Position.y = -gl_Position.y;
-
+    
     texcoord = position;
 }

@@ -69,13 +69,21 @@ LRTR::PastEffectRenderSystem::PastEffectRenderSystem(
 
 	CompileShaderWorkflow workflow;
 
+#ifdef SHADER_SOURCE_HLSL
+	const auto sourceLanguage = SourceLanguage::eHLSL;
+#else
+	const auto sourceLanguage = SourceLanguage::eGLSL;
+#endif
+	const auto targetLanguage = mDevice->apiVersion() == CodeRed::APIVersion::DirectX12 ?
+		TargetLanguage::eDXIL : TargetLanguage::eSPIRV;
+
 	const auto vShaderFile =
-		mDevice->apiVersion() == CodeRed::APIVersion::DirectX12 ?
+		sourceLanguage == SourceLanguage::eHLSL ?
 		"./Resources/Shaders/Systems/DirectX12/PastEffectRenderSystemVert.hlsl" :
 		"./Resources/Shaders/Systems/Vulkan/PastEffectRenderSystemVert.vert";
 
 	const auto fShaderFile =
-		mDevice->apiVersion() == CodeRed::APIVersion::DirectX12 ?
+		sourceLanguage == SourceLanguage::eHLSL ?
 		"./Resources/Shaders/Systems/DirectX12/PastEffectRenderSystemFrag.hlsl" :
 		"./Resources/Shaders/Systems/Vulkan/PastEffectRenderSystemFrag.frag";
 
@@ -84,8 +92,9 @@ LRTR::PastEffectRenderSystem::PastEffectRenderSystem(
 			CodeRed::ShaderType::Vertex,
 			workflow.start({ CompileShaderInput(
 				vShaderFile,
-				mDevice->apiVersion(),
-				CodeRed::ShaderType::Vertex
+				CodeRed::ShaderType::Vertex,
+				sourceLanguage,
+				targetLanguage
 			) })
 		)
 	);
@@ -95,8 +104,9 @@ LRTR::PastEffectRenderSystem::PastEffectRenderSystem(
 			CodeRed::ShaderType::Pixel,
 			workflow.start({ CompileShaderInput(
 				fShaderFile,
-				mDevice->apiVersion(),
-				CodeRed::ShaderType::Pixel
+				CodeRed::ShaderType::Pixel,
+				sourceLanguage,
+				targetLanguage
 			) })
 		)
 	);

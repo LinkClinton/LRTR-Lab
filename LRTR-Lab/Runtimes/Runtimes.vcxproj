@@ -362,6 +362,9 @@
     <ProjectReference Include="..\..\References\Code-Red\CodeRed\CodeRed.vcxproj">
       <Project>{078ae23f-1cc2-43b5-9096-f6238c363520}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\References\Code-Red\Extensions\Compiler\Compiler.vcxproj">
+      <Project>{9c821fbc-2bce-4017-b711-872de476df00}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\References\Code-Red\Extensions\ImGui\ImGui.vcxproj">
       <Project>{f3acdf05-0a62-466b-a39b-d616b30cb5c5}</Project>
     </ProjectReference>

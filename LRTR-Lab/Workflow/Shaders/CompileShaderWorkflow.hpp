@@ -3,24 +3,33 @@
 #include <CodeRed/Shared/Enum/APIVersion.hpp>
 #include <CodeRed/Shared/Enum/ShaderType.hpp>
 
+#include <Extensions/Compiler/CompileOption.hpp>
+
 #include "../Workflow.hpp"
 
 #include <string>
 #include <vector>
 
+using namespace CodeRed::Compiler;
+
 namespace LRTR {
 
 	struct CompileShaderInput {
 		std::string FileName;
-		CodeRed::APIVersion Version = CodeRed::APIVersion::DirectX12;
+
 		CodeRed::ShaderType Type = CodeRed::ShaderType::Vertex;
+
+		SourceLanguage Source = SourceLanguage::eHLSL;
+		TargetLanguage Target = TargetLanguage::eDXIL;
 
 		CompileShaderInput() = default;
 
-		CompileShaderInput(const std::string& fileName,
-			const CodeRed::APIVersion version,
-			const CodeRed::ShaderType type) :
-			FileName(fileName), Version(version), Type(type) {}
+		CompileShaderInput(
+			const std::string& fileName,
+			const CodeRed::ShaderType& type,
+			const SourceLanguage& source,
+			const TargetLanguage& target) :
+			FileName(fileName), Type(type), Source(source), Target(target) {}
 	};
 	
 	class CompileShaderWorkflow : public Workflow<CompileShaderInput, std::vector<CodeRed::Byte>> {

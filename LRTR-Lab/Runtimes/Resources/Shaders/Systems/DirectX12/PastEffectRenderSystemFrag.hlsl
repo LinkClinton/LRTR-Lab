@@ -18,7 +18,7 @@ struct Output
 };
 
 ConstantBuffer<View> view : register(b0);
-ConstantBuffer<Config> config : register(b3);
+[[vk::push_constant]] ConstantBuffer<Config> config : register(b3);
 
 SamplerState textureSampler : register(s2);
 

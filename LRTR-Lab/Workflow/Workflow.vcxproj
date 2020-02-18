@@ -172,6 +172,11 @@
     <ClInclude Include="Workflow.hpp" />
     <ClInclude Include="WorkflowStartup.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\References\Code-Red\Extensions\Compiler\Compiler.vcxproj">
+      <Project>{9c821fbc-2bce-4017-b711-872de476df00}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

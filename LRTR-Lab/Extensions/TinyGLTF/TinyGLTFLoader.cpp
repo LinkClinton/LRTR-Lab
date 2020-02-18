@@ -257,7 +257,7 @@ namespace LRTR {
 					TINY_GLTF_HAS_VALUE(primitives.material) ? readMaterial(
 						sharing, &scene->materials[primitives.material], scene) :
 					std::make_shared<PhysicalBasedMaterial>());
-
+				
 				tinyGLTFScene->add(meshShape);
 			}
 		}

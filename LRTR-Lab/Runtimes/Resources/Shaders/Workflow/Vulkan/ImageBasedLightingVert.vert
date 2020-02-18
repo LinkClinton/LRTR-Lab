@@ -34,6 +34,4 @@ void main()
     
     outPosition = inPosition;
     outTexcoord = inTexcoord;
-
-    gl_Position.y = -gl_Position.y;
 }

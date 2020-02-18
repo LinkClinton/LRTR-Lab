@@ -9,6 +9,11 @@
 
 #include <CodeRed/Interface/GpuGraphicsCommandList.hpp>
 
+#define SHADER_SOURCE_HLSL
+#ifndef SHADER_SOURCE_HLSL
+#define SHADER_SOURCE_GLSL
+#endif
+
 namespace LRTR {
 
 	using SceneCamera = ProjectiveCamera;

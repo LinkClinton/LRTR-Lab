@@ -145,16 +145,23 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 			CodeRed::FillMode::Solid
 		)
 	);
-
 	CompileShaderWorkflow workflow;
 
-	const auto vShaderFile = 
-		mDevice->apiVersion() == CodeRed::APIVersion::DirectX12 ? 
+#ifdef SHADER_SOURCE_HLSL
+	const auto sourceLanguage = SourceLanguage::eHLSL;
+#else
+	const auto sourceLanguage = SourceLanguage::eGLSL;
+#endif
+	const auto targetLanguage = mDevice->apiVersion() == CodeRed::APIVersion::DirectX12 ?
+		TargetLanguage::eDXIL : TargetLanguage::eSPIRV;
+
+	const auto vShaderFile =
+		sourceLanguage == SourceLanguage::eHLSL ?
 		"./Resources/Shaders/Systems/DirectX12/PhysicalBasedRenderSystemVert.hlsl" :
 		"./Resources/Shaders/Systems/Vulkan/PhysicalBasedRenderSystemVert.vert";
 
 	const auto fShaderFile =
-		mDevice->apiVersion() == CodeRed::APIVersion::DirectX12 ?
+		sourceLanguage == SourceLanguage::eHLSL ?
 		"./Resources/Shaders/Systems/DirectX12/PhysicalBasedRenderSystemFrag.hlsl" :
 		"./Resources/Shaders/Systems/Vulkan/PhysicalBasedRenderSystemFrag.frag";
 
@@ -163,8 +170,9 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 			CodeRed::ShaderType::Vertex,
 			workflow.start({ CompileShaderInput(
 				vShaderFile,
-				mDevice->apiVersion(),
-				CodeRed::ShaderType::Vertex
+				CodeRed::ShaderType::Vertex,
+				sourceLanguage,
+				targetLanguage
 			) })
 		)
 	);
@@ -174,11 +182,13 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 			CodeRed::ShaderType::Pixel,
 			workflow.start({ CompileShaderInput(
 				fShaderFile,
-				mDevice->apiVersion(),
-				CodeRed::ShaderType::Pixel
+				CodeRed::ShaderType::Pixel,
+				sourceLanguage,
+				targetLanguage
 			) })
 		)
 	);
+	
 }
 
 void LRTR::PhysicalBasedRenderSystem::update(const Group<Identity, std::shared_ptr<Shape>>& shapes, float delta)

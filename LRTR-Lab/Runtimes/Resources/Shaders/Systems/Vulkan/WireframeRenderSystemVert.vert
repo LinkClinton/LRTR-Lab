@@ -23,5 +23,4 @@ void main()
 {
     gl_Position = (transforms.Transform[config.Index] * vec4(inPosition, 1.0));
     gl_Position = (view.View * gl_Position);
-    gl_Position.y = -gl_Position.y;
 }

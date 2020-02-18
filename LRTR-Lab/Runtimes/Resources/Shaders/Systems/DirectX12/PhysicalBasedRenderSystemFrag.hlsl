@@ -158,7 +158,7 @@ TextureCube preFilteringMap : register(t11);
 Texture2D preComputingBRDF : register(t12);
 
 SamplerState materialSampler : register(s13);
-ConstantBuffer<Config> config : register(b14);
+[[vk::push_constant]] ConstantBuffer<Config> config : register(b14);
 
 float3 getNormal(float3 normal, float2 texcoord, float3 tangent)
 {

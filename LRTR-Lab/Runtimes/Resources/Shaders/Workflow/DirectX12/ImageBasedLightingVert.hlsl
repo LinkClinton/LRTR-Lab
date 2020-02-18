@@ -29,7 +29,7 @@ Texture2D hdrTexture : register(t1, space0);
 TextureCube environmentMap : register(t2, space0);
 
 SamplerState textureSampler : register(s0, space1);
-ConstantBuffer<Config> config : register(b0, space2);
+[[vk::push_constant]] ConstantBuffer<Config> config : register(b0, space2);
 
 Output main(float3 position : POSITION, float3 texcoord : TEXCOORD)
 {

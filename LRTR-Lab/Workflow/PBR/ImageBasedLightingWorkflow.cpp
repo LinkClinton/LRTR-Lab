@@ -88,30 +88,41 @@ LRTR::ImageBasedLightingWorkflow::ImageBasedLightingWorkflow(const std::shared_p
 	//Compile Shaders 
 	CompileShaderWorkflow workflow;
 	
-	const auto EnvironmentMapVShaderFile =
-		mDevice->apiVersion() == CodeRed::APIVersion::DirectX12 ?
+#ifdef SHADER_SOURCE_HLSL
+	const auto sourceLanguage = SourceLanguage::eHLSL;
+#else
+	const auto sourceLanguage = SourceLanguage::eGLSL;
+#endif
+	const auto targetLanguage = mDevice->apiVersion() == CodeRed::APIVersion::DirectX12 ?
+		TargetLanguage::eDXIL : TargetLanguage::eSPIRV;
+
+	const auto vShaderFile =
+		sourceLanguage == SourceLanguage::eHLSL ?
 		"./Resources/Shaders/Workflow/DirectX12/ImageBasedLightingVert.hlsl" :
 		"./Resources/Shaders/Workflow/Vulkan/ImageBasedLightingVert.vert";
-	const auto EnvironmentMapFShaderFile =
-		mDevice->apiVersion() == CodeRed::APIVersion::DirectX12 ?
+
+	const auto fShaderFile =
+		sourceLanguage == SourceLanguage::eHLSL ?
 		"./Resources/Shaders/Workflow/DirectX12/ImageBasedLightingFrag.hlsl" :
 		"./Resources/Shaders/Workflow/Vulkan/ImageBasedLightingFrag.frag";
 
 	mVertShader = pipelineFactory->createShaderState(
 		CodeRed::ShaderType::Vertex,
 		workflow.start({ CompileShaderInput(
-			EnvironmentMapVShaderFile,
-			mDevice->apiVersion(),
-			CodeRed::ShaderType::Vertex
+			vShaderFile,
+			CodeRed::ShaderType::Vertex,
+			sourceLanguage,
+			targetLanguage
 		) })
 	);
 
 	mFragShader = pipelineFactory->createShaderState(
 		CodeRed::ShaderType::Pixel,
 		workflow.start({ CompileShaderInput(
-			EnvironmentMapFShaderFile,
-			mDevice->apiVersion(),
-			CodeRed::ShaderType::Pixel
+			fShaderFile,
+			CodeRed::ShaderType::Pixel,
+			sourceLanguage,
+			targetLanguage
 		) })
 	);
 

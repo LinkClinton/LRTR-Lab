@@ -19,7 +19,7 @@ struct Config {
 
 StructuredBuffer<MeshBufferData> meshBuffer : register(t0);
 ConstantBuffer<View> view : register(b1);
-ConstantBuffer<Config> config : register(b2);
+[[vk::push_constant]] ConstantBuffer<Config> config : register(b2);
 
 Output main(
 	float3 position : POSITION)

@@ -39,7 +39,7 @@ struct Output
 StructuredBuffer<Transform> transforms : register(t2);
 ConstantBuffer<View> view : register(b3);
 
-ConstantBuffer<Config> config : register(b14);
+[[vk::push_constant]] ConstantBuffer<Config> config : register(b14);
 
 Output main(
     float3 position : POSITION,
