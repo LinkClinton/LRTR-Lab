@@ -48,7 +48,7 @@ auto LRTR::CompileShaderWorkflow::work(
 	const auto option = CompileOption(startup.InputData.Source, startup.InputData.Target, startup.InputData.Type);
 	const auto result = compile(mShaderCode, option);
 
-	LRTR_DEBUG_ERROR_IF(result.failed(), result.Message);
+	LRTR_DEBUG_THROW_IF(result.failed(), result.Message);
 	LRTR_DEBUG_WARNING_IF(!result.Message.empty(), result.Message);
 
 	return result.Code;

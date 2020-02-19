@@ -25,6 +25,7 @@
 #define LRTR_DEBUG_ERROR(...) LRTR_ERROR(__VA_ARGS__);
 #define LRTR_DEBUG_INFO(...) LRTR_INFO(__VA_ARGS__);
 
+#define LRTR_DEBUG_THROW_IF(condition, ...) if (condition) { LRTR_ERROR(__VA_ARGS__); throw std::exception(); }
 #define LRTR_DEBUG_WARNING_IF(condition, ...) if (condition) LRTR_DEBUG_WARNING(__VA_ARGS__);
 #define LRTR_DEBUG_ERROR_IF(condition, ...) if (condition) LRTR_DEBUG_ERROR(__VA_ARGS__);
 #define LRTR_DEBUG_INFO_IF(condition, ...) if (condition) LRTR_DEBUG_INFO(__VA_ARGS__);
@@ -33,6 +34,7 @@
 #define LRTR_DEBUG_ERROR(...)
 #define LRTR_DEBUG_INFO(...)
 
+#define LRTR_DEBUG_THROW_IF(condition, ...)
 #define LRTR_DEBUG_WARNING_IF(condition, ...)
 #define LRTR_DEBUG_ERROR_IF(condition, ...)
 #define LRTR_DEBUG_INFO_IF(condition, ...)

@@ -11,6 +11,8 @@
 #include "../../Shared/Transform.hpp"
 #include "../../Shared/Hash.hpp"
 
+#include "../../Scenes/System.hpp"
+
 #include <CodeRed/Core/CodeRedGraphics.hpp>
 
 #include <filesystem>
