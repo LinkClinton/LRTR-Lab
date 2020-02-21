@@ -43,7 +43,7 @@ LRTR::SceneManager::SceneManager(
 	light->addComponent(std::make_shared<PointLightSource>(Vector3f(70)));
 	light->component<CollectionLabel>()->set("Light", "Point");
 	light->addComponent(std::make_shared<TransformWrap>(
-		Vector3f(4, 1, 6),
+		Vector3f(0, 1, 1),
 		Vector4f(1, 0, 0, -glm::pi<float>() * 0.5f),
 		Vector3f(1)
 		));

@@ -169,6 +169,7 @@
   <ItemGroup>
     <ClInclude Include="PBR\ImageBasedLightingWorkflow.hpp" />
     <ClInclude Include="Shaders\CompileShaderWorkflow.hpp" />
+    <ClInclude Include="Shadow\PointShadowMapWorkflow.hpp" />
     <ClInclude Include="Workflow.hpp" />
     <ClInclude Include="WorkflowStartup.hpp" />
   </ItemGroup>
