@@ -205,7 +205,7 @@ float4 main(
 		color = color + ComputePointLight(lights[index], material, position, normal, toEye, F0);
 	}
 	
-	//ambient lighting
+	//ambient lighting with environment map
     if (config.HasEnvironmentLight)
     {
         float3 N = normal;
@@ -228,7 +228,11 @@ float4 main(
         float3 specular = preFilteringColor * (F * brdf.x + brdf.y);
 		
         color = color + (kD * diffuse + specular) * occlusion;
-    }
+	}
+	else {
+		//if we do not have environment map, we will use default environment light
+		color = color + material.BaseColor * 0.03 * occlusion;
+	}
 	
     color = color + material.Emissive.rgb;
 	

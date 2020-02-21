@@ -235,6 +235,8 @@ void main()
         vec3 specular = preFilteringColor * (F * brdf.x + brdf.y);
 		
         color = color + (kD * diffuse + specular) * occlusion;
+    }else {
+        color = color + material.BaseColor.rgb * vec3(0.03) * occlusion;
     }
 	
     color = color + material.Emissive.rgb;

@@ -237,4 +237,9 @@
       <Filter>Resources\Models</Filter>
     </CopyFileToFolders>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Models\Sponza.glb">
+      <Filter>Resources\Models</Filter>
+    </None>
+  </ItemGroup>
 </Project>

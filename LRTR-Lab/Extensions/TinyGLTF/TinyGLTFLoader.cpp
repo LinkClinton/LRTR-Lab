@@ -210,10 +210,10 @@ namespace LRTR {
 			Vector3f(axis.z, axis.x, axis.y)), scale).matrix();
 		
 		MathUtility::decompose(currentTransform, translation, rotation, scale);
-		
+
 		if (TINY_GLTF_HAS_VALUE(node->mesh)) {
 			const auto& mesh = scene->meshes[node->mesh];
-
+			
 			for (size_t index = 0; index < mesh.primitives.size(); index++) {
 				const auto& primitives = mesh.primitives[index];
 				const auto meshShape = std::make_shared<Shape>();
@@ -281,8 +281,11 @@ auto LRTR::TinyGLTFLoader::loadScene(
 	std::string warning;
 	
 	tinygltf::TinyGLTF loader;
-
+	
 	loader.LoadBinaryFromFile(&model, &error, &warning, fileName);
+	
+	LRTR_DEBUG_WARNING_IF(!warning.empty(), warning);
+	LRTR_DEBUG_ERROR_IF(!error.empty(), error);
 	
 	auto tinyGLTFScene = std::make_shared<TinyGLTFScene>(sharing, sceneName, 2);
 
@@ -300,68 +303,5 @@ auto LRTR::TinyGLTFLoader::loadScene(
 		TinyGLTFBuildScene(sharing, tinyGLTFScene, transform.matrix(), &model, &model.nodes[index]);
 	}
 
-	if (fileName == "./Resources/Models/WaterBottle.glb" || 
-		fileName == "./Resources/Models/DamagedHelmet.glb") {
-		const auto light0 = std::make_shared<Shape>();
-		const auto light1 = std::make_shared<Shape>();
-		const auto light2 = std::make_shared<Shape>();
-
-		light0->addComponent(std::make_shared<TransformWrap>(
-			Vector3f(0.f, 5.f, 10.f),
-			Vector4f(0, 0, 1, 0),
-			Vector3f(1)));
-		light0->addComponent(std::make_shared<PointLightSource>(Vector3f(100)));
-		light0->component<CollectionLabel>()->set("Light", "light0");
-		
-		light1->addComponent(std::make_shared<TransformWrap>(
-			Vector3f(10.f, 5.f, 0.f),
-			Vector4f(0, 0, 1, 0),
-			Vector3f(1)));
-		light1->addComponent(std::make_shared<PointLightSource>(Vector3f(100)));
-		light1->component<CollectionLabel>()->set("Light", "light1");
-
-		light2->addComponent(std::make_shared<TransformWrap>(
-			Vector3f(-10.f, 5.f, 0.f),
-			Vector4f(0, 0, 1, 0),
-			Vector3f(1)));
-		light2->addComponent(std::make_shared<PointLightSource>(Vector3f(100)));
-		light2->component<CollectionLabel>()->set("Light", "light2");
-
-		tinyGLTFScene->add(light0);
-		tinyGLTFScene->add(light1);
-		tinyGLTFScene->add(light2);
-	}
-	
-	if (fileName == "./Resources/Models/MetalRoughSpheresNoTextures.glb") {
-		const auto light0 = std::make_shared<Shape>();
-		const auto light1 = std::make_shared<Shape>();
-		const auto light2 = std::make_shared<Shape>();
-
-		light0->addComponent(std::make_shared<TransformWrap>(
-			Vector3f(0.002f, 0.003f, 2.f),
-			Vector4f(0, 0, 1, 0),
-			Vector3f(1)));
-		light0->addComponent(std::make_shared<PointLightSource>(Vector3f(10)));
-		light0->component<CollectionLabel>()->set("Light", "light0");
-
-		light1->addComponent(std::make_shared<TransformWrap>(
-			Vector3f(0.002f, 5.f, 2.f),
-			Vector4f(0, 0, 1, 0),
-			Vector3f(1)));
-		light1->addComponent(std::make_shared<PointLightSource>(Vector3f(10)));
-		light1->component<CollectionLabel>()->set("Light", "light1");
-
-		light2->addComponent(std::make_shared<TransformWrap>(
-			Vector3f(5.f, 0.003f, 2.f),
-			Vector4f(0, 0, 1, 0),
-			Vector3f(1)));
-		light2->addComponent(std::make_shared<PointLightSource>(Vector3f(10)));
-		light2->component<CollectionLabel>()->set("Light", "light2");
-
-		tinyGLTFScene->add(light0);
-		tinyGLTFScene->add(light1);
-		tinyGLTFScene->add(light2);
-	}
-	
 	return tinyGLTFScene;
 }

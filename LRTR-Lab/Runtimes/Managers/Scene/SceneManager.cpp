@@ -11,6 +11,7 @@
 #include "../../../Scenes/Systems/LinesMeshRenderSystem.hpp"
 #include "../../../Scenes/Systems/WireframeRenderSystem.hpp"
 
+#include "../../../Scenes/Components/LightSources/PointLightSource.hpp"
 #include "../../../Scenes/Components/MeshData/TrianglesMesh.hpp"
 #include "../../../Scenes/Components/Environment/SkyBox.hpp"
 #include "../../../Scenes/Components/CollectionLabel.hpp"
@@ -26,21 +27,33 @@ LRTR::SceneManager::SceneManager(
 	const std::shared_ptr<CodeRed::GpuLogicalDevice>& device) :
 	Manager(sharing), mDevice(device)
 {
-	ImageBasedLightingWorkflow workflow(mDevice);
+	/*ImageBasedLightingWorkflow workflow(mDevice);
 
 	auto input = ImageBasedLightingInput(mRuntimeSharing->queue(), mRuntimeSharing,
 		"./Resources/Textures/HDR/newport_loft.hdr");
 	
-	auto output = workflow.start({ input });
+	auto output = workflow.start({ input });*/
 	
-	add(TinyGLTFLoader::loadScene(mRuntimeSharing, "Scene", "./Resources/Models/WaterBottle.glb",
-		Transform::rotate(-glm::pi<float>() * 0.5f, Vector3f(0, 1, 0))));
+	add(TinyGLTFLoader::loadScene(mRuntimeSharing, "Scene", "./Resources/Models/Sponza.glb",
+		Transform::rotate(glm::pi<float>() * 0.5f, Vector3f(1, 0, 0)) *
+		Transform::rotate(glm::pi<float>() * 1.5f, Vector3f(0, 1, 0))));
+
+	auto light = std::make_shared<Shape>();
+
+	light->addComponent(std::make_shared<PointLightSource>(Vector3f(70)));
+	light->component<CollectionLabel>()->set("Light", "Point");
+	light->addComponent(std::make_shared<TransformWrap>(
+		Vector3f(4, 1, 6),
+		Vector4f(1, 0, 0, -glm::pi<float>() * 0.5f),
+		Vector3f(1)
+		));
 	
+	mScenes["Scene"]->add(light);
 	
 	const auto camera = std::make_shared<PerspectiveCamera>(
 		std::make_shared<TransformWrap>(
-			Vector3f(0.003f, 0.003f, 0.513f),
-			Vector4f(0, 0, 1, 0),
+			Vector3f(0, 1, 1),
+			Vector4f(1, 0, 0, glm::pi<float>() * 0.5f),
 			Vector3f(1)),
 		std::make_shared<Perspective>(
 			MathUtility::pi<float>() * 0.25f,
@@ -51,7 +64,7 @@ LRTR::SceneManager::SceneManager(
 
 	camera->component<CollectionLabel>()->set("Collection", "Camera");
 
-	mScenes["Scene"]->property()->addComponent(std::make_shared<SkyBox>(output.EnvironmentMap));
+	//mScenes["Scene"]->property()->addComponent(std::make_shared<SkyBox>(output.EnvironmentMap));
 	
 	/*mScenes["Scene"]->property()->addComponent(std::make_shared<SkyBox>(
 		CodeRed::ResourceHelper::loadSkyBox(
@@ -69,7 +82,7 @@ LRTR::SceneManager::SceneManager(
 	mScenes["Scene"]->addSystem(std::make_shared<PastEffectRenderSystem>(mRuntimeSharing, device));
 	mScenes["Scene"]->addSystem(std::make_shared<CollectionUpdateSystem>(mRuntimeSharing));
 
-	for (auto& system : mScenes["Scene"]->systems()) {
+	/*for (auto& system : mScenes["Scene"]->systems()) {
 		if (std::dynamic_pointer_cast<PhysicalBasedRenderSystem>(system) != nullptr) {
 			auto pbrSystem = std::dynamic_pointer_cast<PhysicalBasedRenderSystem>(system);
 			
@@ -79,7 +92,7 @@ LRTR::SceneManager::SceneManager(
 				output.PreComputingBRDF
 			});
 		}
-	}
+	}*/
 }
 
 void LRTR::SceneManager::update(float delta)

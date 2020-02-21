@@ -49,7 +49,10 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 	);
 	
 	mSampler = mDevice->createSampler(
-		CodeRed::SamplerInfo(16)
+		CodeRed::SamplerInfo(16,
+			CodeRed::AddressMode::Repeat,
+			CodeRed::AddressMode::Repeat,
+			CodeRed::AddressMode::Repeat)
 	);
 
 	//resource 0 : material properties
