@@ -3,6 +3,8 @@
 #include "Quaternion.hpp"
 #include "Vector.hpp"
 #include "Matrix.hpp"
+#include "Radius.hpp"
+#include "Size.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
@@ -12,10 +14,20 @@ namespace LRTR {
 	using Real = float;
 
 	using QuaternionF = Quaternion<float>;
+	
 	using Vector1f = Vector1<float>;
 	using Vector2f = Vector2<float>;
 	using Vector3f = Vector3<float>;
 	using Vector4f = Vector4<float>;
+
+	using Radius1f = Radius1<float>;
+	using Radius2f = Radius2<float>;
+	using Radius3f = Radius3<float>;
+
+	using Size2f = Size2<float>;
+	using Size2i = Size2<int>;
+	using Size2u = Size2<unsigned>;
+	
 	using UInt32 = unsigned;
 
 	using Matrix4x4f = Matrix4x4<float>;

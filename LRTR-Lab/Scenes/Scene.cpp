@@ -13,8 +13,12 @@ LRTR::Scene::Scene(
 	const size_t maxFrameCount) :
 	mDevice(device), mMaxFrameCount(maxFrameCount), mName(name)
 {
-	mCommandAllocator = mDevice->createCommandAllocator();
-	mCommandList = mDevice->createGraphicsCommandList(mCommandAllocator);
+	mCommandAllocators.push_back(mDevice->createCommandAllocator());
+	mCommandAllocators.push_back(mDevice->createCommandAllocator());
+	
+	//first for processing, second for rendering
+	mCommandLists.push_back(mDevice->createGraphicsCommandList(mCommandAllocators[0]));
+	mCommandLists.push_back(mDevice->createGraphicsCommandList(mCommandAllocators[1]));
 
 	add(mProperty = std::make_shared<SceneProperty>());
 
@@ -85,27 +89,31 @@ auto LRTR::Scene::render(
 {
 	setTarget(texture);
 
-	mCommandAllocator->reset();
-	mCommandList->beginRecording();
+	mCommandAllocators[0]->reset();
+	mCommandAllocators[1]->reset();
 
-	mCommandList->beginRenderPass(mRenderPass, mFrameBuffer);
-	mCommandList->setViewPort(mFrameBuffer->fullViewPort());
-	mCommandList->setScissorRect(mFrameBuffer->fullScissorRect());
+	mCommandLists[0]->beginRecording();
+	mCommandLists[1]->beginRecording();
+
+	mCommandLists[1]->beginRenderPass(mRenderPass, mFrameBuffer);
+	mCommandLists[1]->setViewPort(mFrameBuffer->fullViewPort());
+	mCommandLists[1]->setScissorRect(mFrameBuffer->fullScissorRect());
 
 	for (const auto& system : mSystems) {
 		auto renderSystem = std::dynamic_pointer_cast<RenderSystem>(system);
 
 		if (renderSystem != nullptr)
-			renderSystem->render(mCommandList, mFrameBuffer, camera, delta);
+			renderSystem->render(mCommandLists, mFrameBuffer, camera, delta);
 	}
 	
-	mCommandList->endRenderPass();
+	mCommandLists[1]->endRenderPass();
 
-	mCommandList->endRecording();
+	mCommandLists[0]->endRecording();
+	mCommandLists[1]->endRecording();
 
 	mCurrentFrameIndex = (mCurrentFrameIndex + 1) % mMaxFrameCount;
 
-	return { mCommandList };
+	return mCommandLists;
 }
 
 void LRTR::Scene::setTarget(const std::shared_ptr<CodeRed::GpuTexture>& texture)

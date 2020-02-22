@@ -18,7 +18,7 @@ namespace LRTR {
 			const Group<Identity, std::shared_ptr<Shape>>& shapes, float delta) override;
 
 		void render(
-			const std::shared_ptr<CodeRed::GpuGraphicsCommandList>& commandList,
+			const std::vector<std::shared_ptr<CodeRed::GpuGraphicsCommandList>>& commandLists,
 			const std::shared_ptr<CodeRed::GpuFrameBuffer>& frameBuffer, 
 			const std::shared_ptr<SceneCamera>& camera, 
 			float delta) override;

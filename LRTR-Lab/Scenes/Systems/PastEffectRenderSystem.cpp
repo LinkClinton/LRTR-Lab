@@ -131,7 +131,7 @@ void LRTR::PastEffectRenderSystem::update(const Group<Identity, std::shared_ptr<
 }
 
 void LRTR::PastEffectRenderSystem::render(
-	const std::shared_ptr<CodeRed::GpuGraphicsCommandList>& commandList,
+	const std::vector<std::shared_ptr<CodeRed::GpuGraphicsCommandList>>& commandLists,
 	const std::shared_ptr<CodeRed::GpuFrameBuffer>& frameBuffer, 
 	const std::shared_ptr<SceneCamera>& camera,
 	float delta)
@@ -145,6 +145,8 @@ void LRTR::PastEffectRenderSystem::render(
 	const auto descriptorHeap = mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuDescriptorHeap>("DescriptorHeap");
 	const auto skyBox = mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuTexture>("SkyBox");
 	const auto isHDR = skyBox == nullptr ? 0 : CodeRed::PixelFormatSizeOf::get(skyBox->format()) > 4;
+
+	const auto commandList = commandLists[1];
 	
 	commandList->setGraphicsPipeline(mPipelineInfo->graphicsPipeline());
 	commandList->setResourceLayout(mResourceLayout);

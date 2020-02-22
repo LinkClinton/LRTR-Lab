@@ -22,7 +22,7 @@ namespace LRTR {
 		size_t PreComputingBRDFSize = 512;
 
 		std::shared_ptr<CodeRed::GpuCommandQueue> Queue = nullptr;
-		std::shared_ptr<RuntimeSharing> mRuntimeSharing = nullptr;
+		std::shared_ptr<RuntimeSharing> Sharing = nullptr;
 		
 		ImageBasedLightingInput() = default;
 
@@ -30,7 +30,7 @@ namespace LRTR {
 			const std::shared_ptr<CodeRed::GpuCommandQueue> queue,
 			const std::shared_ptr<RuntimeSharing>& sharing,
 			const std::string fileName) :
-			FileName(fileName), Queue(queue), mRuntimeSharing(sharing) {}
+			FileName(fileName), Queue(queue), Sharing(sharing) {}
 		
 		auto string() const noexcept -> std::string;
 	};

@@ -181,7 +181,7 @@ void LRTR::WireframeRenderSystem::update(const Group<Identity, std::shared_ptr<S
 }
 
 void LRTR::WireframeRenderSystem::render(
-	const std::shared_ptr<CodeRed::GpuGraphicsCommandList>& commandList,
+	const std::vector<std::shared_ptr<CodeRed::GpuGraphicsCommandList>>& commandLists,
 	const std::shared_ptr<CodeRed::GpuFrameBuffer>& frameBuffer, 
 	const std::shared_ptr<SceneCamera>& camera,
 	float delta)
@@ -196,6 +196,8 @@ void LRTR::WireframeRenderSystem::render(
 	const auto vertexBuffer = meshDataAssetComponent->positions();
 	const auto indexBuffer = meshDataAssetComponent->indices();
 
+	const auto commandList = commandLists[1];
+	
 	commandList->setGraphicsPipeline(mPipelineInfo->graphicsPipeline());
 	commandList->setResourceLayout(mResourceLayout);
 	commandList->setDescriptorHeap(descriptorHeap);

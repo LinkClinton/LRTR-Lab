@@ -55,13 +55,13 @@ namespace LRTR {
 	protected:
 		std::shared_ptr<CodeRed::GpuLogicalDevice> mDevice;
 
-		std::shared_ptr<CodeRed::GpuGraphicsCommandList> mCommandList;
-		std::shared_ptr<CodeRed::GpuCommandAllocator> mCommandAllocator;
-
 		std::shared_ptr<CodeRed::GpuFrameBuffer> mFrameBuffer;
 		std::shared_ptr<CodeRed::GpuRenderPass> mRenderPass;
 
 		std::shared_ptr<CodeRed::GpuTexture> mDepthStencil;
+
+		std::vector<std::shared_ptr<CodeRed::GpuCommandAllocator>> mCommandAllocators;
+		std::vector<std::shared_ptr<CodeRed::GpuGraphicsCommandList>> mCommandLists;
 	private:
 		size_t mCurrentFrameIndex = 0;
 		size_t mMaxFrameCount = 0;

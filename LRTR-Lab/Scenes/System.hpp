@@ -56,7 +56,7 @@ namespace LRTR {
 		~RenderSystem() = default;
 	
 		virtual void render(
-			const std::shared_ptr<CodeRed::GpuGraphicsCommandList>& commandList,
+			const std::vector<std::shared_ptr<CodeRed::GpuGraphicsCommandList>>& commandLists,
 			const std::shared_ptr<CodeRed::GpuFrameBuffer>& frameBuffer,
 			const std::shared_ptr<SceneCamera>& camera,
 			float delta) = 0;

@@ -14,23 +14,32 @@ namespace LRTR {
 		Workflow() = default;
 
 		~Workflow() = default;
+	};
 
+	template<typename InputType, typename OutputType>
+	class Workflow<InputType, OutputType, true> : public Noncopyable {
+	public:
 		auto start(const WorkflowStartup<InputType>& startup) -> OutputType;
-	protected:	
+	protected:
 		virtual auto readCache(const WorkflowStartup<InputType>& startup) -> std::optional<OutputType> = 0;
 
 		virtual void writeCache(const WorkflowStartup<InputType>& startup, const OutputType& output) = 0;
-		
+
 		virtual auto work(const WorkflowStartup<InputType>& startup) -> OutputType = 0;
 	};
 
-	template <typename InputType, typename OutputType, bool EnableCache>
-	auto Workflow<InputType, OutputType, EnableCache>::start(
+	template<typename InputType, typename OutputType>
+	class Workflow<InputType, OutputType, false> : public Noncopyable {
+	public:
+		auto start(const WorkflowStartup<InputType>& startup) -> OutputType;
+	protected:
+		virtual auto work(const WorkflowStartup<InputType>& startup) -> OutputType = 0;
+	};
+
+	template <typename InputType, typename OutputType>
+	auto Workflow<InputType, OutputType, true>::start(
 		const WorkflowStartup<InputType>& startup) -> OutputType
 	{
-		//if we do not want to use cache, we will start work
-		if (EnableCache == false) return work(startup);
-
 		const auto cache = readCache(startup);
 
 		if (cache.has_value()) return cache.value();
@@ -42,4 +51,9 @@ namespace LRTR {
 		return output;
 	}
 
+	template <typename InputType, typename OutputType>
+	auto Workflow<InputType, OutputType, false>::start(const WorkflowStartup<InputType>& startup) -> OutputType
+	{
+		return work(startup);
+	}
 }

@@ -8,6 +8,9 @@
     <ClCompile Include="PBR\ImageBasedLightingWorkflow.cpp">
       <Filter>PBR</Filter>
     </ClCompile>
+    <ClCompile Include="Shadow\PointShadowMapWorkflow.cpp">
+      <Filter>Shadow</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Workflow.hpp" />

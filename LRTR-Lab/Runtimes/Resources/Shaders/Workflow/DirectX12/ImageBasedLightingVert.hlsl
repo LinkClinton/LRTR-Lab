@@ -17,6 +17,7 @@ struct Config
     uint EnvironmentMapSize;
     float Roughenss;
 };
+
 struct Output
 {
     float4 SVPosition : SV_POSITION;

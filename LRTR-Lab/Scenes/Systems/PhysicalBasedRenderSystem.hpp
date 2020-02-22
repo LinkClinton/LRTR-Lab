@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../../Workflow/Shadow/PointShadowMapWorkflow.hpp"
+
 #include "../../Shared/Graphics/PipelineInfo.hpp"
 #include "../../Shared/Accelerators/Group.hpp"
 
@@ -33,6 +35,18 @@ namespace LRTR {
 			const std::shared_ptr<CodeRed::GpuTexture>& preComputingBRDF) :
 			Irradiance(irradiance), PreFiltering(preFiltering), PreComputingBRDF(preComputingBRDF) {}
 	};
+
+	struct LightShadowArea {
+		Vector3f Position;
+		float Radius = 100.0f;
+
+		LightShadowArea() = default;
+
+		LightShadowArea(
+			const Vector3f& position,
+			const float& radius) :
+			Position(position), Radius(radius) {}
+	};
 	
 	class PhysicalBasedRenderSystem : public RenderSystem {
 	public:
@@ -45,7 +59,7 @@ namespace LRTR {
 			const Group<Identity, std::shared_ptr<Shape>>& shapes, float delta) override;
 
 		void render(
-			const std::shared_ptr<CodeRed::GpuGraphicsCommandList>& commandList, 
+			const std::vector<std::shared_ptr<CodeRed::GpuGraphicsCommandList>>& commandLists, 
 			const std::shared_ptr<CodeRed::GpuFrameBuffer>& frameBuffer, 
 			const std::shared_ptr<SceneCamera>& camera, 
 			float delta) override;
@@ -68,11 +82,17 @@ namespace LRTR {
 		std::shared_ptr<CodeRed::PipelineInfo> mPipelineInfo;
 		std::shared_ptr<CodeRed::GpuBuffer> mViewBuffer;
 		std::shared_ptr<CodeRed::GpuSampler> mSampler;
-		
-		std::vector<PhysicalBasedDrawCall> mDrawCalls;
 
-		EnvironmentLight mEnvironmentLight;
+		std::shared_ptr<CodeRed::GpuTexture> mPointShadowMap;
+
+		std::shared_ptr<PointShadowMapWorkflow> mPointShadowMapWorkflow;
+
+		std::vector<LightShadowArea> mLightShadowAreas;
+		std::vector<PhysicalBasedDrawCall> mDrawCalls;
+		std::vector<ShadowCastInfo> mShadowCastInfos;
 		
+		EnvironmentLight mEnvironmentLight;
+
 		size_t mLights = 0;
 	};
 	

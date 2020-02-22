@@ -61,6 +61,9 @@
     <Filter Include="Resources\Shaders\Workflow\Vulkan">
       <UniqueIdentifier>{28452f56-365b-4ac9-96fa-00658abc701c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources\Shaders\Workflow\HLSL">
+      <UniqueIdentifier>{240458d8-f48a-404b-95da-69b214924925}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Managers\Asset\Components\AssetComponent.hpp">
@@ -236,10 +239,14 @@
     <CopyFileToFolders Include="Resources\Models\DamagedHelmet.glb">
       <Filter>Resources\Models</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Models\Sponza.glb" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Models\Sponza.glb">
-      <Filter>Resources\Models</Filter>
-    </None>
+    <FxCompile Include="Resources\Shaders\Workflow\HLSL\PointShadowMapFrag.hlsl">
+      <Filter>Resources\Shaders\Workflow\HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Workflow\HLSL\PointShadowMapVert.hlsl">
+      <Filter>Resources\Shaders\Workflow\HLSL</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

@@ -225,7 +225,7 @@ void LRTR::LinesMeshRenderSystem::update(const Group<Identity, std::shared_ptr<S
 }
 
 void LRTR::LinesMeshRenderSystem::render(
-	const std::shared_ptr<CodeRed::GpuGraphicsCommandList>& commandList,
+	const std::vector<std::shared_ptr<CodeRed::GpuGraphicsCommandList>>& commandLists,
 	const std::shared_ptr<CodeRed::GpuFrameBuffer>& frameBuffer,
 	const std::shared_ptr<SceneCamera>& camera,
 	float delta)
@@ -237,6 +237,8 @@ void LRTR::LinesMeshRenderSystem::render(
 	const auto vertexBuffer = mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>("VertexBuffer");
 	const auto indexBuffer = mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>("IndexBuffer");
 
+	const auto commandList = commandLists[1];
+	
 	commandList->setGraphicsPipeline(mPipelineInfo->graphicsPipeline());
 	commandList->setResourceLayout(mResourceLayout);
 	commandList->setDescriptorHeap(descriptorHeap);

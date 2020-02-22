@@ -191,13 +191,21 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 			) })
 		)
 	);
-	
+
+	mPointShadowMap = mDevice->createTexture(
+		CodeRed::ResourceInfo::CubeMap(1024, 1024, CodeRed::PixelFormat::Depth32BitFloat, 1,
+			CodeRed::ResourceUsage::DepthStencil)
+	);
+
+	mPointShadowMapWorkflow = std::make_shared<PointShadowMapWorkflow>(mDevice);
 }
 
 void LRTR::PhysicalBasedRenderSystem::update(const Group<Identity, std::shared_ptr<Shape>>& shapes, float delta)
 {
+	mLightShadowAreas.clear();
+	mShadowCastInfos.clear();
 	mDrawCalls.clear();
-
+	
 	std::vector<Matrix4x4f> transforms;
 	std::vector<SharedLight> lights;
 	std::vector<SharedMaterial> materials;
@@ -249,9 +257,10 @@ void LRTR::PhysicalBasedRenderSystem::update(const Group<Identity, std::shared_p
 
 		if (mEnvironmentLight.PreComputingBRDF != nullptr) descriptorHeap->bindTexture(
 			mEnvironmentLight.PreComputingBRDF, 12);
-		
-		mDrawCalls.push_back(drawCall);
 
+		mShadowCastInfos.push_back({ trianglesMesh, index });
+		mDrawCalls.push_back(drawCall);
+		
 		transforms.push_back(transform);
 		materials.push_back(material);
 	};
@@ -281,6 +290,8 @@ void LRTR::PhysicalBasedRenderSystem::update(const Group<Identity, std::shared_p
 				transform != nullptr ? Vector4f(transform->translation(), 1.0f) : Vector4f(0),
 				Vector4f(pointLight->intensity(), 1.0f)
 				});
+
+			mLightShadowAreas.push_back({ lights.back().Position, 100.0f });
 		}
 	}
 
@@ -330,7 +341,7 @@ void LRTR::PhysicalBasedRenderSystem::update(const Group<Identity, std::shared_p
 }
 
 void LRTR::PhysicalBasedRenderSystem::render(
-	const std::shared_ptr<CodeRed::GpuGraphicsCommandList>& commandList,
+	const std::vector<std::shared_ptr<CodeRed::GpuGraphicsCommandList>>& commandLists,
 	const std::shared_ptr<CodeRed::GpuFrameBuffer>& frameBuffer, 
 	const std::shared_ptr<SceneCamera>& camera,
 	float delta)
@@ -338,22 +349,22 @@ void LRTR::PhysicalBasedRenderSystem::render(
 	updatePipeline(frameBuffer);
 	updateCamera(camera);
 
+	// pre build shadow map for lights
+	// in this version, we only test on point shadow map
+	mPointShadowMapWorkflow->start({
+		PointShadowMapInput(
+			commandLists[0], mPointShadowMap,
+			mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>("TransformBuffer"),
+			mRuntimeSharing, mShadowCastInfos, Vector3f(mLightShadowAreas[0].Position), mLightShadowAreas[0].Radius) });
+	
 	const auto cameraPosition = getCameraPosition(camera);
 	const auto meshDataAssetComponent = std::static_pointer_cast<MeshDataAssetComponent>(
 		mRuntimeSharing->assetManager()->components().at("MeshData"));
-
-	//update the vertex buffer we use,
-	//in render function, we do not render anything
-	//so we can update vertex buffer directly
-	meshDataAssetComponent->beginAllocating();
-
-	for (const auto& drawCall : mDrawCalls)
-		meshDataAssetComponent->allocate(drawCall.Mesh);
-
-	meshDataAssetComponent->endAllocating();
-
+	
 	const auto descriptorHeapPool = mFrameResources[mCurrentFrameIndex]
 		.get<std::vector<std::shared_ptr<CodeRed::GpuDescriptorHeap>>>("DescriptorHeapPool");
+
+	const auto commandList = commandLists[1];
 	
 	commandList->setGraphicsPipeline(mPipelineInfo->graphicsPipeline());
 	commandList->setResourceLayout(mResourceLayout);

@@ -13,8 +13,6 @@
 
 #include "../../Scenes/System.hpp"
 
-#include <CodeRed/Core/CodeRedGraphics.hpp>
-
 #include <filesystem>
 
 const static auto PBRCacheLocation = "./Resources/Caches/PBR/";
@@ -302,7 +300,7 @@ auto LRTR::ImageBasedLightingWorkflow::work(
 
 	const auto commandList = mDevice->createGraphicsCommandList(mAllocator);
 	const auto meshDataAssetComponent = std::static_pointer_cast<MeshDataAssetComponent>(
-		startup.InputData.mRuntimeSharing->assetManager()->components().at("MeshData"));
+		startup.InputData.Sharing->assetManager()->components().at("MeshData"));
 	
 	commandList->beginRecording();
 

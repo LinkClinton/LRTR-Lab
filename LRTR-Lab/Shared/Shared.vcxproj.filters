@@ -60,6 +60,12 @@
     <ClInclude Include="Files\FileSystem.hpp">
       <Filter>Files</Filter>
     </ClInclude>
+    <ClInclude Include="Math\Radius.hpp">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Size.hpp">
+      <Filter>Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\PipelineInfo.cpp">

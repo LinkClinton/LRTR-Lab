@@ -164,6 +164,7 @@
   <ItemGroup>
     <ClCompile Include="PBR\ImageBasedLightingWorkflow.cpp" />
     <ClCompile Include="Shaders\CompileShaderWorkflow.cpp" />
+    <ClCompile Include="Shadow\PointShadowMapWorkflow.cpp" />
     <ClCompile Include="Workflow.cpp" />
   </ItemGroup>
   <ItemGroup>
