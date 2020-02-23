@@ -47,6 +47,15 @@ namespace LRTR {
 			const float& radius) :
 			Position(position), Radius(radius) {}
 	};
+
+	struct PointShadowMap {
+		std::vector<PointShadowFrameBuffer> FrameBuffers;
+		std::shared_ptr<CodeRed::GpuTexture> Texture;
+
+		PointShadowMap(const std::shared_ptr<CodeRed::GpuLogicalDevice>& device, const size_t extent, const size_t length);
+
+		~PointShadowMap() = default;
+	};
 	
 	class PhysicalBasedRenderSystem : public RenderSystem {
 	public:
@@ -83,7 +92,7 @@ namespace LRTR {
 		std::shared_ptr<CodeRed::GpuBuffer> mViewBuffer;
 		std::shared_ptr<CodeRed::GpuSampler> mSampler;
 
-		std::shared_ptr<CodeRed::GpuTexture> mPointShadowMap;
+		std::shared_ptr<PointShadowMap> mPointShadowMap;
 
 		std::shared_ptr<PointShadowMapWorkflow> mPointShadowMapWorkflow;
 

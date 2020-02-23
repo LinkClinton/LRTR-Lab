@@ -15,6 +15,11 @@ struct Light
 {
 	vec4 Position;
 	vec4 Intensity;
+
+    float FarPlane;
+	uint Index;
+	uint Type;
+	uint Unused;
 };
 
 layout (push_constant) uniform Config
@@ -164,8 +169,9 @@ layout (set = 0, binding = 9) uniform texture2D emissiveTexture;
 layout (set = 0, binding = 10) uniform textureCube irradianceMap;
 layout (set = 0, binding = 11) uniform textureCube preFilteringMap;
 layout (set = 0, binding = 12) uniform texture2D preComputingBRDF;
+layout (set = 0, binding = 13) uniform textureCubeArray pointShadowMaps;
 
-layout (set = 0, binding = 13) uniform sampler materialSampler;
+layout (set = 1, binding = 0) uniform sampler materialSampler;
 
 vec3 getNormal(vec3 normal, vec2 texcoord, vec3 tangent)
 {
@@ -179,6 +185,21 @@ vec3 getNormal(vec3 normal, vec2 texcoord, vec3 tangent)
     mat3 TBN = mat3(T, B, N);
 
     return TBN * tangentNormal;
+}
+
+float ShadowCalculation(vec3 position, uint index)
+{
+	vec3 lightPosition = lights.Value[index].Position.xyz;
+	vec3 fragToLight = position - lightPosition;
+
+	float depth = texture(samplerCubeArray(pointShadowMaps, materialSampler), vec4(position, index)).r;
+	float closest = depth * lights.Value[index].FarPlane;
+
+	float current = length(lightPosition);
+
+	float bias = 0.05;
+
+	return current - bias > closest ? 1 : 0;
 }
 
 layout (location = 0) in vec3 inPosition;
@@ -210,7 +231,8 @@ void main()
     
     for (uint index = 0; index < config.Lights; index++)
 	{
-		color = color + ComputePointLight(lights.Value[index], material, inPosition, normal, toEye, F0);
+		color = color + ComputePointLight(lights.Value[index], material, inPosition, normal, toEye, F0) * 
+			(1.0 - ShadowCalculation(inPosition, index));
 	}
 
     if (config.HasEnvironmentLight != 0)

@@ -6,6 +6,7 @@
     <ClInclude Include="Propertyable.hpp" />
     <ClInclude Include="Renderable.hpp" />
     <ClInclude Include="TypeInfo.hpp" />
+    <ClInclude Include="Shadowable.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp" />

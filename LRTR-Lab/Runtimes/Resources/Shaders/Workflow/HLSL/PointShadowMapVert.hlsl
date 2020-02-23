@@ -37,6 +37,7 @@ Output main(float3 position : POSITION)
 
     result.Position = mul(float4(position, 1.0f), transforms[config.index].Transform).xyz;
     result.SVPosition = mul(float4(result.Position, 1.0f), view.View[config.face]);
+    result.SVPosition.y = -result.SVPosition.y;
 
     return result;
 }

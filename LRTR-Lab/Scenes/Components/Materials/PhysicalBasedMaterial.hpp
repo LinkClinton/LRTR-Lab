@@ -3,14 +3,22 @@
 #include "../../../Shared/Textures/ConstantTexture.hpp"
 #include "../../../Shared/Textures/ImageTexture.hpp"
 
+#include "../../../Core/Shadowable.hpp"
+
 #include "Material.hpp"
 
 namespace LRTR {
 
-	class PhysicalBasedMaterial : public Material {
+	class PhysicalBasedMaterial : public Material, public Shadowable {
 	public:
 		explicit PhysicalBasedMaterial();
 
+		explicit PhysicalBasedMaterial(
+			const Vector4f metallic,
+			const Vector4f baseColor,
+			const Vector4f roughness,
+			const Vector4f emissive);
+		
 		explicit PhysicalBasedMaterial(
 			const std::shared_ptr<ImageTexture>& metallic,
 			const std::shared_ptr<ImageTexture>& baseColor,
@@ -24,7 +32,7 @@ namespace LRTR {
 			const std::shared_ptr<ConstantTexture4F>& baseColor,
 			const std::shared_ptr<ConstantTexture4F>& roughness,
 			const std::shared_ptr<ConstantTexture4F>& emissive);
-
+		
 		explicit PhysicalBasedMaterial(
 			const std::shared_ptr<ConstantTexture4F>& metallicFactor,
 			const std::shared_ptr<ConstantTexture4F>& baseColorFactor,

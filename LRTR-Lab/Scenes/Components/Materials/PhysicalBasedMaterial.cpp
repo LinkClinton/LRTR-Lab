@@ -15,6 +15,18 @@ LRTR::PhysicalBasedMaterial::PhysicalBasedMaterial() :
 }
 
 LRTR::PhysicalBasedMaterial::PhysicalBasedMaterial(
+	const Vector4f metallic, const Vector4f baseColor,
+	const Vector4f roughness, const Vector4f emissive) :
+	PhysicalBasedMaterial(
+		std::make_shared<ConstantTexture4F>(metallic),
+		std::make_shared<ConstantTexture4F>(baseColor),
+		std::make_shared<ConstantTexture4F>(roughness),
+		std::make_shared<ConstantTexture4F>(emissive))
+{
+	
+}
+
+LRTR::PhysicalBasedMaterial::PhysicalBasedMaterial(
 	const std::shared_ptr<ImageTexture>& metallic,
 	const std::shared_ptr<ImageTexture>& baseColor, 
 	const std::shared_ptr<ImageTexture>& roughness,
@@ -131,7 +143,8 @@ void LRTR::PhysicalBasedMaterial::onProperty()
 
 	ImGui::BeginPropertyTable("Visibility");
 	ImGui::Property("Visibility", [&]() {ImGui::Checkbox("##Visibility", &mVisibility); });
-
+	ImGui::Property("ShadowCast", [&]() {ImGui::Checkbox("##CastShadow", &mShadowCast); });
+	
 	ImGui::EndPropertyTable();
 
 	ImGui::PopStyleColor();

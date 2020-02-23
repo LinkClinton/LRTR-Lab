@@ -166,6 +166,7 @@
     <ClInclude Include="Noncopyable.hpp" />
     <ClInclude Include="Propertyable.hpp" />
     <ClInclude Include="Renderable.hpp" />
+    <ClInclude Include="Shadowable.hpp" />
     <ClInclude Include="TypeInfo.hpp" />
   </ItemGroup>
   <ItemGroup>

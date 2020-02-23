@@ -14,6 +14,11 @@ struct Light
 {
 	float4 Position;
 	float4 Intensity;
+
+	float FarPlane;
+	uint Index;
+	uint Type;
+	uint Unused;
 };
 
 struct Config
@@ -156,9 +161,10 @@ Texture2D emissiveTexture : register(t9);
 TextureCube irradianceMap : register(t10);
 TextureCube preFilteringMap : register(t11);
 Texture2D preComputingBRDF : register(t12);
+TextureCubeArray pointShadowMaps : register(t13);
 
-SamplerState materialSampler : register(s13);
-[[vk::push_constant]] ConstantBuffer<Config> config : register(b14);
+SamplerState materialSampler : register(s0, space1);
+[[vk::push_constant]] ConstantBuffer<Config> config : register(b0, space2);
 
 float3 getNormal(float3 normal, float2 texcoord, float3 tangent)
 {
@@ -174,6 +180,38 @@ float3 getNormal(float3 normal, float2 texcoord, float3 tangent)
     return mul(tangentNormal, TBN);
 }
 
+float ShadowCalculation(float3 position, float viewDistance, uint index)
+{
+	const float3 gridSamplingDisk[20] = {
+		float3( 1,  1,  1), float3( 1, -1,  1), float3(-1, -1,  1), float3(-1,  1,  1), 
+		float3( 1,  1, -1), float3( 1, -1, -1), float3(-1, -1, -1), float3(-1,  1, -1),
+		float3( 1,  1,  0), float3( 1, -1,  0), float3(-1, -1,  0), float3(-1,  1,  0),
+		float3( 1,  0,  1), float3(-1,  0,  1), float3( 1,  0, -1), float3(-1,  0, -1),
+		float3( 0,  1,  1), float3( 0, -1,  1), float3( 0, -1, -1), float3( 0,  1, -1)
+	};
+
+	if (lights[index].Index == 0) return 0;
+
+	float3 lightPosition = lights[index].Position.xyz;
+	float3 fragToLight = position - lightPosition;
+	float diskRadius = (1.0 + (viewDistance / lights[index].FarPlane)) / 25.0;
+	float current = length(fragToLight);
+	float bias = 0.15;
+
+	float shadow = 0.0;
+	uint samples = 20;
+
+	for (uint i = 0; i < samples; i++)
+	{
+		float closest = lights[index].FarPlane * 
+			pointShadowMaps.Sample(materialSampler, float4(fragToLight + gridSamplingDisk[i] * diskRadius, lights[index].Index - 1)).r;
+		
+		if (current - bias > closest) shadow = shadow + 1.0;
+	}
+
+	return shadow / float(samples);
+}
+
 float4 main(
 	float4 svPosition : SV_POSITION,
 	float3 position : POSITION,
@@ -184,7 +222,8 @@ float4 main(
     float3 toEye = normalize(float3(config.EyePositionX, config.EyePositionY, config.EyePositionZ) - position);
 	float3 F0 = 0.04;
 	float3 color = float3(0.0f, 0.0f, 0.0f);
-    float occlusion = 1.0f;
+    float viewDistance = length(float3(config.EyePositionX, config.EyePositionY, config.EyePositionZ) - position);
+	float occlusion = 1.0f;
 	
 	Material material = materials[config.Index];
     material.Roughness = max(material.Roughness, 0.05f);
@@ -202,7 +241,7 @@ float4 main(
 	[loop]
 	for (uint index = 0; index < config.Lights; index++)
 	{
-		color = color + ComputePointLight(lights[index], material, position, normal, toEye, F0);
+		color = color + ComputePointLight(lights[index], material, position, normal, toEye, F0) * (1.0 - ShadowCalculation(position, viewDistance, index));
 	}
 	
 	//ambient lighting with environment map
@@ -231,7 +270,7 @@ float4 main(
 	}
 	else {
 		//if we do not have environment map, we will use default environment light
-		color = color + material.BaseColor * 0.03 * occlusion;
+		color = color + material.BaseColor.xyz * 0.03 * occlusion;
 	}
 	
     color = color + material.Emissive.rgb;

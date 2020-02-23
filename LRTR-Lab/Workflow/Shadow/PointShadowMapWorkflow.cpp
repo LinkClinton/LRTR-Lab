@@ -43,6 +43,13 @@ LRTR::PointShadowMapWorkflow::PointShadowMapWorkflow(const std::shared_ptr<CodeR
 
 	mPipelineInfo->setResourceLayout(mResourceLayout);
 
+	mPipelineInfo->setDepthStencilState(
+		pipelineFactory->createDetphStencilState(
+			true, true, false,
+			CodeRed::CompareOperator::LessEqual
+		)
+	);
+
 	mRenderPass = mDevice->createRenderPass(std::nullopt, 
 		CodeRed::Attachment::DepthStencil(CodeRed::PixelFormat::Depth32BitFloat));
 
@@ -130,19 +137,7 @@ auto LRTR::PointShadowMapWorkflow::work(const WorkflowStartup<PointShadowMapInpu
 	};
 	
 	for (size_t face = 0; face < 6; face++) {
-		if (mFrameBuffer[face] == nullptr) {
-			mFrameBuffer[face] = mDevice->createFrameBuffer(nullptr,
-				startup.InputData.ShadowMap->reference(CodeRed::TextureRefInfo(
-					CodeRed::ValueRange<size_t>(0, 1),
-					CodeRed::ValueRange<size_t>(face, face + 1))));
-		}else {
-			mFrameBuffer[face]->reset(nullptr,
-				startup.InputData.ShadowMap->reference(CodeRed::TextureRefInfo(
-					CodeRed::ValueRange<size_t>(0, 1),
-					CodeRed::ValueRange<size_t>(face, face + 1))));
-		}
-
-		commandList->beginRenderPass(mRenderPass, mFrameBuffer[face]);
+		commandList->beginRenderPass(mRenderPass, startup.InputData.FrameBuffers[face]);
 		
 		commandList->setViewPort(viewPort);
 		commandList->setScissorRect(scissorRect);
@@ -166,5 +161,5 @@ auto LRTR::PointShadowMapWorkflow::work(const WorkflowStartup<PointShadowMapInpu
 		commandList->endRenderPass();
 	}
 	
-	return { startup.InputData.ShadowMap };
+	return { };
 }

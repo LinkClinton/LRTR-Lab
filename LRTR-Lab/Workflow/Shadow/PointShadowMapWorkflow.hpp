@@ -21,22 +21,26 @@ namespace LRTR {
 			const std::shared_ptr<TrianglesMesh>& mesh,
 			const size_t& index) : Mesh(mesh), Index(index) {}
 	};
+
+	using PointShadowFrameBuffer = std::array<std::shared_ptr<CodeRed::GpuFrameBuffer>, 6>;
 	
 	struct PointShadowMapInput {
+		std::array<std::shared_ptr<CodeRed::GpuFrameBuffer>, 6> FrameBuffers;
 		std::shared_ptr<CodeRed::GpuGraphicsCommandList> CommandList;
 		std::shared_ptr<CodeRed::GpuTexture> ShadowMap;
 		std::shared_ptr<CodeRed::GpuBuffer> Transform;
-
+		
 		std::shared_ptr<RuntimeSharing> Sharing;
 
 		std::vector<ShadowCastInfo> Info;
-		
+
 		Vector3f Position = Vector3f(0);
 		float Radius = 100;
 
 		PointShadowMapInput() = default;
 
 		PointShadowMapInput(
+			const std::array<std::shared_ptr<CodeRed::GpuFrameBuffer>, 6>& frameBuffers,
 			const std::shared_ptr<CodeRed::GpuGraphicsCommandList>& commandList,
 			const std::shared_ptr<CodeRed::GpuTexture>& shadowMap,
 			const std::shared_ptr<CodeRed::GpuBuffer>& transform,
@@ -44,13 +48,11 @@ namespace LRTR {
 			const std::vector<ShadowCastInfo>& info,
 			const Vector3f& position,
 			const float radius = 100) :
-			CommandList(commandList), ShadowMap(shadowMap), Transform(transform),
+			FrameBuffers(frameBuffers), CommandList(commandList), ShadowMap(shadowMap), Transform(transform),
 			Sharing(sharing), Info(info), Position(position), Radius(radius) {}
 	};
 
 	struct PointShadowMapOutput {
-		std::shared_ptr<CodeRed::GpuTexture> ShadowMap;
-
 		PointShadowMapOutput() = default;
 	};
 
@@ -70,8 +72,6 @@ namespace LRTR {
 		std::shared_ptr<CodeRed::GpuShaderState> mVertShader;
 		std::shared_ptr<CodeRed::GpuShaderState> mFragShader;
 
-		std::shared_ptr<CodeRed::GpuFrameBuffer> mFrameBuffer[6];
-		
 		std::shared_ptr<CodeRed::GpuDescriptorHeap> mDescriptorHeap;
 		std::shared_ptr<CodeRed::GpuResourceLayout> mResourceLayout;
 		std::shared_ptr<CodeRed::PipelineInfo> mPipelineInfo;

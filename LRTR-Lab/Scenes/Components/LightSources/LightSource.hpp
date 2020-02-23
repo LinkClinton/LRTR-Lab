@@ -1,11 +1,13 @@
 #pragma once
 
 #include "../../../Shared/Math/Math.hpp"
+#include "../../../Core/Shadowable.hpp"
+
 #include "../../Component.hpp"
 
 namespace LRTR {
 
-	class LightSource : public Component {
+	class LightSource : public Component, public Shadowable {
 	public:
 		explicit LightSource(const Vector3f& intensity) :
 			mIntensity(intensity) {}

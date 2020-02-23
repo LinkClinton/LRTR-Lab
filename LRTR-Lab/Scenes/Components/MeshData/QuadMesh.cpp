@@ -21,11 +21,17 @@ LRTR::QuadMesh::QuadMesh(const float width, const float height) :
 	};
 
 	mIndices = {
-		0, 1, 2,
-		0, 2, 3
+		0, 2, 1,
+		0, 3, 2
+	};
+
+	mNormals = {
+		Vector3f(0, 0, 1),
+		Vector3f(0, 0, 1),
+		Vector3f(0, 0, 1),
+		Vector3f(0, 0, 1),
 	};
 	
-	mNormals = std::vector<Vector3f>(4);
 	mTangents = std::vector<Vector3f>(4);
 }
 

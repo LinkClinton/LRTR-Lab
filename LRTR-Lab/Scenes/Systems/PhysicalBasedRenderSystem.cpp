@@ -33,8 +33,39 @@ namespace LRTR {
 	struct SharedLight {
 		Vector4f Position;
 		Vector4f Intensity;
+
+		float FarPlane;
+		unsigned Index;
+		unsigned Type;
+		unsigned Unused;
 	};
 	
+}
+
+LRTR::PointShadowMap::PointShadowMap(
+	const std::shared_ptr<CodeRed::GpuLogicalDevice>& device,
+	const size_t extent, const size_t length)
+{
+	Texture = device->createTexture(
+		CodeRed::ResourceInfo::CubeMapArray(extent, extent, length, CodeRed::PixelFormat::Depth32BitFloat, 1,
+			CodeRed::ResourceUsage::DepthStencil)
+	);
+
+	for (size_t index = 0; index < length; index++) {
+		PointShadowFrameBuffer frameBuffer;
+
+		for (size_t face = 0; face < 6; face++) {
+			frameBuffer[face] = device->createFrameBuffer(nullptr, Texture->reference(
+				CodeRed::TextureRefInfo(
+					CodeRed::ValueRange<size_t>(0, 1),
+					CodeRed::ValueRange<size_t>(index * 6 + face, index * 6 + face + 1),
+					CodeRed::TextureRefUsage::Common,
+					CodeRed::PixelFormat::Depth32BitFloat
+				)));
+		}
+
+		FrameBuffers.push_back(frameBuffer);
+	}
 }
 
 LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
@@ -68,8 +99,9 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 	//resource 10 : irradiance map
 	//resource 11 : pre filtering map
 	//resource 12 : pre computingBRDF map
-	//resource 13 : sampler
-	//resource 14 : hasEnvironmentLight, hasBaseColor, HasRoughness, HasOcclusion, HasNormalMap, HasMetallic, HasEmissive,
+	//resource 13 : point shadow map array
+	//resource 14 : sampler
+	//resource 15 : hasEnvironmentLight, hasBaseColor, HasRoughness, HasOcclusion, HasNormalMap, HasMetallic, HasEmissive,
 	//eyePosition.x, eyePosition.y, eyePosition.z, MipLevels, nLights, index
 	mResourceLayout = mDevice->createResourceLayout(
 		{
@@ -85,10 +117,11 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 9),
 			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 10),
 			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 11),
-			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 12)
+			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 12),
+			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 13)
 		}, {
-			CodeRed::SamplerLayoutElement(mSampler, 13)
-		}, CodeRed::Constant32Bits(13, 14));
+			CodeRed::SamplerLayoutElement(mSampler, 0, 1)
+		}, CodeRed::Constant32Bits(13, 0, 2));
 
 	for (auto& frameResource : mFrameResources) {
 		auto descriptorHeapPool = std::make_shared<std::vector<std::shared_ptr<CodeRed::GpuDescriptorHeap>>>();
@@ -143,11 +176,12 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 
 	mPipelineInfo->setRasterizationState(
 		pipelineFactory->createRasterizationState(
-			CodeRed::FrontFace::Clockwise,
-			CodeRed::CullMode::None,
+			CodeRed::FrontFace::CounterClockwise,
+			CodeRed::CullMode::Back,
 			CodeRed::FillMode::Solid
 		)
 	);
+	
 	CompileShaderWorkflow workflow;
 
 #ifdef SHADER_SOURCE_HLSL
@@ -192,11 +226,9 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 		)
 	);
 
-	mPointShadowMap = mDevice->createTexture(
-		CodeRed::ResourceInfo::CubeMap(1024, 1024, CodeRed::PixelFormat::Depth32BitFloat, 1,
-			CodeRed::ResourceUsage::DepthStencil)
-	);
-
+	// in this version, we only support 2 point light for test
+	mPointShadowMap = std::make_shared<PointShadowMap>(mDevice, 1024, 2);
+	
 	mPointShadowMapWorkflow = std::make_shared<PointShadowMapWorkflow>(mDevice);
 }
 
@@ -258,7 +290,14 @@ void LRTR::PhysicalBasedRenderSystem::update(const Group<Identity, std::shared_p
 		if (mEnvironmentLight.PreComputingBRDF != nullptr) descriptorHeap->bindTexture(
 			mEnvironmentLight.PreComputingBRDF, 12);
 
-		mShadowCastInfos.push_back({ trianglesMesh, index });
+		descriptorHeap->bindTexture(mPointShadowMap->Texture->reference(
+			CodeRed::TextureRefInfo(
+				CodeRed::TextureRefUsage::CubeMap, 
+				CodeRed::PixelFormat::Red32BitFloat)), 13);
+
+		// only cast shadow that enable ShadowCast
+		if (physicalBasedMaterial->isCast()) mShadowCastInfos.push_back({ trianglesMesh, index });
+
 		mDrawCalls.push_back(drawCall);
 		
 		transforms.push_back(transform);
@@ -286,12 +325,16 @@ void LRTR::PhysicalBasedRenderSystem::update(const Group<Identity, std::shared_p
 		if (shape.second->hasComponent<PointLightSource>()) {
 			const auto pointLight = shape.second->component<PointLightSource>();
 
+			//if index is zero means we do not cast shadow
+			//if is not zero, it indicate the index of shadow map.
 			lights.push_back({
 				transform != nullptr ? Vector4f(transform->translation(), 1.0f) : Vector4f(0),
-				Vector4f(pointLight->intensity(), 1.0f)
-				});
+				Vector4f(pointLight->intensity(), 1.0f),
+				25.0f,
+				pointLight->isCast() ? static_cast<unsigned>(mLightShadowAreas.size() + 1) : 0,
+				0, });
 
-			mLightShadowAreas.push_back({ lights.back().Position, 100.0f });
+			if (pointLight->isCast()) mLightShadowAreas.push_back({ lights.back().Position, 25.0f });
 		}
 	}
 
@@ -351,12 +394,14 @@ void LRTR::PhysicalBasedRenderSystem::render(
 
 	// pre build shadow map for lights
 	// in this version, we only test on point shadow map
-	mPointShadowMapWorkflow->start({
-		PointShadowMapInput(
-			commandLists[0], mPointShadowMap,
-			mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>("TransformBuffer"),
-			mRuntimeSharing, mShadowCastInfos, Vector3f(mLightShadowAreas[0].Position), mLightShadowAreas[0].Radius) });
-	
+	for (size_t index = 0; index < mLightShadowAreas.size(); index++) {
+		mPointShadowMapWorkflow->start({
+			PointShadowMapInput(
+				mPointShadowMap->FrameBuffers[index], commandLists[0], mPointShadowMap->Texture,
+				mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>("TransformBuffer"),
+				mRuntimeSharing, mShadowCastInfos, Vector3f(mLightShadowAreas[index].Position), mLightShadowAreas[index].Radius) });
+	}
+		
 	const auto cameraPosition = getCameraPosition(camera);
 	const auto meshDataAssetComponent = std::static_pointer_cast<MeshDataAssetComponent>(
 		mRuntimeSharing->assetManager()->components().at("MeshData"));
