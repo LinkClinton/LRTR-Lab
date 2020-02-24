@@ -234,7 +234,7 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 
 void LRTR::PhysicalBasedRenderSystem::update(const Group<Identity, std::shared_ptr<Shape>>& shapes, float delta)
 {
-	mLightShadowAreas.clear();
+	mPointShadowAreas.clear();
 	mShadowCastInfos.clear();
 	mDrawCalls.clear();
 	
@@ -324,17 +324,18 @@ void LRTR::PhysicalBasedRenderSystem::update(const Group<Identity, std::shared_p
 
 		if (shape.second->hasComponent<PointLightSource>()) {
 			const auto pointLight = shape.second->component<PointLightSource>();
-
+			
 			//if index is zero means we do not cast shadow
 			//if is not zero, it indicate the index of shadow map.
 			lights.push_back({
 				transform != nullptr ? Vector4f(transform->translation(), 1.0f) : Vector4f(0),
 				Vector4f(pointLight->intensity(), 1.0f),
 				25.0f,
-				pointLight->isCast() ? static_cast<unsigned>(mLightShadowAreas.size() + 1) : 0,
+				pointLight->isCast() ? static_cast<unsigned>(mPointShadowAreas.size() + 1) : 0,
 				0, });
 
-			if (pointLight->isCast()) mLightShadowAreas.push_back({ lights.back().Position, 25.0f });
+			if (pointLight->isCast()) 
+				mPointShadowAreas.push_back({ mPointShadowMap->FrameBuffers[mPointShadowAreas.size()], lights.back().Position, 25.0f });
 		}
 	}
 
@@ -391,16 +392,14 @@ void LRTR::PhysicalBasedRenderSystem::render(
 {
 	updatePipeline(frameBuffer);
 	updateCamera(camera);
-
+	
 	// pre build shadow map for lights
 	// in this version, we only test on point shadow map
-	for (size_t index = 0; index < mLightShadowAreas.size(); index++) {
-		mPointShadowMapWorkflow->start({
-			PointShadowMapInput(
-				mPointShadowMap->FrameBuffers[index], commandLists[0], mPointShadowMap->Texture,
-				mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>("TransformBuffer"),
-				mRuntimeSharing, mShadowCastInfos, Vector3f(mLightShadowAreas[index].Position), mLightShadowAreas[index].Radius) });
-	}
+	mPointShadowMapWorkflow->start({
+		PointShadowMapInput(
+			commandLists[0], mPointShadowMap->Texture,
+			mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>("TransformBuffer"),
+			mRuntimeSharing, mPointShadowAreas , mShadowCastInfos) });
 		
 	const auto cameraPosition = getCameraPosition(camera);
 	const auto meshDataAssetComponent = std::static_pointer_cast<MeshDataAssetComponent>(

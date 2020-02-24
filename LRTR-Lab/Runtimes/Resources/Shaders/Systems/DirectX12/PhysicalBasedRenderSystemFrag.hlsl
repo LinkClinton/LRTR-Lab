@@ -201,10 +201,12 @@ float ShadowCalculation(float3 position, float viewDistance, uint index)
 	float shadow = 0.0;
 	uint samples = 20;
 
+	float mapIndex = lights[index].Index - 1;
+
 	for (uint i = 0; i < samples; i++)
 	{
 		float closest = lights[index].FarPlane * 
-			pointShadowMaps.Sample(materialSampler, float4(fragToLight + gridSamplingDisk[i] * diskRadius, lights[index].Index - 1)).r;
+			pointShadowMaps.Sample(materialSampler, float4(fragToLight + gridSamplingDisk[i] * diskRadius, mapIndex)).r;
 		
 		if (current - bias > closest) shadow = shadow + 1.0;
 	}

@@ -43,20 +43,31 @@ LRTR::SceneManager::SceneManager(
 		Transform::rotate(glm::pi<float>() * 1.5f, Vector3f(0, 1, 0))));
 
 	const auto light = std::make_shared<Shape>();
+	const auto light2 = std::make_shared<Shape>();
 	
-	light->addComponent(std::make_shared<PointLightSource>(Vector3f(30)));
+	light->addComponent(std::make_shared<PointLightSource>(Vector3f(50)));
 	light->component<CollectionLabel>()->set("Light", "Point");
 	light->addComponent(std::make_shared<TransformWrap>(
-		Vector3f(0, 6.f, 3.f),
+		Vector3f(0, 5.f, 2),
 		Vector4f(1, 0, 0, 0),
 		Vector3f(1)
 		));
 
-	mScenes["Scene"]->add(light);
+
+	light2->addComponent(std::make_shared<PointLightSource>(Vector3f(30)));
+	light2->component<CollectionLabel>()->set("Light", "Point2");
+	light2->addComponent(std::make_shared<TransformWrap>(
+		Vector3f(0, 3.f, 3.f),
+		Vector4f(1, 0, 0, 0),
+		Vector3f(1)
+		));
 	
+	mScenes["Scene"]->add(light);
+	mScenes["Scene"]->add(light2);
+
 	const auto camera = std::make_shared<PerspectiveCamera>(
 		std::make_shared<TransformWrap>(
-			Vector3f(0, 1, 1),
+			Vector3f(0, 0, 1),
 			Vector4f(1, 0, 0, glm::pi<float>() * 0.5f),
 			Vector3f(1)),
 		std::make_shared<Perspective>(

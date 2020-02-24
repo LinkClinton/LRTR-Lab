@@ -96,7 +96,7 @@ namespace LRTR {
 
 		std::shared_ptr<PointShadowMapWorkflow> mPointShadowMapWorkflow;
 
-		std::vector<LightShadowArea> mLightShadowAreas;
+		std::vector<PointShadowArea> mPointShadowAreas;
 		std::vector<PhysicalBasedDrawCall> mDrawCalls;
 		std::vector<ShadowCastInfo> mShadowCastInfos;
 		
