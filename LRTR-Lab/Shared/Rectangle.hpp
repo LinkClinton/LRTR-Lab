@@ -20,6 +20,13 @@ namespace LRTR {
 			const T& left, const T& top, const T& right, const T& bottom) :
 			Min(Vector2<T>(left, top)),
 			Max(Vector2<T>(right, bottom)) {}
+
+		template<typename U>
+		bool contain(const Vector2<U>& point) const noexcept {
+			return
+				point.x >= Min.x && point.x <= Max.x &&
+				point.y >= Min.y && point.y <= Max.y;
+		}
 	};
 
 	using RectangleF = Rectangle<float>;

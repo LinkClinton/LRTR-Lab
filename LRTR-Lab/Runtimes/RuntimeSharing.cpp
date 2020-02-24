@@ -21,6 +21,16 @@ auto LRTR::RuntimeSharing::assetManager() const noexcept -> std::shared_ptr<Asse
 	return mLabApp->mAssetManager;
 }
 
+auto LRTR::RuntimeSharing::inputManager() const noexcept -> std::shared_ptr<InputManager>
+{
+	return mLabApp->mInputManager;
+}
+
+auto LRTR::RuntimeSharing::mousePosition() const noexcept -> Vector2f
+{
+	return mLabApp->mMousePosition;
+}
+
 auto LRTR::RuntimeSharing::allocator() const noexcept -> std::shared_ptr<CodeRed::GpuCommandAllocator>
 {
 	return mLabApp->mCommandAllocator;

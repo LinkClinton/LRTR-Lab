@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Core/Noncopyable.hpp"
+#include "../Shared/Math/Math.hpp"
 
 #include <CodeRed/Core/CodeRedGraphics.hpp>
 
@@ -14,6 +15,7 @@ namespace LRTR {
 	class RuntimeSharing;
 	class SceneManager;
 	class AssetManager;
+	class InputManager;
 	class UIManager;
 
 	struct AppStartup {
@@ -81,11 +83,14 @@ namespace LRTR {
 	private:
 		std::shared_ptr<SceneManager> mSceneManager;
 		std::shared_ptr<AssetManager> mAssetManager;
+		std::shared_ptr<InputManager> mInputManager;
 		std::shared_ptr<UIManager> mUIManager;
 
 		void initializeSceneManager();
 
 		void initializeAssetManager();
+
+		void initializeInputManager();
 		
 		void initializeUIManager();
 	private:
@@ -98,6 +103,8 @@ namespace LRTR {
 		HWND mHwnd;
 
 		bool mExisted;
+
+		Vector2f mMousePosition;
 
 		static void processMessage(LabApp* app, const MSG& message);
 	};

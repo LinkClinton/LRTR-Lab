@@ -64,6 +64,9 @@
     <Filter Include="Resources\Shaders\Workflow\HLSL">
       <UniqueIdentifier>{240458d8-f48a-404b-95da-69b214924925}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Managers\Input">
+      <UniqueIdentifier>{c729fd84-2c62-431c-8044-dace703b0315}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Managers\Asset\Components\AssetComponent.hpp">
@@ -108,6 +111,12 @@
     <ClInclude Include="LabApp.hpp" />
     <ClInclude Include="Runtime.hpp" />
     <ClInclude Include="RuntimeSharing.hpp" />
+    <ClInclude Include="Managers\Input\InputManager.hpp">
+      <Filter>Managers\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Managers\Input\KeyCode.hpp">
+      <Filter>Managers\Input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Managers\Asset\Components\MeshDataAssetComponent.cpp">
@@ -144,6 +153,9 @@
     <ClCompile Include="Runtime.cpp" />
     <ClCompile Include="RuntimeSharing.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Managers\Input\InputManager.cpp">
+      <Filter>Managers\Input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Resources\Fonts\Consola.ttf">

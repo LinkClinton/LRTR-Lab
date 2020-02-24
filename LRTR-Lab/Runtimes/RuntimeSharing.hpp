@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Core/Noncopyable.hpp"
+#include "../Shared/Math/Math.hpp"
 
 #include <CodeRed/Interface/GpuLogicalDevice.hpp>
 
@@ -11,6 +12,7 @@ namespace LRTR {
 	class UIManager;
 	class SceneManager;
 	class AssetManager;
+	class InputManager;
 	class LabApp;
 	
 	class RuntimeSharing : public Noncopyable {
@@ -23,6 +25,10 @@ namespace LRTR {
 
 		auto assetManager() const noexcept -> std::shared_ptr<AssetManager>;
 
+		auto inputManager() const noexcept -> std::shared_ptr<InputManager>;
+
+		auto mousePosition() const noexcept -> Vector2f;
+		
 		auto allocator() const noexcept -> std::shared_ptr<CodeRed::GpuCommandAllocator>;
 		
 		auto device() const noexcept -> std::shared_ptr<CodeRed::GpuLogicalDevice>;

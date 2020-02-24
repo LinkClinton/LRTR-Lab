@@ -103,6 +103,15 @@
     <ClCompile Include="Components\MeshData\QuadMesh.cpp">
       <Filter>Components\MeshData</Filter>
     </ClCompile>
+    <ClCompile Include="Cameras\MotionCamera.cpp">
+      <Filter>Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="Cameras\Components\MotionProperty.cpp">
+      <Filter>Cameras\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\MotionCameraUpdateSystem.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cameras\Components\Perspective.hpp">
@@ -183,6 +192,15 @@
     <ClInclude Include="System.hpp" />
     <ClInclude Include="Components\MeshData\QuadMesh.hpp">
       <Filter>Components\MeshData</Filter>
+    </ClInclude>
+    <ClInclude Include="Cameras\MotionCamera.hpp">
+      <Filter>Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\MotionCameraUpdateSystem.hpp">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Cameras\Components\MotionProperty.hpp">
+      <Filter>Cameras\Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

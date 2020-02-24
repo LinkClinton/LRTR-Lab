@@ -7,6 +7,7 @@
 
 #include "Managers/Scene/SceneManager.hpp"
 #include "Managers/Asset/AssetManager.hpp"
+#include "Managers/Input/InputManager.hpp"
 #include "Managers/UI/UIManager.hpp"
 #include "RuntimeSharing.hpp"
 
@@ -165,6 +166,7 @@ void LRTR::LabApp::initializeManagerComponents()
 
 	initializeAssetManager();
 	initializeSceneManager();
+	initializeInputManager();
 	initializeUIManager();
 
 	LRTR_DEBUG_INFO("Finish initialize Managers.");
@@ -255,6 +257,14 @@ void LRTR::LabApp::initializeAssetManager()
 		mRuntimeSharing);
 }
 
+void LRTR::LabApp::initializeInputManager()
+{
+	LRTR_DEBUG_INFO("Initialize Input Manager");
+
+	mInputManager = std::make_shared<InputManager>(
+		mRuntimeSharing);
+}
+
 void LRTR::LabApp::initializeUIManager()
 {
 	LRTR_DEBUG_INFO("Initialize UI Manager.");
@@ -270,5 +280,15 @@ void LRTR::LabApp::initializeUIManager()
 
 void LRTR::LabApp::processMessage(LabApp* app, const MSG& message)
 {
-
+	switch (message.message) {
+	case WM_MOUSEMOVE:
+	{
+		app->mMousePosition = Vector2f(
+			static_cast<float>(LOWORD(message.lParam)),
+			static_cast<float>(HIWORD(message.lParam)));
+		break;
+	}
+	default:
+		break;
+	}
 }

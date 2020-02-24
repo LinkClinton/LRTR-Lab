@@ -178,6 +178,8 @@
     <ClInclude Include="Managers\Asset\AssetManager.hpp" />
     <ClInclude Include="Managers\Asset\Components\AssetComponent.hpp" />
     <ClInclude Include="Managers\Asset\Components\MeshDataAssetComponent.hpp" />
+    <ClInclude Include="Managers\Input\InputManager.hpp" />
+    <ClInclude Include="Managers\Input\KeyCode.hpp" />
     <ClInclude Include="Managers\Manager.hpp" />
     <ClInclude Include="Managers\Scene\SceneManager.hpp" />
     <ClInclude Include="Managers\UI\Components\ConsoleUIComponent.hpp" />
@@ -196,6 +198,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Managers\Asset\AssetManager.cpp" />
     <ClCompile Include="Managers\Asset\Components\MeshDataAssetComponent.cpp" />
+    <ClCompile Include="Managers\Input\InputManager.cpp" />
     <ClCompile Include="Managers\Scene\SceneManager.cpp" />
     <ClCompile Include="Managers\UI\Components\ConsoleUIComponent.cpp" />
     <ClCompile Include="Managers\UI\Components\LoggingUIComponent.cpp" />

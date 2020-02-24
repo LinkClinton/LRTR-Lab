@@ -6,6 +6,7 @@
 #include "../../../Extensions/TinyGLTF/TinyGLTFLoader.hpp"
 
 #include "../../../Scenes/Systems/PhysicalBasedRenderSystem.hpp"
+#include "../../../Scenes/Systems/MotionCameraUpdateSystem.hpp"
 #include "../../../Scenes/Systems/PastEffectRenderSystem.hpp"
 #include "../../../Scenes/Systems/CollectionUpdateSystem.hpp"
 #include "../../../Scenes/Systems/LinesMeshRenderSystem.hpp"
@@ -20,6 +21,7 @@
 #include "../../../Scenes/Components/Environment/SkyBox.hpp"
 #include "../../../Scenes/Components/CollectionLabel.hpp"
 #include "../../../Scenes/Components/CameraGroup.hpp"
+#include "../../../Scenes/Cameras/MotionCamera.hpp"
 #include "../../../Scenes/Scene.hpp"
 
 #include "../../../Shared/Graphics/ResourceHelper.hpp"
@@ -53,7 +55,6 @@ LRTR::SceneManager::SceneManager(
 		Vector3f(1)
 		));
 
-
 	light2->addComponent(std::make_shared<PointLightSource>(Vector3f(30)));
 	light2->component<CollectionLabel>()->set("Light", "Point2");
 	light2->addComponent(std::make_shared<TransformWrap>(
@@ -63,9 +64,9 @@ LRTR::SceneManager::SceneManager(
 		));
 	
 	mScenes["Scene"]->add(light);
-	mScenes["Scene"]->add(light2);
+	//mScenes["Scene"]->add(light2);
 
-	const auto camera = std::make_shared<PerspectiveCamera>(
+	const auto camera = std::make_shared<MotionCamera>(
 		std::make_shared<TransformWrap>(
 			Vector3f(0, 0, 1),
 			Vector4f(1, 0, 0, glm::pi<float>() * 0.5f),
@@ -75,7 +76,8 @@ LRTR::SceneManager::SceneManager(
 			1920.0f,
 			1080.0f,
 			0.001f,
-			1000.0f));
+			1000.0f),
+		std::make_shared<MotionProperty>());
 
 	camera->component<CollectionLabel>()->set("Collection", "Camera");
 
@@ -95,6 +97,8 @@ LRTR::SceneManager::SceneManager(
 	mScenes["Scene"]->addSystem(std::make_shared<WireframeRenderSystem>(mRuntimeSharing, mDevice));
 	mScenes["Scene"]->addSystem(std::make_shared<PhysicalBasedRenderSystem>(mRuntimeSharing, mDevice));
 	mScenes["Scene"]->addSystem(std::make_shared<PastEffectRenderSystem>(mRuntimeSharing, device));
+
+	mScenes["Scene"]->addSystem(std::make_shared<MotionCameraUpdateSystem>(mRuntimeSharing));
 	mScenes["Scene"]->addSystem(std::make_shared<CollectionUpdateSystem>(mRuntimeSharing));
 
 	/*for (auto& system : mScenes["Scene"]->systems()) {

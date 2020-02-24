@@ -163,7 +163,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Cameras\Camera.cpp" />
+    <ClCompile Include="Cameras\Components\MotionProperty.cpp" />
     <ClCompile Include="Cameras\Components\Perspective.cpp" />
+    <ClCompile Include="Cameras\MotionCamera.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Components\CameraGroup.cpp" />
     <ClCompile Include="Components\CollectionLabel.cpp" />
@@ -185,14 +187,17 @@
     <ClCompile Include="System.cpp" />
     <ClCompile Include="Systems\CollectionUpdateSystem.cpp" />
     <ClCompile Include="Systems\LinesMeshRenderSystem.cpp" />
+    <ClCompile Include="Systems\MotionCameraUpdateSystem.cpp" />
     <ClCompile Include="Systems\PastEffectRenderSystem.cpp" />
     <ClCompile Include="Systems\PhysicalBasedRenderSystem.cpp" />
     <ClCompile Include="Systems\WireframeRenderSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cameras\Camera.hpp" />
+    <ClInclude Include="Cameras\Components\MotionProperty.hpp" />
     <ClInclude Include="Cameras\Components\Perspective.hpp" />
     <ClInclude Include="Cameras\Components\Projective.hpp" />
+    <ClInclude Include="Cameras\MotionCamera.hpp" />
     <ClInclude Include="Component.hpp" />
     <ClInclude Include="Components\CameraGroup.hpp" />
     <ClInclude Include="Components\CollectionLabel.hpp" />
@@ -216,6 +221,7 @@
     <ClInclude Include="System.hpp" />
     <ClInclude Include="Systems\CollectionUpdateSystem.hpp" />
     <ClInclude Include="Systems\LinesMeshRenderSystem.hpp" />
+    <ClInclude Include="Systems\MotionCameraUpdateSystem.hpp" />
     <ClInclude Include="Systems\PastEffectRenderSystem.hpp" />
     <ClInclude Include="Systems\PhysicalBasedRenderSystem.hpp" />
     <ClInclude Include="Systems\WireframeRenderSystem.hpp" />
