@@ -64,7 +64,7 @@ LRTR::SceneManager::SceneManager(
 		));
 	
 	mScenes["Scene"]->add(light);
-	//mScenes["Scene"]->add(light2);
+	mScenes["Scene"]->add(light2);
 
 	const auto camera = std::make_shared<MotionCamera>(
 		std::make_shared<TransformWrap>(
@@ -77,7 +77,7 @@ LRTR::SceneManager::SceneManager(
 			1080.0f,
 			0.001f,
 			1000.0f),
-		std::make_shared<MotionProperty>());
+		std::make_shared<MotionProperty>(0.01f, 2.f));
 
 	camera->component<CollectionLabel>()->set("Collection", "Camera");
 
