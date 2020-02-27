@@ -39,6 +39,7 @@ Output main(float3 position : POSITION, float3 texcoord : TEXCOORD)
     if (config.BuildType == IBL_BUILD_PRE_COMPUTING_BRDF)
     {
         result.SVPosition = float4(position, 1.0f);
+        
         result.Texcoord = texcoord;
         result.Position = position;
         
@@ -46,6 +47,7 @@ Output main(float3 position : POSITION, float3 texcoord : TEXCOORD)
     }
     
     result.SVPosition = mul(float4(position, 1.0f), view.View[config.Index]);    
+    result.SVPosition.y = -result.SVPosition.y;
     result.Position = position;
     result.Texcoord = texcoord;
     

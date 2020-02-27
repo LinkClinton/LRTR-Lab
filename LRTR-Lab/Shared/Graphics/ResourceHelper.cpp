@@ -300,10 +300,10 @@ auto CodeRed::ResourceHelper::loadSkyBox(
 	const std::string fileName[6] = {
 		"right.jpg",
 		"left.jpg",
-		"bottom.jpg",
 		"top.jpg",
-		"back.jpg",
-		"front.jpg"
+		"bottom.jpg",
+		"front.jpg",
+		"back.jpg"
 	};
 
 	stbi_uc* skyBoxImages[6];

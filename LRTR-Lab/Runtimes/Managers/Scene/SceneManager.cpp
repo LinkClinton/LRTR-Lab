@@ -33,42 +33,98 @@ LRTR::SceneManager::SceneManager(
 	const std::shared_ptr<CodeRed::GpuLogicalDevice>& device) :
 	Manager(sharing), mDevice(device)
 {
-	/*ImageBasedLightingWorkflow workflow(mDevice);
+	add(std::make_shared<Scene>("Scene", mDevice));
 
-	auto input = ImageBasedLightingInput(mRuntimeSharing->queue(), mRuntimeSharing,
-		"./Resources/Textures/HDR/newport_loft.hdr");
-	
-	auto output = workflow.start({ input });*/
-	
-	add(TinyGLTFLoader::loadScene(mRuntimeSharing, "Scene", "./Resources/Models/Sponza.glb",
-		Transform::rotate(glm::pi<float>() * 0.5f, Vector3f(1, 0, 0)) *
-		Transform::rotate(glm::pi<float>() * 1.5f, Vector3f(0, 1, 0))));
-
-	const auto light = std::make_shared<Shape>();
+	const auto light0 = std::make_shared<Shape>();
+	const auto light1 = std::make_shared<Shape>();
 	const auto light2 = std::make_shared<Shape>();
+
+	const auto quad = std::make_shared<Shape>();
+	const auto box0 = std::make_shared<Shape>();
+	const auto box1 = std::make_shared<Shape>();
+	const auto box2 = std::make_shared<Shape>();
+	const auto box3 = std::make_shared<Shape>();
 	
-	light->addComponent(std::make_shared<PointLightSource>(Vector3f(50)));
-	light->component<CollectionLabel>()->set("Light", "Point");
-	light->addComponent(std::make_shared<TransformWrap>(
-		Vector3f(0, 5.f, 2),
+	quad->addComponent<TrianglesMesh>(std::make_shared<QuadMesh>(20.f, 20.f));
+	quad->addComponent(std::make_shared<TransformWrap>());
+	quad->addComponent(std::make_shared<PhysicalBasedMaterial>(
+		Vector4f(0), Vector4f(1), Vector4f(0.7f), Vector4f(0)
+		));
+	quad->component<CollectionLabel>()->set("Objects", "Quad");
+
+	box0->addComponent<TrianglesMesh>(std::make_shared<BoxMesh>(1.f, 1.f, 1.f));
+	box0->addComponent(std::make_shared<TransformWrap>(
+		Vector3f(1, 0, 0.5f), Vector4f(), Vector3f(1)
+		));
+	box0->addComponent(std::make_shared<PhysicalBasedMaterial>(
+		Vector4f(0.f), Vector4f(0.7f, 0.6f, 0.65f, 1.0f), Vector4f(0.5f), Vector4f(0)
+		));
+	box0->component<CollectionLabel>()->set("Objects", "Box0");
+
+	box1->addComponent<TrianglesMesh>(std::make_shared<BoxMesh>(1.f, 1.f, 1.f));
+	box1->addComponent(std::make_shared<TransformWrap>(
+		Vector3f(-1, 0, 0.5f), Vector4f(), Vector3f(1)
+		));
+	box1->addComponent(std::make_shared<PhysicalBasedMaterial>(
+		Vector4f(0.33f), Vector4f(0.7f, 0.6f, 0.65f, 1.0f), Vector4f(0.6f), Vector4f(0)
+		));
+	box1->component<CollectionLabel>()->set("Objects", "Box1");
+
+	box2->addComponent<TrianglesMesh>(std::make_shared<BoxMesh>(1.f, 1.f, 1.f));
+	box2->addComponent(std::make_shared<TransformWrap>(
+		Vector3f(0, 1, 0.5f), Vector4f(), Vector3f(1)
+		));
+	box2->addComponent(std::make_shared<PhysicalBasedMaterial>(
+		Vector4f(0.66f), Vector4f(0.7f, 0.6f, 0.65f, 1.0f), Vector4f(0.7f), Vector4f(0)
+		));
+	box2->component<CollectionLabel>()->set("Objects", "Box2");
+
+	box3->addComponent<TrianglesMesh>(std::make_shared<BoxMesh>(1.f, 1.f, 1.f));
+	box3->addComponent(std::make_shared<TransformWrap>(
+		Vector3f(0, -1, 0.5f), Vector4f(), Vector3f(1)
+		));
+	box3->addComponent(std::make_shared<PhysicalBasedMaterial>(
+		Vector4f(1.f), Vector4f(0.7f, 0.6f, 0.65f, 1.0f), Vector4f(0.8f), Vector4f(0)
+		));
+	box3->component<CollectionLabel>()->set("Objects", "Box3");
+	
+	light0->addComponent(std::make_shared<PointLightSource>(Vector3f(20)));
+	light0->component<CollectionLabel>()->set("Light", "Point0");
+	light0->addComponent(std::make_shared<TransformWrap>(
+		Vector3f(0, 5.f, 3.f),
 		Vector4f(1, 0, 0, 0),
 		Vector3f(1)
 		));
 
-	light2->addComponent(std::make_shared<PointLightSource>(Vector3f(30)));
+	light1->addComponent(std::make_shared<PointLightSource>(Vector3f(20)));
+	light1->component<CollectionLabel>()->set("Light", "Point1");
+	light1->addComponent(std::make_shared<TransformWrap>(
+		Vector3f(5.f, 0.f, 3.f),
+		Vector4f(1, 0, 0, 0),
+		Vector3f(1)
+		));
+
+	light2->addComponent(std::make_shared<PointLightSource>(Vector3f(20)));
 	light2->component<CollectionLabel>()->set("Light", "Point2");
 	light2->addComponent(std::make_shared<TransformWrap>(
-		Vector3f(0, 3.f, 3.f),
+		Vector3f(0.f, 0.f, 3.5f),
 		Vector4f(1, 0, 0, 0),
 		Vector3f(1)
 		));
-	
-	mScenes["Scene"]->add(light);
-	mScenes["Scene"]->add(light2);
 
+	mScenes["Scene"]->add(quad);
+	mScenes["Scene"]->add(box0);
+	mScenes["Scene"]->add(box1);
+	mScenes["Scene"]->add(box2);
+	mScenes["Scene"]->add(box3);
+	
+	mScenes["Scene"]->add(light0);
+	mScenes["Scene"]->add(light1);
+	mScenes["Scene"]->add(light2);
+	
 	const auto camera = std::make_shared<MotionCamera>(
 		std::make_shared<TransformWrap>(
-			Vector3f(0, 0, 1),
+			Vector3f(0, 2, 1),
 			Vector4f(1, 0, 0, glm::pi<float>() * 0.5f),
 			Vector3f(1)),
 		std::make_shared<Perspective>(
@@ -77,19 +133,20 @@ LRTR::SceneManager::SceneManager(
 			1080.0f,
 			0.001f,
 			1000.0f),
-		std::make_shared<MotionProperty>(0.01f, 2.f));
+		std::make_shared<MotionProperty>(0.01f, 3.f, 
+			std::array<bool, 3>{ true, true, false }));
 
 	camera->component<CollectionLabel>()->set("Collection", "Camera");
 
 	//mScenes["Scene"]->property()->addComponent(std::make_shared<SkyBox>(output.EnvironmentMap));
 	
-	/*mScenes["Scene"]->property()->addComponent(std::make_shared<SkyBox>(
+	mScenes["Scene"]->property()->addComponent(std::make_shared<SkyBox>(
 		CodeRed::ResourceHelper::loadSkyBox(
 			sharing->device(),
 			sharing->allocator(),
 			sharing->queue(),
 			"./Resources/Textures/SkyBoxes/Sea"
-		)));*/
+		)));
 	
 	mScenes["Scene"]->add(camera);
 

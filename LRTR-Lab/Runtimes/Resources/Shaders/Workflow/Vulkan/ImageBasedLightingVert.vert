@@ -29,9 +29,11 @@ void main()
 {
     if (config.BuildType == IBL_BUILD_PRE_COMPUTING_BRDF)
         gl_Position = vec4(inPosition, 1.0f);
-    else
+    else {
         gl_Position = views.View[config.Index] * vec4(inPosition, 1.0f);
-    
+        gl_Position.y = -gl_Position.y;
+    }
+
     outPosition = inPosition;
     outTexcoord = inTexcoord;
 }

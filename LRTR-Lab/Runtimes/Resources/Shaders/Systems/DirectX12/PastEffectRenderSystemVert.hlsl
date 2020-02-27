@@ -30,7 +30,9 @@ Output main(float3 position : POSITION)
     
     result.SVPosition = mul(float4(position, 1.0f), view.ViewWithoutTranslation);
     result.SVPosition = result.SVPosition.xyww;
-    result.TexCoord = position;
+    
+    // because we set the x-y plane as horizon, we we need rotate the sky box
+    result.TexCoord = float3(position.x, position.z, -position.y);
     
     return result;
 }

@@ -227,7 +227,7 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 	);
 
 	// in this version, we only support 2 point light for test
-	mPointShadowMap = std::make_shared<PointShadowMap>(mDevice, 1024, 2);
+	mPointShadowMap = std::make_shared<PointShadowMap>(mDevice, 1024, 5);
 	
 	mPointShadowMapWorkflow = std::make_shared<PointShadowMapWorkflow>(mDevice);
 }

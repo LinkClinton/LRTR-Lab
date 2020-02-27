@@ -2,8 +2,9 @@
 
 #include "../../../Extensions/ImGui/ImGui.hpp"
 
-LRTR::MotionProperty::MotionProperty(const float sensitivity, const float speed) :
-	mSensitivity(sensitivity), mSpeed(speed)
+LRTR::MotionProperty::MotionProperty(const float sensitivity, const float speed, 
+	const std::array<bool, 3>& axes) :
+	mSensitivity(sensitivity), mSpeed(speed), mAxes(axes)
 {
 }
 
@@ -25,6 +26,10 @@ void LRTR::MotionProperty::onProperty()
 	ImGui::Property("Sensitivity", [&]() { ImGui::InputFloat("##Sensitivity", &mSensitivity); });
 	ImGui::BeginPropertyTable("Speed");
 	ImGui::Property("Speed", [&]() {ImGui::InputFloat("##Speed", &mSpeed); });
+	ImGui::BeginPropertyTable("Axes");
+	ImGui::Property("Axis X", [&]() { ImGui::Checkbox("##Axis X", &mAxes[0]); });
+	ImGui::Property("Axis Y", [&]() { ImGui::Checkbox("##Axis Y", &mAxes[1]); });
+	ImGui::Property("Axis Z", [&]() { ImGui::Checkbox("##Axis Z", &mAxes[2]); });
 	ImGui::EndPropertyTable();
 
 	ImGui::PopStyleColor();
