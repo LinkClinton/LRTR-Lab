@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Math/Vector.hpp"
+#include "Math/Math.hpp"
+
 #include <array>
 
 namespace LRTR {

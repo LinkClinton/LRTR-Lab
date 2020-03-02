@@ -1,4 +1,4 @@
-#include "PastEffectRenderSystem.hpp"
+#include "PostEffectRenderSystem.hpp"
 
 #include "../../Runtimes/Managers/Asset/Components/MeshDataAssetComponent.hpp"
 #include "../../Runtimes/Managers/Asset/AssetManager.hpp"
@@ -11,7 +11,7 @@
 #include "../Components/Environment/SkyBox.hpp"
 
 
-LRTR::PastEffectRenderSystem::PastEffectRenderSystem(
+LRTR::PostEffectRenderSystem::PostEffectRenderSystem(
 	const std::shared_ptr<RuntimeSharing>& sharing,
 	const std::shared_ptr<CodeRed::GpuLogicalDevice>& device,
 	size_t maxFrameCount) : RenderSystem(sharing, device, maxFrameCount)
@@ -79,13 +79,13 @@ LRTR::PastEffectRenderSystem::PastEffectRenderSystem(
 
 	const auto vShaderFile =
 		sourceLanguage == SourceLanguage::eHLSL ?
-		"./Resources/Shaders/Systems/DirectX12/PastEffectRenderSystemVert.hlsl" :
-		"./Resources/Shaders/Systems/Vulkan/PastEffectRenderSystemVert.vert";
+		"./Resources/Shaders/Systems/DirectX12/PostEffectRenderSystemVert.hlsl" :
+		"./Resources/Shaders/Systems/Vulkan/PostEffectRenderSystemVert.vert";
 
 	const auto fShaderFile =
 		sourceLanguage == SourceLanguage::eHLSL ?
-		"./Resources/Shaders/Systems/DirectX12/PastEffectRenderSystemFrag.hlsl" :
-		"./Resources/Shaders/Systems/Vulkan/PastEffectRenderSystemFrag.frag";
+		"./Resources/Shaders/Systems/DirectX12/PostEffectRenderSystemFrag.hlsl" :
+		"./Resources/Shaders/Systems/Vulkan/PostEffectRenderSystemFrag.frag";
 
 	mPipelineInfo->setVertexShaderState(
 		pipelineFactory->createShaderState(
@@ -112,7 +112,7 @@ LRTR::PastEffectRenderSystem::PastEffectRenderSystem(
 	);
 }
 
-void LRTR::PastEffectRenderSystem::update(const Group<Identity, std::shared_ptr<Shape>>& shapes, float delta)
+void LRTR::PostEffectRenderSystem::update(const Group<Identity, std::shared_ptr<Shape>>& shapes, float delta)
 {
 	mFrameResources[mCurrentFrameIndex].set<CodeRed::GpuTexture>("SkyBox", nullptr);
 	
@@ -130,7 +130,7 @@ void LRTR::PastEffectRenderSystem::update(const Group<Identity, std::shared_ptr<
 	}
 }
 
-void LRTR::PastEffectRenderSystem::render(
+void LRTR::PostEffectRenderSystem::render(
 	const std::vector<std::shared_ptr<CodeRed::GpuGraphicsCommandList>>& commandLists,
 	const std::shared_ptr<CodeRed::GpuFrameBuffer>& frameBuffer, 
 	const std::shared_ptr<SceneCamera>& camera,
@@ -168,17 +168,17 @@ void LRTR::PastEffectRenderSystem::render(
 	mCurrentFrameIndex = (mCurrentFrameIndex + 1) % mFrameResources.size();
 }
 
-auto LRTR::PastEffectRenderSystem::typeName() const noexcept -> std::string
+auto LRTR::PostEffectRenderSystem::typeName() const noexcept -> std::string
 {
-	return "PastEffectRenderSystem";
+	return "PostEffectRenderSystem";
 }
 
-auto LRTR::PastEffectRenderSystem::typeIndex() const noexcept -> std::type_index
+auto LRTR::PostEffectRenderSystem::typeIndex() const noexcept -> std::type_index
 {
-	return typeid(PastEffectRenderSystem);
+	return typeid(PostEffectRenderSystem);
 }
 
-void LRTR::PastEffectRenderSystem::updatePipeline(const std::shared_ptr<CodeRed::GpuFrameBuffer>& frameBuffer) const
+void LRTR::PostEffectRenderSystem::updatePipeline(const std::shared_ptr<CodeRed::GpuFrameBuffer>& frameBuffer) const
 {
 	if (CodeRed::PipelineInfo::isCompatible(mPipelineInfo->renderPass(), frameBuffer) &&
 		mPipelineInfo->graphicsPipeline() != nullptr) return;
@@ -187,7 +187,7 @@ void LRTR::PastEffectRenderSystem::updatePipeline(const std::shared_ptr<CodeRed:
 	mPipelineInfo->updateState();
 }
 
-void LRTR::PastEffectRenderSystem::updateCamera(const std::shared_ptr<SceneCamera>& camera) const
+void LRTR::PostEffectRenderSystem::updateCamera(const std::shared_ptr<SceneCamera>& camera) const
 {
 	if (camera == nullptr) return;
 

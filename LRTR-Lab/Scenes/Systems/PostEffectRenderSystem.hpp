@@ -7,9 +7,9 @@
 
 namespace LRTR {
 
-	class PastEffectRenderSystem : public RenderSystem {
+	class PostEffectRenderSystem : public RenderSystem {
 	public:
-		explicit PastEffectRenderSystem(
+		explicit PostEffectRenderSystem(
 			const std::shared_ptr<RuntimeSharing>& sharing,
 			const std::shared_ptr<CodeRed::GpuLogicalDevice>& device,
 			size_t maxFrameCount = 2);

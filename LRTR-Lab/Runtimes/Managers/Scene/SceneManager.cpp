@@ -7,7 +7,7 @@
 
 #include "../../../Scenes/Systems/PhysicalBasedRenderSystem.hpp"
 #include "../../../Scenes/Systems/MotionCameraUpdateSystem.hpp"
-#include "../../../Scenes/Systems/PastEffectRenderSystem.hpp"
+#include "../../../Scenes/Systems/PostEffectRenderSystem.hpp"
 #include "../../../Scenes/Systems/CollectionUpdateSystem.hpp"
 #include "../../../Scenes/Systems/LinesMeshRenderSystem.hpp"
 #include "../../../Scenes/Systems/WireframeRenderSystem.hpp"
@@ -153,7 +153,7 @@ LRTR::SceneManager::SceneManager(
 	mScenes["Scene"]->addSystem(std::make_shared<LinesMeshRenderSystem>(mRuntimeSharing, mDevice));
 	mScenes["Scene"]->addSystem(std::make_shared<WireframeRenderSystem>(mRuntimeSharing, mDevice));
 	mScenes["Scene"]->addSystem(std::make_shared<PhysicalBasedRenderSystem>(mRuntimeSharing, mDevice));
-	mScenes["Scene"]->addSystem(std::make_shared<PastEffectRenderSystem>(mRuntimeSharing, device));
+	mScenes["Scene"]->addSystem(std::make_shared<PostEffectRenderSystem>(mRuntimeSharing, device));
 
 	mScenes["Scene"]->addSystem(std::make_shared<MotionCameraUpdateSystem>(mRuntimeSharing));
 	mScenes["Scene"]->addSystem(std::make_shared<CollectionUpdateSystem>(mRuntimeSharing));

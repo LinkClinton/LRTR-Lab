@@ -191,12 +191,6 @@
     <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\LinesMeshRenderSystemVert.hlsl">
       <Filter>Resources\Shaders\Systems\DirectX12</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\PastEffectRenderSystemFrag.hlsl">
-      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\PastEffectRenderSystemVert.hlsl">
-      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
-    </CopyFileToFolders>
     <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\PhysicalBasedRenderSystemFrag.hlsl">
       <Filter>Resources\Shaders\Systems\DirectX12</Filter>
     </CopyFileToFolders>
@@ -236,12 +230,6 @@
     <CopyFileToFolders Include="Resources\Shaders\Workflow\Vulkan\ImageBasedLightingVert.vert">
       <Filter>Resources\Shaders\Workflow\Vulkan</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\PastEffectRenderSystemFrag.frag">
-      <Filter>Resources\Shaders\Systems\Vulkan</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\PastEffectRenderSystemVert.vert">
-      <Filter>Resources\Shaders\Systems\Vulkan</Filter>
-    </CopyFileToFolders>
     <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\PhysicalBasedRenderSystemFrag.frag">
       <Filter>Resources\Shaders\Systems\Vulkan</Filter>
     </CopyFileToFolders>
@@ -260,5 +248,21 @@
     <CopyFileToFolders Include="Resources\Shaders\Workflow\HLSL\PointShadowMapVert.hlsl">
       <Filter>Resources\Shaders\Workflow\HLSL</Filter>
     </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Resources\Shaders\Systems\DirectX12\PostEffectRenderSystemFrag.hlsl">
+      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Systems\DirectX12\PostEffectRenderSystemVert.hlsl">
+      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Shaders\Systems\Vulkan\PostEffectRenderSystemFrag.frag">
+      <Filter>Resources\Shaders\Systems\Vulkan</Filter>
+    </None>
+    <None Include="Resources\Shaders\Systems\Vulkan\PostEffectRenderSystemVert.vert">
+      <Filter>Resources\Shaders\Systems\Vulkan</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -179,6 +179,7 @@
     <ClCompile Include="Components\MeshData\BoxMesh.cpp" />
     <ClCompile Include="Components\MeshData\MeshData.cpp" />
     <ClCompile Include="Components\MeshData\QuadMesh.cpp" />
+    <ClCompile Include="Components\MeshData\SphereMesh.cpp" />
     <ClCompile Include="Components\MeshData\TrianglesMesh.cpp" />
     <ClCompile Include="Components\TransformWrap.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -188,7 +189,7 @@
     <ClCompile Include="Systems\CollectionUpdateSystem.cpp" />
     <ClCompile Include="Systems\LinesMeshRenderSystem.cpp" />
     <ClCompile Include="Systems\MotionCameraUpdateSystem.cpp" />
-    <ClCompile Include="Systems\PastEffectRenderSystem.cpp" />
+    <ClCompile Include="Systems\PostEffectRenderSystem.cpp" />
     <ClCompile Include="Systems\PhysicalBasedRenderSystem.cpp" />
     <ClCompile Include="Systems\WireframeRenderSystem.cpp" />
   </ItemGroup>
@@ -213,6 +214,7 @@
     <ClInclude Include="Components\MeshData\BoxMesh.hpp" />
     <ClInclude Include="Components\MeshData\MeshData.hpp" />
     <ClInclude Include="Components\MeshData\QuadMesh.hpp" />
+    <ClInclude Include="Components\MeshData\SphereMesh.hpp" />
     <ClInclude Include="Components\MeshData\TrianglesMesh.hpp" />
     <ClInclude Include="Components\TransformWrap.hpp" />
     <ClInclude Include="Scene.hpp" />
@@ -222,7 +224,7 @@
     <ClInclude Include="Systems\CollectionUpdateSystem.hpp" />
     <ClInclude Include="Systems\LinesMeshRenderSystem.hpp" />
     <ClInclude Include="Systems\MotionCameraUpdateSystem.hpp" />
-    <ClInclude Include="Systems\PastEffectRenderSystem.hpp" />
+    <ClInclude Include="Systems\PostEffectRenderSystem.hpp" />
     <ClInclude Include="Systems\PhysicalBasedRenderSystem.hpp" />
     <ClInclude Include="Systems\WireframeRenderSystem.hpp" />
   </ItemGroup>

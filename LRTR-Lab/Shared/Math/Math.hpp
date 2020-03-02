@@ -38,6 +38,9 @@ namespace LRTR {
 		static auto pi() -> T;
 
 		template<typename T>
+		static auto two_pi() ->T ;
+
+		template<typename T>
 		static auto cross(const T& v0, const T& v1) -> T;
 
 		template<typename T>
@@ -50,6 +53,12 @@ namespace LRTR {
 		static auto acos(const T& v) -> T;
 
 		template<typename T>
+		static auto sin(const T& v) -> T;
+
+		template<typename T>
+		static auto cos(const T& v) -> T;
+		
+		template<typename T>
 		static auto clamp(const T& value, const T& min, const T& max) -> T;
 
 		template<typename T>
@@ -57,7 +66,7 @@ namespace LRTR {
 
 		template<typename T>
 		static auto min(const T& v0, const T& v1) -> T;
-
+		
 		template<typename T>
 		static auto rotate(const Vector3<T>& from, const Vector3<T>& to) -> Vector4<T>;
 
@@ -70,6 +79,12 @@ namespace LRTR {
 	auto MathUtility::pi() -> T
 	{
 		return glm::pi<T>();
+	}
+
+	template <typename T>
+	auto MathUtility::two_pi() -> T
+	{
+		return glm::two_pi<T>();
 	}
 
 	template <typename T>
@@ -94,6 +109,18 @@ namespace LRTR {
 	auto MathUtility::acos(const T& v) -> T
 	{
 		return glm::acos(v);
+	}
+
+	template <typename T>
+	auto MathUtility::sin(const T& v) -> T
+	{
+		return glm::sin(v);
+	}
+
+	template <typename T>
+	auto MathUtility::cos(const T& v) -> T
+	{
+		return glm::cos(v);
 	}
 
 	template <typename T>

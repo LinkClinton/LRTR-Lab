@@ -84,9 +84,6 @@
     <ClCompile Include="Systems\LinesMeshRenderSystem.cpp">
       <Filter>Systems</Filter>
     </ClCompile>
-    <ClCompile Include="Systems\PastEffectRenderSystem.cpp">
-      <Filter>Systems</Filter>
-    </ClCompile>
     <ClCompile Include="Systems\PhysicalBasedRenderSystem.cpp">
       <Filter>Systems</Filter>
     </ClCompile>
@@ -111,6 +108,12 @@
     </ClCompile>
     <ClCompile Include="Systems\MotionCameraUpdateSystem.cpp">
       <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\PostEffectRenderSystem.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\MeshData\SphereMesh.cpp">
+      <Filter>Components\MeshData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -174,9 +177,6 @@
     <ClInclude Include="Systems\LinesMeshRenderSystem.hpp">
       <Filter>Systems</Filter>
     </ClInclude>
-    <ClInclude Include="Systems\PastEffectRenderSystem.hpp">
-      <Filter>Systems</Filter>
-    </ClInclude>
     <ClInclude Include="Systems\PhysicalBasedRenderSystem.hpp">
       <Filter>Systems</Filter>
     </ClInclude>
@@ -201,6 +201,12 @@
     </ClInclude>
     <ClInclude Include="Cameras\Components\MotionProperty.hpp">
       <Filter>Cameras\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\PostEffectRenderSystem.hpp">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\MeshData\SphereMesh.hpp">
+      <Filter>Components\MeshData</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
