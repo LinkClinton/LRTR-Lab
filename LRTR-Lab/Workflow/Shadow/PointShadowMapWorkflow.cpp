@@ -69,7 +69,7 @@ LRTR::PointShadowMapWorkflow::PointShadowMapWorkflow(const std::shared_ptr<CodeR
 		)
 	);
 
-	mRenderPass = mDevice->createRenderPass(std::nullopt, 
+	mRenderPass = mDevice->createRenderPass({},
 		CodeRed::Attachment::DepthStencil(CodeRed::PixelFormat::Depth32BitFloat));
 
 	CompileShaderWorkflow workflow;

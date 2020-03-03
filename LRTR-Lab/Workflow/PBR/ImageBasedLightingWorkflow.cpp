@@ -81,9 +81,11 @@ LRTR::ImageBasedLightingWorkflow::ImageBasedLightingWorkflow(const std::shared_p
 
 	//Build Render Pass
 	mRenderPass = mDevice->createRenderPass(
-		CodeRed::Attachment::RenderTarget(CodeRed::PixelFormat::RedGreenBlueAlpha32BitFloat,
+		{
+			CodeRed::Attachment::RenderTarget(CodeRed::PixelFormat::RedGreenBlueAlpha32BitFloat,
 			CodeRed::ResourceLayout::RenderTarget,
-			CodeRed::ResourceLayout::GeneralRead));
+			CodeRed::ResourceLayout::GeneralRead)
+		});
 
 	//Compile Shaders 
 	CompileShaderWorkflow workflow;
@@ -317,10 +319,10 @@ auto LRTR::ImageBasedLightingWorkflow::work(
 			
 			const auto drawProperty = meshDataAssetComponent->get("SkyBox");
 			const auto frameBuffer = mDevice->createFrameBuffer(
-				output.EnvironmentMap->reference(
+				{ output.EnvironmentMap->reference(
 					CodeRed::TextureRefInfo(
 						CodeRed::ValueRange<size_t>(mipSlice, mipSlice + 1),
-						CodeRed::ValueRange<size_t>(arraySlice, arraySlice + 1))));
+						CodeRed::ValueRange<size_t>(arraySlice, arraySlice + 1))) });
 
 			commandList->beginRenderPass(mRenderPass, frameBuffer);
 
@@ -344,10 +346,12 @@ auto LRTR::ImageBasedLightingWorkflow::work(
 	for (size_t index = 0; index < 6; index++) {
 		const auto drawProperty = meshDataAssetComponent->get("SkyBox");
 		const auto frameBuffer = mDevice->createFrameBuffer(
-			output.IrradianceMap->reference(
+			{
+				output.IrradianceMap->reference(
 				CodeRed::TextureRefInfo(
 					CodeRed::ValueRange<size_t>(0, 1),
-					CodeRed::ValueRange<size_t>(index, index + 1))));
+					CodeRed::ValueRange<size_t>(index, index + 1)))
+			});
 
 		commandList->beginRenderPass(mRenderPass, frameBuffer);
 
@@ -372,10 +376,12 @@ auto LRTR::ImageBasedLightingWorkflow::work(
 
 			const auto drawProperty = meshDataAssetComponent->get("SkyBox");
 			const auto frameBuffer = mDevice->createFrameBuffer(
-				output.PreFilteringMap->reference(
-					CodeRed::TextureRefInfo(
+				{
+					output.PreFilteringMap->reference(
+						CodeRed::TextureRefInfo(
 						CodeRed::ValueRange<size_t>(mipSlice, mipSlice + 1),
-						CodeRed::ValueRange<size_t>(arraySlice, arraySlice + 1))));
+						CodeRed::ValueRange<size_t>(arraySlice, arraySlice + 1)))
+				});
 
 			commandList->beginRenderPass(mRenderPass, frameBuffer);
 
@@ -399,7 +405,7 @@ auto LRTR::ImageBasedLightingWorkflow::work(
 	{
 		const auto drawProperty = meshDataAssetComponent->get("Quad");
 
-		const auto frameBuffer = mDevice->createFrameBuffer(output.PreComputingBRDF);
+		const auto frameBuffer = mDevice->createFrameBuffer({ output.PreComputingBRDF->reference() });
 
 		commandList->beginRenderPass(mRenderPass, frameBuffer);
 

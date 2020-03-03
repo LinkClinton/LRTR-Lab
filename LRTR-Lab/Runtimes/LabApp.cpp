@@ -227,13 +227,13 @@ void LRTR::LabApp::initializeSwapChain()
 	for (size_t index = 0; index < mSwapChain->bufferCount(); index++) {
 		mFrameBuffers.push_back(
 			mDevice->createFrameBuffer(
-				mSwapChain->buffer(index)
+				{ mSwapChain->buffer(index)->reference() }
 			)
 		);
 	}
 
 	mRenderPass = mDevice->createRenderPass(
-		CodeRed::Attachment::RenderTarget(mSwapChain->format())
+		{ CodeRed::Attachment::RenderTarget(mSwapChain->format()) }
 	);
 
 	LRTR_DEBUG_INFO("Initialize Swap Chain with [{0}, {1}].",

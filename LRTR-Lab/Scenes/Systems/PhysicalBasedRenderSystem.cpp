@@ -55,7 +55,7 @@ LRTR::PointShadowMap::PointShadowMap(
 		PointShadowFrameBuffer frameBuffer;
 
 		for (size_t face = 0; face < 6; face++) {
-			frameBuffer[face] = device->createFrameBuffer(nullptr, Texture->reference(
+			frameBuffer[face] = device->createFrameBuffer({}, Texture->reference(
 				CodeRed::TextureRefInfo(
 					CodeRed::ValueRange<size_t>(0, 1),
 					CodeRed::ValueRange<size_t>(index * 6 + face, index * 6 + face + 1),

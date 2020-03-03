@@ -10,7 +10,8 @@ CodeRed::PipelineInfo::PipelineInfo(const std::shared_ptr<GpuLogicalDevice>& dev
 	mDepthStencilState = mPipelineFactory->createDetphStencilState();
 	mBlendState = mPipelineFactory->createBlendState();
 	mResourceLayout = mDevice->createResourceLayout({}, {});
-	mRenderPass = mDevice->createRenderPass(Attachment::RenderTarget(PixelFormat::BlueGreenRedAlpha8BitUnknown));
+	mRenderPass = mDevice->createRenderPass(
+		{ Attachment::RenderTarget(PixelFormat::BlueGreenRedAlpha8BitUnknown) });
 }
 
 void CodeRed::PipelineInfo::setRasterizationState(const std::shared_ptr<GpuRasterizationState>& state)
@@ -54,13 +55,16 @@ void CodeRed::PipelineInfo::setRenderPass(const std::shared_ptr<GpuRenderPass>& 
 
 void CodeRed::PipelineInfo::setRenderPass(const std::shared_ptr<GpuFrameBuffer>& frameBuffer)
 {
-	const auto renderTarget = frameBuffer->renderTarget();
-	const auto depthStencil = frameBuffer->depthStencil();
-	
-	mRenderPass = mDevice->createRenderPass(
-		renderTarget == nullptr ? std::nullopt : std::optional<Attachment>(Attachment::RenderTarget(renderTarget->format())),
-		depthStencil == nullptr ? std::nullopt : std::optional<Attachment>(Attachment::DepthStencil(depthStencil->format()))
-	);
+	std::vector<Attachment> colorAttachments = {};
+	std::optional<Attachment> depthAttachment = std::nullopt;
+
+	for (size_t index = 0; index < frameBuffer->size(); index++) 
+		colorAttachments.push_back(Attachment::RenderTarget(frameBuffer->renderTarget(index)->format()));
+
+	if (frameBuffer->depthStencil() != nullptr)
+		depthAttachment = std::optional<Attachment>(Attachment::DepthStencil(frameBuffer->depthStencil()->format()));
+
+	mRenderPass = mDevice->createRenderPass(colorAttachments, depthAttachment);
 }
 
 void CodeRed::PipelineInfo::updateState()

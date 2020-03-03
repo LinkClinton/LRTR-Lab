@@ -125,7 +125,7 @@ void LRTR::Scene::setTarget(const std::shared_ptr<CodeRed::GpuTexture>& texture)
 		texture == nullptr,
 		"texture can not be nullptr."
 	);
-	
+
 	//when we change the render target, we need reset the frame buffer
 	//and render pass.
 	mDepthStencil = mDevice->createTexture(
@@ -135,13 +135,15 @@ void LRTR::Scene::setTarget(const std::shared_ptr<CodeRed::GpuTexture>& texture)
 			CodeRed::PixelFormat::Depth32BitFloat
 		)
 	);
-	
-	mFrameBuffer = mDevice->createFrameBuffer(texture, mDepthStencil);
+
+	mFrameBuffer = mDevice->createFrameBuffer({ texture->reference() }, mDepthStencil->reference());
 	mRenderPass = mDevice->createRenderPass(
-		CodeRed::Attachment::RenderTarget(
+		{
+			CodeRed::Attachment::RenderTarget(
 			texture->format(),
 			CodeRed::ResourceLayout::RenderTarget,
-			CodeRed::ResourceLayout::GeneralRead),
+			CodeRed::ResourceLayout::GeneralRead)
+		},
 		CodeRed::Attachment::DepthStencil(
 			mDepthStencil->format(),
 			CodeRed::ResourceLayout::DepthStencil,
