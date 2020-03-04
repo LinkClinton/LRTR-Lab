@@ -136,13 +136,26 @@ void LRTR::Scene::setTarget(const std::shared_ptr<CodeRed::GpuTexture>& texture)
 		)
 	);
 
-	mFrameBuffer = mDevice->createFrameBuffer({ texture->reference() }, mDepthStencil->reference());
+	mBlurTexture = mDevice->createTexture(
+		CodeRed::ResourceInfo::RenderTarget(
+			texture->width(),
+			texture->height(),
+			CodeRed::PixelFormat::RedGreenBlueAlpha8BitUnknown,
+			CodeRed::ClearValue(0, 0, 0, 0)
+		));
+	
+	mFrameBuffer = mDevice->createFrameBuffer({ texture->reference(), mBlurTexture->reference() }, mDepthStencil->reference());
 	mRenderPass = mDevice->createRenderPass(
 		{
 			CodeRed::Attachment::RenderTarget(
-			texture->format(),
-			CodeRed::ResourceLayout::RenderTarget,
-			CodeRed::ResourceLayout::GeneralRead)
+				texture->format(),
+				CodeRed::ResourceLayout::RenderTarget,
+				CodeRed::ResourceLayout::GeneralRead),
+			CodeRed::Attachment::RenderTarget(
+				mBlurTexture->format(),
+				CodeRed::ResourceLayout::RenderTarget,
+				CodeRed::ResourceLayout::GeneralRead
+			)
 		},
 		CodeRed::Attachment::DepthStencil(
 			mDepthStencil->format(),
@@ -150,5 +163,8 @@ void LRTR::Scene::setTarget(const std::shared_ptr<CodeRed::GpuTexture>& texture)
 			CodeRed::ResourceLayout::GeneralRead
 		));
 
-	mRenderPass->setClear(texture->clearValue(), mDepthStencil->clearValue());
+	mRenderPass->setClear(std::vector<CodeRed::ClearValue>{
+		texture->clearValue(),
+		mBlurTexture->clearValue()
+	}, mDepthStencil->clearValue());
 }

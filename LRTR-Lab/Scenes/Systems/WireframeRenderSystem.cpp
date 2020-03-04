@@ -134,7 +134,7 @@ void LRTR::WireframeRenderSystem::update(const Group<Identity, std::shared_ptr<S
 		const std::shared_ptr<TrianglesMesh>& trianglesMesh,
 		const Matrix4x4f& transform)
 	{
-		if (!wireframeMaterial->visibility()) return;
+		if (!wireframeMaterial->IsRendered) return;
 
 		mDrawCalls.push_back({
 			trianglesMesh,

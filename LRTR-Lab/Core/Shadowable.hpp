@@ -8,13 +8,7 @@ namespace LRTR {
 
 		virtual ~Shadowable() = default;
 
-		void cast() { mShadowCast = true; }
-
-		void unCast() { mShadowCast = false; }
-		
-		auto isCast() const noexcept -> bool { return mShadowCast; }
-	protected:
-		bool mShadowCast = true;
+		bool IsShadowed = true;
 	};
 
 }

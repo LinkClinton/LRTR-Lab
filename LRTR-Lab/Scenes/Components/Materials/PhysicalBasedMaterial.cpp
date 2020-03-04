@@ -142,8 +142,8 @@ void LRTR::PhysicalBasedMaterial::onProperty()
 	ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0, 0, 0, 0.1f));
 
 	ImGui::BeginPropertyTable("Visibility");
-	ImGui::Property("Visibility", [&]() {ImGui::Checkbox("##Visibility", &mVisibility); });
-	ImGui::Property("ShadowCast", [&]() {ImGui::Checkbox("##CastShadow", &mShadowCast); });
+	ImGui::Property("Visibility", [&]() {ImGui::Checkbox("##Visibility", &IsRendered); });
+	ImGui::Property("ShadowCast", [&]() {ImGui::Checkbox("##CastShadow", &IsShadowed); });
 	
 	ImGui::EndPropertyTable();
 

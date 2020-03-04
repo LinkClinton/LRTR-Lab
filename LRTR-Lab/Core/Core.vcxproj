@@ -162,6 +162,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Blurable.hpp" />
     <ClInclude Include="Logging.hpp" />
     <ClInclude Include="Noncopyable.hpp" />
     <ClInclude Include="Propertyable.hpp" />

@@ -87,7 +87,7 @@ void LRTR::LinesMesh::onProperty()
 		});
 	
 	ImGui::BeginPropertyTable("Visibility");
-	ImGui::Property("Visibility", [&]() {ImGui::Checkbox("##Visibility", &mVisibility); });
+	ImGui::Property("Visibility", [&]() {ImGui::Checkbox("##Visibility", &IsRendered); });
 
 	ImGui::PopStyleColor();
 

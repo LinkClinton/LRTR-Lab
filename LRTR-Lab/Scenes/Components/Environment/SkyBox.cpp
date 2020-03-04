@@ -34,7 +34,7 @@ void LRTR::SkyBox::onProperty()
 	ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0, 0, 0, 0.1f));
 
 	ImGui::BeginPropertyTable("Visibility");
-	ImGui::Property("Visibility", [&]() {ImGui::Checkbox("##Visibility", &mVisibility); });
+	ImGui::Property("Visibility", [&]() {ImGui::Checkbox("##Visibility", &IsRendered); });
 
 	ImGui::EndPropertyTable();
 

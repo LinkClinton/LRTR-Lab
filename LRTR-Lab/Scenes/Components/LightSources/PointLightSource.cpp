@@ -31,7 +31,7 @@ void LRTR::PointLightSource::onProperty()
 	ImGui::Property("Intensity X", [&]() { ImGui::InputFloat("##X", &mIntensity.x); });
 	ImGui::Property("          Y", [&]() { ImGui::InputFloat("##Y", &mIntensity.y); });
 	ImGui::Property("          Z", [&]() { ImGui::InputFloat("##Z", &mIntensity.z); });
-	ImGui::Property("ShadowCast", [&]() { ImGui::Checkbox("##CastShadow", &mShadowCast); });
+	ImGui::Property("ShadowCast", [&]() { ImGui::Checkbox("##CastShadow", &IsShadowed); });
 
 	ImGui::EndPropertyTable();
 

@@ -7,6 +7,7 @@
     <ClInclude Include="Renderable.hpp" />
     <ClInclude Include="TypeInfo.hpp" />
     <ClInclude Include="Shadowable.hpp" />
+    <ClInclude Include="Blurable.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp" />

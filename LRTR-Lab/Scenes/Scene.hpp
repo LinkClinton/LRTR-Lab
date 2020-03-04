@@ -58,6 +58,7 @@ namespace LRTR {
 		std::shared_ptr<CodeRed::GpuFrameBuffer> mFrameBuffer;
 		std::shared_ptr<CodeRed::GpuRenderPass> mRenderPass;
 
+		std::shared_ptr<CodeRed::GpuTexture> mBlurTexture;
 		std::shared_ptr<CodeRed::GpuTexture> mDepthStencil;
 
 		std::vector<std::shared_ptr<CodeRed::GpuCommandAllocator>> mCommandAllocators;

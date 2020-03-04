@@ -140,7 +140,7 @@ void LRTR::LinesMeshRenderSystem::update(const Group<Identity, std::shared_ptr<S
 		const Matrix4x4f& transform,
 		const std::shared_ptr<LinesMesh>& component)
 	{
-		if (!component->visibility()) return;
+		if (!component->IsRendered) return;
 
 		for (size_t index = 0; index < component->size(); index++) {
 			transforms.push_back(transform);

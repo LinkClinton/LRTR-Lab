@@ -117,7 +117,7 @@ void LRTR::PostEffectRenderSystem::update(const Group<Identity, std::shared_ptr<
 	mFrameResources[mCurrentFrameIndex].set<CodeRed::GpuTexture>("SkyBox", nullptr);
 	
 	for (const auto& shape : shapes) {
-		if (shape.second->hasComponent<SkyBox>() && shape.second->component<SkyBox>()->visibility()) {
+		if (shape.second->hasComponent<SkyBox>() && shape.second->component<SkyBox>()->IsRendered) {
 			mFrameResources[mCurrentFrameIndex].set("SkyBox",
 				shape.second->component<SkyBox>()->cubeMap());
 		}

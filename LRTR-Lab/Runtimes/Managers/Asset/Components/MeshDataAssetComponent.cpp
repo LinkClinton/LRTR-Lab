@@ -2,6 +2,7 @@
 
 #include <CodeRed/Core/CodeRedGraphics.hpp>
 
+#include "../../../../Scenes/Components/MeshData/SphereMesh.hpp"
 #include "../../../../Scenes/Components/MeshData/QuadMesh.hpp"
 #include "../../../../Scenes/Components/MeshData/BoxMesh.hpp"
 #include "../../../../Shared/Graphics/ResourceHelper.hpp"
@@ -39,6 +40,7 @@ LRTR::MeshDataAssetComponent::MeshDataAssetComponent(
 	
 	allocate(mMeshes["SkyBox"] = std::make_shared<BoxMesh>(2.0f, 2.0f, 2.0f));
 	allocate(mMeshes["Quad"] = std::make_shared<QuadMesh>(2.0f, 2.0f));
+	allocate(mMeshes["Sphere"] = std::make_shared<SphereMesh>(1.0f, 64, 64));
 	
 	endAllocating();
 }

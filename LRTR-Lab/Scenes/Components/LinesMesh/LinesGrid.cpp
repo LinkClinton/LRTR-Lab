@@ -141,7 +141,7 @@ void LRTR::LinesGrid::onProperty()
 	ImGui::Property("            Y", [&]() { isChanged ^= ImGui::InputInt("##TestY", &y); });
 
 	ImGui::BeginPropertyTable("Visibility");
-	ImGui::Property("Visibility", [&]() {ImGui::Checkbox("##Visibility", &mVisibility); });
+	ImGui::Property("Visibility", [&]() {ImGui::Checkbox("##Visibility", &IsRendered); });
 	
 	ImGui::PopStyleColor();
 

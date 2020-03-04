@@ -251,7 +251,7 @@ void LRTR::PhysicalBasedRenderSystem::update(const Group<Identity, std::shared_p
 		const Matrix4x4f& transform,
 		const size_t index)
 	{
-		if (!physicalBasedMaterial->visibility()) return;
+		if (!physicalBasedMaterial->IsRendered) return;
 
 		const auto descriptorHeap = (*descriptorHeapPool)[index];
 		
@@ -296,7 +296,7 @@ void LRTR::PhysicalBasedRenderSystem::update(const Group<Identity, std::shared_p
 				CodeRed::PixelFormat::Red32BitFloat)), 13);
 
 		// only cast shadow that enable ShadowCast
-		if (physicalBasedMaterial->isCast()) mShadowCastInfos.push_back({ trianglesMesh, index });
+		if (physicalBasedMaterial->IsShadowed) mShadowCastInfos.push_back({ trianglesMesh, index });
 
 		mDrawCalls.push_back(drawCall);
 		
@@ -331,10 +331,10 @@ void LRTR::PhysicalBasedRenderSystem::update(const Group<Identity, std::shared_p
 				transform != nullptr ? Vector4f(transform->translation(), 1.0f) : Vector4f(0),
 				Vector4f(pointLight->intensity(), 1.0f),
 				25.0f,
-				pointLight->isCast() ? static_cast<unsigned>(mPointShadowAreas.size() + 1) : 0,
+				pointLight->IsShadowed ? static_cast<unsigned>(mPointShadowAreas.size() + 1) : 0,
 				0, });
 
-			if (pointLight->isCast()) 
+			if (pointLight->IsShadowed) 
 				mPointShadowAreas.push_back({ mPointShadowMap->FrameBuffers[mPointShadowAreas.size()], lights.back().Position, 25.0f });
 		}
 	}
