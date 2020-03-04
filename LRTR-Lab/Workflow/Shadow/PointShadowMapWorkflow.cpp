@@ -131,6 +131,12 @@ auto LRTR::PointShadowMapWorkflow::work(const WorkflowStartup<PointShadowMapInpu
 		startup.InputData.ShadowMap->height()
 	};
 
+	commandList->setGraphicsPipeline(mPipelineInfo->graphicsPipeline());
+	commandList->setResourceLayout(mResourceLayout);
+
+	commandList->setVertexBuffers({ meshDataAssetComponent->positions() });
+	commandList->setIndexBuffer(meshDataAssetComponent->indices());
+	
 	for (size_t light = 0; light < startup.InputData.Areas.size(); light++) {
 		const auto &area = startup.InputData.Areas[light];
 		const auto views = generateViewMatrix(area);
@@ -140,11 +146,6 @@ auto LRTR::PointShadowMapWorkflow::work(const WorkflowStartup<PointShadowMapInpu
 		mDescriptorHeaps[light]->bindBuffer(mViewBuffers[light], 0);
 		mDescriptorHeaps[light]->bindBuffer(startup.InputData.Transform, 1);
 
-		commandList->setGraphicsPipeline(mPipelineInfo->graphicsPipeline());
-		commandList->setResourceLayout(mResourceLayout);
-
-		commandList->setVertexBuffers({ meshDataAssetComponent->positions() });
-		commandList->setIndexBuffer(meshDataAssetComponent->indices());
 		commandList->setDescriptorHeap(mDescriptorHeaps[light]);
 
 		for (size_t face = 0; face < 6; face++) {

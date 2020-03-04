@@ -15,10 +15,12 @@ LRTR::Scene::Scene(
 {
 	mCommandAllocators.push_back(mDevice->createCommandAllocator());
 	mCommandAllocators.push_back(mDevice->createCommandAllocator());
-	
-	//first for processing, second for rendering
+	mCommandAllocators.push_back(mDevice->createCommandAllocator());
+
+	//first for pre processing, second for rendering, third for post processing
 	mCommandLists.push_back(mDevice->createGraphicsCommandList(mCommandAllocators[0]));
 	mCommandLists.push_back(mDevice->createGraphicsCommandList(mCommandAllocators[1]));
+	mCommandLists.push_back(mDevice->createGraphicsCommandList(mCommandAllocators[2]));
 
 	add(mProperty = std::make_shared<SceneProperty>());
 
@@ -91,9 +93,11 @@ auto LRTR::Scene::render(
 
 	mCommandAllocators[0]->reset();
 	mCommandAllocators[1]->reset();
+	mCommandAllocators[2]->reset();
 
 	mCommandLists[0]->beginRecording();
 	mCommandLists[1]->beginRecording();
+	mCommandLists[2]->beginRecording();
 
 	mCommandLists[1]->beginRenderPass(mRenderPass, mFrameBuffer);
 	mCommandLists[1]->setViewPort(mFrameBuffer->fullViewPort());
@@ -110,6 +114,7 @@ auto LRTR::Scene::render(
 
 	mCommandLists[0]->endRecording();
 	mCommandLists[1]->endRecording();
+	mCommandLists[2]->endRecording();
 
 	mCurrentFrameIndex = (mCurrentFrameIndex + 1) % mMaxFrameCount;
 

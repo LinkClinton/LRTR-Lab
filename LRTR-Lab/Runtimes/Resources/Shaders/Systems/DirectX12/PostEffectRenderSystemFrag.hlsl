@@ -8,8 +8,10 @@ struct View
 struct Config
 {
     uint IsSkyBox;
+    uint IsBlur;
     uint IsHDR;
 };
+
 
 struct Output
 {
@@ -18,11 +20,12 @@ struct Output
 };
 
 ConstantBuffer<View> view : register(b0);
-[[vk::push_constant]] ConstantBuffer<Config> config : register(b3);
+[[vk::push_constant]] ConstantBuffer<Config> config : register(b0, space2);
 
-SamplerState textureSampler : register(s2);
+SamplerState textureSampler : register(s0, space1);
 
 TextureCube skyBox : register(t1);
+Texture2D blurTexture : register(t2);
 
 float GammaCorrect(float value)
 {
@@ -42,8 +45,17 @@ float3 GammaCorrect(float3 value)
 
 float4 main(float4 svPosition : SV_POSITION, float3 texcoord : TEXCOORD) : SV_TARGET
 {
-    float3 color = skyBox.Sample(textureSampler, texcoord).rgb;
+    if (config.IsSkyBox != 0) {
+        float3 color = skyBox.Sample(textureSampler, texcoord).rgb;
     
-    if (config.IsHDR != 0) return float4(GammaCorrect(color), 1.0f);
-    else return float4(color, 1.0f);
+        if (config.IsHDR != 0) return float4(GammaCorrect(color), 1.0f);
+        else return float4(color, 1.0f);
+    }
+
+    if (config.IsBlur != 0) {
+        return blurTexture.Sample(textureSampler, texcoord.xy);
+    }
+
+    // only for error
+    return float4(1, 0, 0, 0);
 }

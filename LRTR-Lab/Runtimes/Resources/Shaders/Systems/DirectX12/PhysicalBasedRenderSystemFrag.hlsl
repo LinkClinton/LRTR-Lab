@@ -30,6 +30,7 @@ struct Config
 	uint HasNormalMap;
 	uint HasMetallic;
     uint HasEmissive;
+	uint HasBlurred;
     float EyePositionX;
 	float EyePositionY;
     float EyePositionZ;
@@ -214,12 +215,17 @@ float ShadowCalculation(float3 position, float viewDistance, uint index)
 	return shadow / float(samples);
 }
 
-float4 main(
+struct Output {
+	float4 Color0 : SV_TARGET0;
+	float4 Color1 : SV_TARGET1;
+};
+
+Output main(
 	float4 svPosition : SV_POSITION,
 	float3 position : POSITION,
 	float3 texCoord : TEXCOORD,
 	float3 tangent : TANGENT,
-	float3 normal : NORMAL) : SV_TARGET
+	float3 normal : NORMAL)
 {
     float3 toEye = normalize(float3(config.EyePositionX, config.EyePositionY, config.EyePositionZ) - position);
 	float3 F0 = 0.04;
@@ -279,5 +285,12 @@ float4 main(
 	
     color = GammaCorrect(color);
 	
-	return float4(color, material.BaseColor.a);
+	Output result;
+
+	result.Color0 = float4(color, material.BaseColor.a);
+	
+	if (config.HasBlurred != 0) result.Color1 = float4(color, 1.f);
+	else result.Color1 = float4(0, 0, 0, 0);
+
+	return result;
 }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../../Workflow/Blur/GaussianBlurWorkflow.hpp"
+
 #include "../../Shared/Graphics/PipelineInfo.hpp"
 #include "../../Shared/Accelerators/Group.hpp"
 
@@ -27,15 +29,23 @@ namespace LRTR {
 
 		auto typeIndex() const noexcept -> std::type_index override;
 	private:
-		void updatePipeline(const std::shared_ptr<CodeRed::GpuFrameBuffer>& frameBuffer) const;
+		void updatePipeline(const std::shared_ptr<CodeRed::GpuFrameBuffer>& frameBuffer);
 
 		void updateCamera(const std::shared_ptr<SceneCamera>& camera) const;
 	private:
 		std::shared_ptr<CodeRed::GpuResourceLayout> mResourceLayout;
-		std::shared_ptr<CodeRed::PipelineInfo> mPipelineInfo;
+		std::shared_ptr<CodeRed::GpuRenderPass> mRenderPass;
+
+		std::shared_ptr<CodeRed::GpuTexture> mBlurTexture;
 		std::shared_ptr<CodeRed::GpuBuffer> mViewBuffer;
 
+		std::shared_ptr<CodeRed::PipelineInfo> mPipelineInfo;
+
 		std::shared_ptr<CodeRed::GpuSampler> mSampler;
+
+		std::array<std::shared_ptr<CodeRed::GpuFrameBuffer>, 2> mBlurFrameBuffer;
+		
+		std::shared_ptr<GaussianBlurWorkflow> mGaussianBlurWorkflow;
 	};
 	
 }

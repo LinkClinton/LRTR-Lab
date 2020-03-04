@@ -20,6 +20,7 @@ layout (push_constant) uniform Config
     uint HasNormalMap;
     uint HasMetallic;
     uint HasEmissive;
+    uint HasBlurred;
     float EyePositionX;
     float EyePositionY;
     float EyePositionZ;

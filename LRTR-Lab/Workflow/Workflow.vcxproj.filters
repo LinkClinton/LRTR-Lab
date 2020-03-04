@@ -11,6 +11,9 @@
     <ClCompile Include="Shadow\PointShadowMapWorkflow.cpp">
       <Filter>Shadow</Filter>
     </ClCompile>
+    <ClCompile Include="Blur\GaussianBlurWorkflow.cpp">
+      <Filter>Blur</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Workflow.hpp" />
@@ -24,6 +27,9 @@
     <ClInclude Include="Shadow\PointShadowMapWorkflow.hpp">
       <Filter>Shadow</Filter>
     </ClInclude>
+    <ClInclude Include="Blur\GaussianBlurWorkflow.hpp">
+      <Filter>Blur</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">
@@ -34,6 +40,9 @@
     </Filter>
     <Filter Include="Shadow">
       <UniqueIdentifier>{dbc7c335-d06f-4b1f-bff1-85de6006caf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Blur">
+      <UniqueIdentifier>{e5c04704-deeb-40f8-8da1-dd083b18b5c0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

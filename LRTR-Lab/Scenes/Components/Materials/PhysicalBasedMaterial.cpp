@@ -144,6 +144,7 @@ void LRTR::PhysicalBasedMaterial::onProperty()
 	ImGui::BeginPropertyTable("Visibility");
 	ImGui::Property("Visibility", [&]() {ImGui::Checkbox("##Visibility", &IsRendered); });
 	ImGui::Property("ShadowCast", [&]() {ImGui::Checkbox("##CastShadow", &IsShadowed); });
+	ImGui::Property("Blur", [&]() {ImGui::Checkbox("##Blur", &IsBlurred); });
 	
 	ImGui::EndPropertyTable();
 

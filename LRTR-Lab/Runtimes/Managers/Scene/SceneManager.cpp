@@ -87,6 +87,11 @@ LRTR::SceneManager::SceneManager(
 		Vector4f(1.f), Vector4f(0.7f, 0.6f, 0.65f, 1.0f), Vector4f(0.8f), Vector4f(0)
 		));
 	box3->component<CollectionLabel>()->set("Objects", "Box3");
+
+	//box0->component<PhysicalBasedMaterial>()->IsBlurred = true;
+	//box1->component<PhysicalBasedMaterial>()->IsBlurred = true;
+	//box2->component<PhysicalBasedMaterial>()->IsBlurred = true;
+	//box3->component<PhysicalBasedMaterial>()->IsBlurred = true;
 	
 	light0->addComponent(std::make_shared<PointLightSource>(Vector3f(20)));
 	light0->component<CollectionLabel>()->set("Light", "Point0");
@@ -124,8 +129,8 @@ LRTR::SceneManager::SceneManager(
 	
 	const auto camera = std::make_shared<MotionCamera>(
 		std::make_shared<TransformWrap>(
-			Vector3f(0, 2, 1),
-			Vector4f(1, 0, 0, glm::pi<float>() * 0.5f),
+			Vector3f(0.081f, 1.995f, 5.649f),
+			QuaternionF(0.029f, 0.006f, 0.209f, 0.978f),
 			Vector3f(1)),
 		std::make_shared<Perspective>(
 			MathUtility::pi<float>() * 0.25f,

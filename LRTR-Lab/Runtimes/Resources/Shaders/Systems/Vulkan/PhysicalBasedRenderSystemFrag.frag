@@ -31,6 +31,7 @@ layout (push_constant) uniform Config
     uint HasNormalMap;
     uint HasMetallic;
     uint HasEmissive;
+	uint HasBlurred;
     float EyePositionX;
     float EyePositionY;
     float EyePositionZ;
@@ -208,6 +209,7 @@ layout (location = 2) in vec3 inTangent;
 layout (location = 3) in vec3 inNormal;
 
 layout (location = 0) out vec4 outColor;
+layout (location = 1) out vec4 outColor1;
 
 void main()
 {
@@ -266,4 +268,5 @@ void main()
     color = GammaCorrect(color);
 
     outColor = vec4(color, material.BaseColor.a);
+	outColor1 = outColor;
 }

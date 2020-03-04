@@ -20,6 +20,7 @@ namespace LRTR {
 		unsigned HasNormalMap = 0;
 		unsigned HasMetallic = 0;
 		unsigned HasEmissive = 0;
+		unsigned HasBlurred = 0;
 	};
 
 	struct EnvironmentLight {

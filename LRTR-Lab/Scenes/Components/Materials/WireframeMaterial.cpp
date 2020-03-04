@@ -39,6 +39,7 @@ void LRTR::WireframeMaterial::onProperty()
 
 	ImGui::BeginPropertyTable("Visibility");
 	ImGui::Property("Visibility", [&]() {ImGui::Checkbox("##Visibility", &IsRendered); });
+	ImGui::Property("Blur", [&]() {ImGui::Checkbox("##Blur", &IsBlurred); });
 	
 	ImGui::EndPropertyTable();
 }

@@ -101,7 +101,7 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 	//resource 12 : pre computingBRDF map
 	//resource 13 : point shadow map array
 	//resource 14 : sampler
-	//resource 15 : hasEnvironmentLight, hasBaseColor, HasRoughness, HasOcclusion, HasNormalMap, HasMetallic, HasEmissive,
+	//resource 15 : hasEnvironmentLight, hasBaseColor, HasRoughness, HasOcclusion, HasNormalMap, HasMetallic, HasEmissive, HasBlurred
 	//eyePosition.x, eyePosition.y, eyePosition.z, MipLevels, nLights, index
 	mResourceLayout = mDevice->createResourceLayout(
 		{
@@ -121,7 +121,7 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 13)
 		}, {
 			CodeRed::SamplerLayoutElement(mSampler, 0, 1)
-		}, CodeRed::Constant32Bits(13, 0, 2));
+		}, CodeRed::Constant32Bits(14, 0, 2));
 
 	for (auto& frameResource : mFrameResources) {
 		auto descriptorHeapPool = std::make_shared<std::vector<std::shared_ptr<CodeRed::GpuDescriptorHeap>>>();
@@ -181,6 +181,9 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 			CodeRed::FillMode::Solid
 		)
 	);
+
+	// because we use two frame buffers, so we need two blend properties
+	mPipelineInfo->setBlendState(pipelineFactory->createBlendState(2));
 	
 	CompileShaderWorkflow workflow;
 
@@ -225,7 +228,7 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 			) })
 		)
 	);
-
+	
 	// in this version, we only support 2 point light for test
 	mPointShadowMap = std::make_shared<PointShadowMap>(mDevice, 1024, 5);
 	
@@ -273,6 +276,8 @@ void LRTR::PhysicalBasedRenderSystem::update(const Group<Identity, std::shared_p
 		drawCall.HasNormalMap = physicalBasedMaterial->normalMapTexture() != nullptr;
 		drawCall.HasEmissive = physicalBasedMaterial->emissiveTexture() != nullptr;
 
+		drawCall.HasBlurred = physicalBasedMaterial->IsBlurred;
+		
 		if (drawCall.HasMetallic) descriptorHeap->bindTexture(physicalBasedMaterial->metallicTexture()->value(), 4);
 		if (drawCall.HasBaseColor) descriptorHeap->bindTexture(physicalBasedMaterial->baseColorTexture()->value(), 5);
 		if (drawCall.HasRoughness) descriptorHeap->bindTexture(physicalBasedMaterial->roughnessTexture()->value(), 6);
@@ -437,6 +442,7 @@ void LRTR::PhysicalBasedRenderSystem::render(
 			drawCall.HasNormalMap,
 			drawCall.HasMetallic,
 			drawCall.HasEmissive,
+			drawCall.HasBlurred,
 			cameraPosition.x,
 			cameraPosition.y,
 			cameraPosition.z,

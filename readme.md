@@ -8,7 +8,8 @@ The most implementation of rendering technology are learned from some articles, 
 
 - PBR and IBL, Physically based rendering and image based lighting.
 - SkyBox.
-- Shadow Mapping.
+- Soft Shadow Mapping.
+- Gaussian Blur.
 
 ## Scene Loader
 
