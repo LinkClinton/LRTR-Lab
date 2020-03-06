@@ -285,8 +285,8 @@ auto LRTR::ImageBasedLightingWorkflow::work(
 	Matrix4x4f views[8] = {
 		Transform::lookAt(Vector3f(0), Vector3f(+1.f, +0.f, +0.f), Vector3f(+0.f, -1.f, +0.f)).matrix(),
 		Transform::lookAt(Vector3f(0), Vector3f(-1.f, +0.f, +0.f), Vector3f(+0.f, -1.f, +0.f)).matrix(),
-		Transform::lookAt(Vector3f(0), Vector3f(+0.f, +1.f, +0.f), Vector3f(+0.f, +0.f, +1.f)).matrix(),
 		Transform::lookAt(Vector3f(0), Vector3f(+0.f, -1.f, +0.f), Vector3f(+0.f, +0.f, -1.f)).matrix(),
+		Transform::lookAt(Vector3f(0), Vector3f(+0.f, +1.f, +0.f), Vector3f(+0.f, +0.f, +1.f)).matrix(),
 		Transform::lookAt(Vector3f(0), Vector3f(+0.f, +0.f, +1.f), Vector3f(+0.f, -1.f, +0.f)).matrix(),
 		Transform::lookAt(Vector3f(0), Vector3f(+0.f, +0.f, -1.f), Vector3f(+0.f, -1.f, +0.f)).matrix(),
 	};

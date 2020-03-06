@@ -248,17 +248,19 @@
     <CopyFileToFolders Include="Resources\Shaders\Workflow\HLSL\PointShadowMapVert.hlsl">
       <Filter>Resources\Shaders\Workflow\HLSL</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\PostEffectRenderSystemFrag.hlsl" />
-    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\PostEffectRenderSystemVert.hlsl" />
-    <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\PostEffectRenderSystemFrag.frag" />
-    <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\PostEffectRenderSystemVert.vert" />
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="Resources\Shaders\Workflow\HLSL\GaussianBlurFrag.hlsl">
-      <Filter>Resources\Shaders\Workflow\HLSL</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\Workflow\HLSL\GaussianBlurVert.hlsl">
-      <Filter>Resources\Shaders\Workflow\HLSL</Filter>
-    </FxCompile>
+    <CopyFileToFolders Include="Resources\Shaders\Workflow\HLSL\GaussianBlurFrag.hlsl" />
+    <CopyFileToFolders Include="Resources\Shaders\Workflow\HLSL\GaussianBlurVert.hlsl" />
+    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\PostEffectRenderSystemFrag.hlsl">
+      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\PostEffectRenderSystemVert.hlsl">
+      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\PostEffectRenderSystemFrag.frag">
+      <Filter>Resources\Shaders\Systems\Vulkan</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\PostEffectRenderSystemVert.vert">
+      <Filter>Resources\Shaders\Systems\Vulkan</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>

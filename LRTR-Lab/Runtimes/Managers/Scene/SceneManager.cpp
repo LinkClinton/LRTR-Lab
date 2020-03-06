@@ -33,6 +33,14 @@ LRTR::SceneManager::SceneManager(
 	const std::shared_ptr<CodeRed::GpuLogicalDevice>& device) :
 	Manager(sharing), mDevice(device)
 {
+	//auto workflow = std::make_shared<ImageBasedLightingWorkflow>(mDevice);
+
+	/*const auto output = workflow->start({ ImageBasedLightingInput(
+		mRuntimeSharing->queue(),
+		mRuntimeSharing,
+		"./Resources/Textures/HDR/newport_loft.hdr"
+	) });*/
+	
 	add(std::make_shared<Scene>("Scene", mDevice));
 
 	const auto light0 = std::make_shared<Shape>();
