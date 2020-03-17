@@ -14,6 +14,9 @@
     <ClCompile Include="Blur\GaussianBlurWorkflow.cpp">
       <Filter>Blur</Filter>
     </ClCompile>
+    <ClCompile Include="PBR\DeferredShadingWorkflow.cpp">
+      <Filter>PBR</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Workflow.hpp" />
@@ -29,6 +32,9 @@
     </ClInclude>
     <ClInclude Include="Blur\GaussianBlurWorkflow.hpp">
       <Filter>Blur</Filter>
+    </ClInclude>
+    <ClInclude Include="PBR\DeferredShadingWorkflow.hpp">
+      <Filter>PBR</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

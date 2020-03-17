@@ -10,6 +10,7 @@ The most implementation of rendering technology are learned from some articles, 
 - SkyBox.
 - Soft Shadow Mapping.
 - Gaussian Blur.
+- Deferred Shading
 
 ## Scene Loader
 

@@ -7,12 +7,11 @@ struct Transform
 
 struct View
 {
-	matrix View;
+	matrix View[4];
 };
 
 struct Config
 {
-    uint HasEnvironmentLight;
     uint HasBaseColor;
     uint HasRoughness;
     uint HasOcclusion;
@@ -20,11 +19,6 @@ struct Config
     uint HasMetallic;
     uint HasEmissive;
 	uint HasBlurred;
-    float EyePositionX;
-    float EyePositionY;
-    float EyePositionZ;
-    uint MipLevels;
-    uint Lights;
     uint Index;
 };
 
@@ -37,8 +31,8 @@ struct Output
 	float3 Normal : NORMAL;
 };
 
-StructuredBuffer<Transform> transforms : register(t2);
-ConstantBuffer<View> view : register(b3);
+StructuredBuffer<Transform> transforms : register(t1);
+ConstantBuffer<View> view : register(b2);
 
 [[vk::push_constant]] ConstantBuffer<Config> config : register(b0, space2);
 
@@ -51,7 +45,7 @@ Output main(
 	Output result;
 	
 	result.Position = mul(float4(position, 1.0f), transforms[config.Index].Transform).xyz;
-	result.SVPosition = mul(float4(result.Position, 1.0f), view.View);
+	result.SVPosition = mul(float4(result.Position, 1.0f), view.View[0]);
 	result.Normal = mul(normal, (float3x3)transforms[config.Index].Transform); //no scale transform
 	result.Tangent = mul(tangent, (float3x3)transforms[config.Index].Transform); //no scale transform
 	result.TexCoord = texCoord;

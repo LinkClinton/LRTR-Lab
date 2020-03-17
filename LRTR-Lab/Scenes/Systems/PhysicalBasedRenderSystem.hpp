@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../Workflow/Shadow/PointShadowMapWorkflow.hpp"
+#include "../../Workflow/PBR/DeferredShadingWorkflow.hpp"
 
 #include "../../Shared/Graphics/PipelineInfo.hpp"
 #include "../../Shared/Accelerators/Group.hpp"
@@ -8,20 +9,6 @@
 #include "../System.hpp"
 
 namespace LRTR {
-
-	class TrianglesMesh;
-	
-	struct PhysicalBasedDrawCall {
-		std::shared_ptr<TrianglesMesh> Mesh;
-
-		unsigned HasBaseColor = 0;
-		unsigned HasRoughness = 0;
-		unsigned HasOcclusion = 0;
-		unsigned HasNormalMap = 0;
-		unsigned HasMetallic = 0;
-		unsigned HasEmissive = 0;
-		unsigned HasBlurred = 0;
-	};
 
 	struct EnvironmentLight {
 		std::shared_ptr<CodeRed::GpuTexture> Irradiance;
@@ -89,18 +76,22 @@ namespace LRTR {
 		auto hasEnvironmentLight() const noexcept -> bool;
 	private:
 		std::shared_ptr<CodeRed::GpuResourceLayout> mResourceLayout;
+		std::shared_ptr<CodeRed::GpuDescriptorHeap> mDescriptorHeap;
 		std::shared_ptr<CodeRed::PipelineInfo> mPipelineInfo;
 		std::shared_ptr<CodeRed::GpuBuffer> mViewBuffer;
 		std::shared_ptr<CodeRed::GpuSampler> mSampler;
 
 		std::shared_ptr<PointShadowMap> mPointShadowMap;
 
+		std::shared_ptr<DeferredShadingWorkflow> mDeferredShadingWorkflow;
 		std::shared_ptr<PointShadowMapWorkflow> mPointShadowMapWorkflow;
-
+		
 		std::vector<PointShadowArea> mPointShadowAreas;
 		std::vector<PhysicalBasedDrawCall> mDrawCalls;
 		std::vector<ShadowCastInfo> mShadowCastInfos;
-		
+
+		DeferredShadingBuffer mDeferredShadingBuffer;
+
 		EnvironmentLight mEnvironmentLight;
 
 		size_t mLights = 0;

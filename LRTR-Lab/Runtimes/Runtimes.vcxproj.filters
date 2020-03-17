@@ -67,6 +67,9 @@
     <Filter Include="Managers\Input">
       <UniqueIdentifier>{c729fd84-2c62-431c-8044-dace703b0315}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources\Shaders\Systems\HLSL">
+      <UniqueIdentifier>{cfd4abe0-95de-494f-94d5-6098d131ce28}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Managers\Asset\Components\AssetComponent.hpp">
@@ -191,12 +194,6 @@
     <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\LinesMeshRenderSystemVert.hlsl">
       <Filter>Resources\Shaders\Systems\DirectX12</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\PhysicalBasedRenderSystemFrag.hlsl">
-      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\PhysicalBasedRenderSystemVert.hlsl">
-      <Filter>Resources\Shaders\Systems\DirectX12</Filter>
-    </CopyFileToFolders>
     <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\WireframeRenderSystemFrag.hlsl">
       <Filter>Resources\Shaders\Systems\DirectX12</Filter>
     </CopyFileToFolders>
@@ -248,8 +245,6 @@
     <CopyFileToFolders Include="Resources\Shaders\Workflow\HLSL\PointShadowMapVert.hlsl">
       <Filter>Resources\Shaders\Workflow\HLSL</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Resources\Shaders\Workflow\HLSL\GaussianBlurFrag.hlsl" />
-    <CopyFileToFolders Include="Resources\Shaders\Workflow\HLSL\GaussianBlurVert.hlsl" />
     <CopyFileToFolders Include="Resources\Shaders\Systems\DirectX12\PostEffectRenderSystemFrag.hlsl">
       <Filter>Resources\Shaders\Systems\DirectX12</Filter>
     </CopyFileToFolders>
@@ -262,5 +257,25 @@
     <CopyFileToFolders Include="Resources\Shaders\Systems\Vulkan\PostEffectRenderSystemVert.vert">
       <Filter>Resources\Shaders\Systems\Vulkan</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Shaders\Workflow\HLSL\GaussianBlurVert.hlsl">
+      <Filter>Resources\Shaders\Workflow\HLSL</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Shaders\Workflow\HLSL\GaussianBlurFrag.hlsl">
+      <Filter>Resources\Shaders\Workflow\HLSL</Filter>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Resources\Shaders\Workflow\HLSL\DeferredShadingFrag.hlsl">
+      <Filter>Resources\Shaders\Workflow\HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Workflow\HLSL\DeferredShadingVert.hlsl">
+      <Filter>Resources\Shaders\Workflow\HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Systems\HLSL\PhysicalBasedRenderSystemFrag.hlsl">
+      <Filter>Resources\Shaders\Systems\HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Systems\HLSL\PhysicalBasedRenderSystemVert.hlsl">
+      <Filter>Resources\Shaders\Systems\HLSL</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

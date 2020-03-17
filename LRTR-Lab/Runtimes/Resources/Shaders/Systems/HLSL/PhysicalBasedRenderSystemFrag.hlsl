@@ -24,19 +24,11 @@ struct Light
 struct Config
 {
     uint HasEnvironmentLight;
-	uint HasBaseColor;
-	uint HasRoughness;
-	uint HasOcclusion;
-	uint HasNormalMap;
-	uint HasMetallic;
-    uint HasEmissive;
-	uint HasBlurred;
     float EyePositionX;
 	float EyePositionY;
     float EyePositionZ;
     uint MipLevels;
 	uint Lights;
-	uint Index;
 };
 
 float3 mix(float3 x, float3 y, float3 a)
@@ -150,36 +142,20 @@ float3 InverseGammaCorrect(float3 value)
 		InverseGammaCorrect(value.z));
 }
 
-StructuredBuffer<Material> materials : register(t0);
-StructuredBuffer<Light> lights : register(t1);
+StructuredBuffer<Light> lights : register(t0);
 
-Texture2D metallicTexture : register(t4);
-Texture2D baseColorTexture : register(t5);
-Texture2D roughnessTexture : register(t6);
-Texture2D occlusionTexture : register(t7);
-Texture2D normalMapTexture : register(t8);
-Texture2D emissiveTexture : register(t9);
-TextureCube irradianceMap : register(t10);
-TextureCube preFilteringMap : register(t11);
-Texture2D preComputingBRDF : register(t12);
-TextureCubeArray pointShadowMaps : register(t13);
+Texture2D baseColorAndRoughnessTexture : register(t2);
+Texture2D positionAndOcclusionTexture : register(t3);
+Texture2D emissiveAndMetallicTexture : register(t4);
+Texture2D normalAndBlurTexture : register(t5);
+Texture2D depthTexture : register(t6);
+TextureCube irradianceMap : register(t7);
+TextureCube preFilteringMap : register(t8);
+Texture2D preComputingBRDF : register(t9);
+TextureCubeArray pointShadowMaps : register(t10);
 
-SamplerState materialSampler : register(s0, space1);
+SamplerState textureSampler : register(s0, space1);
 [[vk::push_constant]] ConstantBuffer<Config> config : register(b0, space2);
-
-float3 getNormal(float3 normal, float2 texcoord, float3 tangent)
-{
-    if (config.HasNormalMap == 0) return normal;
-
-    float3 tangentNormal = normalMapTexture.Sample(materialSampler, texcoord).xyz * 2.0 - 1.0;
-    
-    float3 N = normalize(normal);
-    float3 T = normalize(tangent - dot(tangent, N) * N);
-    float3 B = cross(N, T);
-    float3x3 TBN = float3x3(T, B, N);
-
-    return mul(tangentNormal, TBN);
-}
 
 float ShadowCalculation(float3 position, float viewDistance, uint index)
 {
@@ -207,7 +183,7 @@ float ShadowCalculation(float3 position, float viewDistance, uint index)
 	for (uint i = 0; i < samples; i++)
 	{
 		float closest = lights[index].FarPlane * 
-			pointShadowMaps.Sample(materialSampler, float4(fragToLight + gridSamplingDisk[i] * diskRadius, mapIndex)).r;
+			pointShadowMaps.Sample(textureSampler, float4(fragToLight + gridSamplingDisk[i] * diskRadius, mapIndex)).r;
 		
 		if (current - bias > closest) shadow = shadow + 1.0;
 	}
@@ -218,33 +194,35 @@ float ShadowCalculation(float3 position, float viewDistance, uint index)
 struct Output {
 	float4 Color0 : SV_TARGET0;
 	float4 Color1 : SV_TARGET1;
+    float Depth : SV_DEPTH;
 };
 
 Output main(
 	float4 svPosition : SV_POSITION,
-	float3 position : POSITION,
-	float3 texCoord : TEXCOORD,
-	float3 tangent : TANGENT,
-	float3 normal : NORMAL)
+	float3 texCoord : TEXCOORD)
 {
+    float4 baseColorAndRoughness = baseColorAndRoughnessTexture.Sample(textureSampler, texCoord.xy);
+    float4 positionAndOcclusion = positionAndOcclusionTexture.Sample(textureSampler, texCoord.xy);
+    float4 emissiveAndMetallic = emissiveAndMetallicTexture.Sample(textureSampler, texCoord.xy);
+    float4 normalAndBlur = normalAndBlurTexture.Sample(textureSampler, texCoord.xy);
+
+    Material material;
+
+    material.BaseColor.xyz = baseColorAndRoughness.xyz;
+    material.Roughness.a = baseColorAndRoughness.a;
+    material.Metallic.a = emissiveAndMetallic.a;
+    material.Emissive.xyz = emissiveAndMetallic.xyz;
+
+    float occlusion = positionAndOcclusion.a;
+    float3 position = positionAndOcclusion.xyz;
+    float3 normal = normalAndBlur.xyz;
+
     float3 toEye = normalize(float3(config.EyePositionX, config.EyePositionY, config.EyePositionZ) - position);
 	float3 F0 = 0.04;
 	float3 color = float3(0.0f, 0.0f, 0.0f);
     float viewDistance = length(float3(config.EyePositionX, config.EyePositionY, config.EyePositionZ) - position);
-	float occlusion = 1.0f;
-	
-	Material material = materials[config.Index];
-    material.Roughness = max(material.Roughness, 0.05f);
     
-    if (config.HasMetallic) material.Metallic.a = material.Metallic.a * metallicTexture.Sample(materialSampler, texCoord.xy).b;
-    if (config.HasBaseColor) material.BaseColor.rgb = material.BaseColor.rgb * InverseGammaCorrect(baseColorTexture.Sample(materialSampler, texCoord.xy).rgb);
-    if (config.HasRoughness) material.Roughness.a = material.Roughness.a * roughnessTexture.Sample(materialSampler, texCoord.xy).g;
-    if (config.HasOcclusion) occlusion = occlusionTexture.Sample(materialSampler, texCoord.xy).r;
-    if (config.HasEmissive) material.Emissive.rgb = material.Emissive.rgb * InverseGammaCorrect(emissiveTexture.Sample(materialSampler, texCoord.xy).rgb);
-	
 	F0 = lerp(F0, material.BaseColor.xyz, material.Metallic.a);
-	
-    normal = normalize(getNormal(normal, texCoord.xy, tangent));
     
 	[loop]
 	for (uint index = 0; index < config.Lights; index++)
@@ -264,14 +242,14 @@ Output main(
         float3 kS = F;
         float3 kD = (1.0 - kS) * (1.0 - material.Metallic.a);
 		
-        float3 irradiance = irradianceMap.Sample(materialSampler, N).rgb;
+        float3 irradiance = irradianceMap.Sample(textureSampler, N).rgb;
         float3 diffuse = irradiance * material.BaseColor.rgb;
 		
         float MaxLod = config.MipLevels - 1.0;
         float NdotV = max(dot(N, V), 0.0);
 
-        float3 preFilteringColor = preFilteringMap.SampleLevel(materialSampler, R, material.Roughness.a * MaxLod).rgb;
-        float2 brdf = preComputingBRDF.Sample(materialSampler, float2(NdotV, material.Roughness.a)).rg;
+        float3 preFilteringColor = preFilteringMap.SampleLevel(textureSampler, R, material.Roughness.a * MaxLod).rgb;
+        float2 brdf = preComputingBRDF.Sample(textureSampler, float2(NdotV, material.Roughness.a)).rg;
         float3 specular = preFilteringColor * (F * brdf.x + brdf.y);
 		
         color = color + (kD * diffuse + specular) * occlusion;
@@ -287,10 +265,12 @@ Output main(
 	
 	Output result;
 
-	result.Color0 = float4(color, material.BaseColor.a);
+	result.Color0 = float4(color, 1.f);
 	
-	if (config.HasBlurred != 0) result.Color1 = float4(color, 1.f);
+	if (normalAndBlur.a != 0.0f) result.Color1 = float4(color, 1.f);
 	else result.Color1 = float4(0, 0, 0, 0);
+
+    result.Depth = depthTexture.Sample(textureSampler, texCoord.xy).r;
 
 	return result;
 }

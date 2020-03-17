@@ -75,7 +75,7 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 {
 	mViewBuffer = mDevice->createBuffer(
 		CodeRed::ResourceInfo::ConstantBuffer(
-			sizeof(Matrix4x4f)
+			sizeof(Matrix4x4f) * 4
 		)
 	);
 	
@@ -86,43 +86,38 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 			CodeRed::AddressMode::Repeat)
 	);
 
-	//resource 0 : material properties
-	//resource 1 : light properties
-	//resource 2 : transform matrix
-	//resource 3 : camera matrix
-	//resource 4 : metallic texture
-	//resource 5 : baseColor texture
-	//resource 6 : roughness texture
-	//resource 7 : occlusion texture
-	//resource 8 : normalMap texture
-	//resource 9 : emissive texture
-	//resource 10 : irradiance map
-	//resource 11 : pre filtering map
-	//resource 12 : pre computingBRDF map
-	//resource 13 : point shadow map array
-	//resource 14 : sampler
-	//resource 15 : hasEnvironmentLight, hasBaseColor, HasRoughness, HasOcclusion, HasNormalMap, HasMetallic, HasEmissive, HasBlurred
-	//eyePosition.x, eyePosition.y, eyePosition.z, MipLevels, nLights, index
+	//resource 0 : light properties
+	//resource 1 : camera matrix
+	//resource 2 : BaseColorAndRoughness Texture
+	//resource 3 : PositionAndOcclusion Texture
+	//resource 4 : EmissiveAndMetallic Texture
+	//resource 5 : NormalAndBlur Texture
+	//resource 6 : Depth Texture
+	//resource 7 : irradiance map
+	//resource 8 : pre filtering map
+	//resource 9 : pre computingBRDF map
+	//resource 10 : point shadow map array
+	//resource 11 : sampler
+	//resource 12 : hasEnvironmentLight, eyePosition.x, eyePosition.y, eyePosition.z, MipLevels, nLights
 	mResourceLayout = mDevice->createResourceLayout(
 		{
 			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::GroupBuffer, 0),
-			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::GroupBuffer, 1),
-			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::GroupBuffer, 2),
-			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Buffer, 3),
+			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Buffer, 1),
+			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 2),
+			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 3),
 			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 4),
 			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 5),
 			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 6),
 			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 7),
 			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 8),
 			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 9),
-			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 10),
-			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 11),
-			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 12),
-			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 13)
+			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 10)
 		}, {
 			CodeRed::SamplerLayoutElement(mSampler, 0, 1)
-		}, CodeRed::Constant32Bits(14, 0, 2));
+		}, CodeRed::Constant32Bits(6, 0, 2));
 
+	mDescriptorHeap = mDevice->createDescriptorHeap(mResourceLayout);
+	
 	for (auto& frameResource : mFrameResources) {
 		auto descriptorHeapPool = std::make_shared<std::vector<std::shared_ptr<CodeRed::GpuDescriptorHeap>>>();
 		
@@ -164,9 +159,7 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 		pipelineFactory->createInputAssemblyState(
 			{
 				CodeRed::InputLayoutElement("POSITION", CodeRed::PixelFormat::RedGreenBlue32BitFloat, 0),
-				CodeRed::InputLayoutElement("TEXCOORD", CodeRed::PixelFormat::RedGreenBlue32BitFloat, 1),
-				CodeRed::InputLayoutElement("TANGENT", CodeRed::PixelFormat::RedGreenBlue32BitFloat, 2),
-				CodeRed::InputLayoutElement("NORMAL", CodeRed::PixelFormat::RedGreenBlue32BitFloat, 3)
+				CodeRed::InputLayoutElement("TEXCOORD", CodeRed::PixelFormat::RedGreenBlue32BitFloat, 1)
 			},
 			CodeRed::PrimitiveTopology::TriangleList
 		)
@@ -176,10 +169,7 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 
 	mPipelineInfo->setRasterizationState(
 		pipelineFactory->createRasterizationState(
-			CodeRed::FrontFace::CounterClockwise,
-			CodeRed::CullMode::Back,
-			CodeRed::FillMode::Solid
-		)
+			CodeRed::FrontFace::CounterClockwise, CodeRed::CullMode::None)
 	);
 
 	// because we use two frame buffers, so we need two blend properties
@@ -187,24 +177,14 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 	
 	CompileShaderWorkflow workflow;
 
-#ifdef SHADER_SOURCE_HLSL
+
 	const auto sourceLanguage = SourceLanguage::eHLSL;
-#else
-	const auto sourceLanguage = SourceLanguage::eGLSL;
-#endif
 	const auto targetLanguage = mDevice->apiVersion() == CodeRed::APIVersion::DirectX12 ?
 		TargetLanguage::eDXIL : TargetLanguage::eSPIRV;
 
-	const auto vShaderFile =
-		sourceLanguage == SourceLanguage::eHLSL ?
-		"./Resources/Shaders/Systems/DirectX12/PhysicalBasedRenderSystemVert.hlsl" :
-		"./Resources/Shaders/Systems/Vulkan/PhysicalBasedRenderSystemVert.vert";
-
-	const auto fShaderFile =
-		sourceLanguage == SourceLanguage::eHLSL ?
-		"./Resources/Shaders/Systems/DirectX12/PhysicalBasedRenderSystemFrag.hlsl" :
-		"./Resources/Shaders/Systems/Vulkan/PhysicalBasedRenderSystemFrag.frag";
-
+	const auto vShaderFile = "./Resources/Shaders/Systems/HLSL/PhysicalBasedRenderSystemVert.hlsl";
+	const auto fShaderFile = "./Resources/Shaders/Systems/HLSL/PhysicalBasedRenderSystemFrag.hlsl";
+	
 	mPipelineInfo->setVertexShaderState(
 		pipelineFactory->createShaderState(
 			CodeRed::ShaderType::Vertex,
@@ -231,8 +211,17 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 	
 	// in this version, we only support 2 point light for test
 	mPointShadowMap = std::make_shared<PointShadowMap>(mDevice, 1024, 5);
-	
+
+	mDeferredShadingWorkflow = std::make_shared<DeferredShadingWorkflow>(mDevice);
 	mPointShadowMapWorkflow = std::make_shared<PointShadowMapWorkflow>(mDevice);
+
+	mDescriptorHeap->bindBuffer(mViewBuffer, 1);
+	mDescriptorHeap->bindTexture(mPointShadowMap->Texture->reference(
+		CodeRed::TextureRefInfo(
+			CodeRed::TextureRefUsage::CubeMap,
+			CodeRed::PixelFormat::Red32BitFloat
+		)
+	), 10);
 }
 
 void LRTR::PhysicalBasedRenderSystem::update(const Group<Identity, std::shared_ptr<Shape>>& shapes, float delta)
@@ -278,27 +267,12 @@ void LRTR::PhysicalBasedRenderSystem::update(const Group<Identity, std::shared_p
 
 		drawCall.HasBlurred = physicalBasedMaterial->IsBlurred;
 		
-		if (drawCall.HasMetallic) descriptorHeap->bindTexture(physicalBasedMaterial->metallicTexture()->value(), 4);
-		if (drawCall.HasBaseColor) descriptorHeap->bindTexture(physicalBasedMaterial->baseColorTexture()->value(), 5);
-		if (drawCall.HasRoughness) descriptorHeap->bindTexture(physicalBasedMaterial->roughnessTexture()->value(), 6);
-		if (drawCall.HasOcclusion) descriptorHeap->bindTexture(physicalBasedMaterial->occlusionTexture()->value(), 7);
-		if (drawCall.HasNormalMap) descriptorHeap->bindTexture(physicalBasedMaterial->normalMapTexture()->value(), 8);
-		if (drawCall.HasEmissive) descriptorHeap->bindTexture(physicalBasedMaterial->emissiveTexture()->value(), 9);
-
-		// only for test, we need find a good way to support 
-		if (mEnvironmentLight.Irradiance != nullptr) descriptorHeap->bindTexture(
-			mEnvironmentLight.Irradiance->reference(CodeRed::TextureRefUsage::CubeMap), 10);
-
-		if (mEnvironmentLight.PreFiltering != nullptr) descriptorHeap->bindTexture(
-			mEnvironmentLight.PreFiltering->reference(CodeRed::TextureRefUsage::CubeMap), 11);
-
-		if (mEnvironmentLight.PreComputingBRDF != nullptr) descriptorHeap->bindTexture(
-			mEnvironmentLight.PreComputingBRDF, 12);
-
-		descriptorHeap->bindTexture(mPointShadowMap->Texture->reference(
-			CodeRed::TextureRefInfo(
-				CodeRed::TextureRefUsage::CubeMap, 
-				CodeRed::PixelFormat::Red32BitFloat)), 13);
+		if (drawCall.HasMetallic) descriptorHeap->bindTexture(physicalBasedMaterial->metallicTexture()->value(), 3);
+		if (drawCall.HasBaseColor) descriptorHeap->bindTexture(physicalBasedMaterial->baseColorTexture()->value(), 4);
+		if (drawCall.HasRoughness) descriptorHeap->bindTexture(physicalBasedMaterial->roughnessTexture()->value(), 5);
+		if (drawCall.HasOcclusion) descriptorHeap->bindTexture(physicalBasedMaterial->occlusionTexture()->value(), 6);
+		if (drawCall.HasNormalMap) descriptorHeap->bindTexture(physicalBasedMaterial->normalMapTexture()->value(), 7);
+		if (drawCall.HasEmissive) descriptorHeap->bindTexture(physicalBasedMaterial->emissiveTexture()->value(), 8);
 
 		// only cast shadow that enable ShadowCast
 		if (physicalBasedMaterial->IsShadowed) mShadowCastInfos.push_back({ trianglesMesh, index });
@@ -317,7 +291,7 @@ void LRTR::PhysicalBasedRenderSystem::update(const Group<Identity, std::shared_p
 			shape.second->hasComponent<TrianglesMesh>())
 		{
 			if (descriptorHeapPool->size() == mDrawCalls.size()) 
-				descriptorHeapPool->push_back(mDevice->createDescriptorHeap(mResourceLayout));
+				descriptorHeapPool->push_back(mDevice->createDescriptorHeap(mDeferredShadingWorkflow->resourceLayout()));
 			
 			ProcessTrianglesMeshComponent(
 				shape.second->component<PhysicalBasedMaterial>(),
@@ -360,9 +334,8 @@ void LRTR::PhysicalBasedRenderSystem::update(const Group<Identity, std::shared_p
 		const auto descriptorHeap = (*descriptorHeapPool)[index];
 
 		descriptorHeap->bindBuffer(materialBuffer, 0);
-		descriptorHeap->bindBuffer(lightBuffer, 1);
-		descriptorHeap->bindBuffer(transformBuffer, 2);
-		descriptorHeap->bindBuffer(mViewBuffer, 3);
+		descriptorHeap->bindBuffer(transformBuffer, 1);
+		descriptorHeap->bindBuffer(mViewBuffer, 2);
 	}
 
 	CodeRed::ResourceHelper::updateBuffer(transformBuffer, transforms.data(),
@@ -397,6 +370,12 @@ void LRTR::PhysicalBasedRenderSystem::render(
 {
 	updatePipeline(frameBuffer);
 	updateCamera(camera);
+
+	// update deferred shading buffer
+	mDeferredShadingBuffer.update(mDevice, frameBuffer);
+
+	const auto descriptorHeapPool = mFrameResources[mCurrentFrameIndex]
+		.get<std::vector<std::shared_ptr<CodeRed::GpuDescriptorHeap>>>("DescriptorHeapPool");
 	
 	// pre build shadow map for lights
 	// in this version, we only test on point shadow map
@@ -405,58 +384,69 @@ void LRTR::PhysicalBasedRenderSystem::render(
 			commandLists[0], mPointShadowMap->Texture,
 			mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>("TransformBuffer"),
 			mRuntimeSharing, mPointShadowAreas , mShadowCastInfos) });
-		
-	const auto cameraPosition = getCameraPosition(camera);
+
+	// pre build the deferred shading buffer(g-buffer)
+	// the SSAO buffer we do not build with it
+	mDeferredShadingWorkflow->start({
+		DeferredShadingWorkflowInput(
+			*descriptorHeapPool,
+			commandLists[0],
+			mRuntimeSharing,
+			mDrawCalls,
+			mDeferredShadingBuffer
+		)});
+	
+	// bind texture and buffer to descriptor heap used for shading
+	mDescriptorHeap->bindBuffer(mFrameResources[mCurrentFrameIndex].get<CodeRed::GpuBuffer>("LightBuffer"), 0);
+
+	mDescriptorHeap->bindTexture(mDeferredShadingBuffer.BaseColorAndRoughness, 2);
+	mDescriptorHeap->bindTexture(mDeferredShadingBuffer.PositionAndOcclusion, 3);
+	mDescriptorHeap->bindTexture(mDeferredShadingBuffer.EmissiveAndMetallic, 4);
+	mDescriptorHeap->bindTexture(mDeferredShadingBuffer.NormalAndBlur, 5);
+	mDescriptorHeap->bindTexture(mDeferredShadingBuffer.Depth->reference(
+		CodeRed::TextureRefInfo(
+			CodeRed::TextureRefUsage::Common,
+			CodeRed::PixelFormat::Red32BitFloat
+		)
+	), 6);
+	
+	if (hasEnvironmentLight()) {
+		mDescriptorHeap->bindTexture(mEnvironmentLight.Irradiance, 7);
+		mDescriptorHeap->bindTexture(mEnvironmentLight.PreFiltering, 8);
+		mDescriptorHeap->bindTexture(mEnvironmentLight.PreComputingBRDF, 9);
+	}
+
 	const auto meshDataAssetComponent = std::static_pointer_cast<MeshDataAssetComponent>(
 		mRuntimeSharing->assetManager()->components().at("MeshData"));
-	
-	const auto descriptorHeapPool = mFrameResources[mCurrentFrameIndex]
-		.get<std::vector<std::shared_ptr<CodeRed::GpuDescriptorHeap>>>("DescriptorHeapPool");
-
 	const auto commandList = commandLists[1];
-	
+	const auto cameraPosition = getCameraPosition(camera);
+
 	commandList->setGraphicsPipeline(mPipelineInfo->graphicsPipeline());
 	commandList->setResourceLayout(mResourceLayout);
-	
-	commandList->setVertexBuffers({
-		meshDataAssetComponent->positions(),
-		meshDataAssetComponent->texCoords(),
-		meshDataAssetComponent->tangents(),
-		meshDataAssetComponent->normals()
-		});
-	
+	commandList->setDescriptorHeap(mDescriptorHeap);
+
+	commandList->setVertexBuffers({ meshDataAssetComponent->positions(), meshDataAssetComponent->texCoords() });
 	commandList->setIndexBuffer(meshDataAssetComponent->indices());
 
-	for (size_t index = 0; index < mDrawCalls.size(); index++) {
-		const auto drawCall = mDrawCalls[index];
-		const auto meshDataInfo = meshDataAssetComponent->get(drawCall.Mesh);
+	{
+		const auto drawProperty = meshDataAssetComponent->get("Quad");
 		const auto mipLevels = hasEnvironmentLight() ? mEnvironmentLight.PreFiltering->mipLevels() : 0;
-		
-		commandList->setDescriptorHeap((*descriptorHeapPool)[index]);
 
+		//hasEnvironmentLight, eyePosition.x, eyePosition.y, eyePosition.z, MipLevels, nLights
 		commandList->setConstant32Bits({
 			hasEnvironmentLight(),
-			drawCall.HasBaseColor,
-			drawCall.HasRoughness,
-			drawCall.HasOcclusion,
-			drawCall.HasNormalMap,
-			drawCall.HasMetallic,
-			drawCall.HasEmissive,
-			drawCall.HasBlurred,
 			cameraPosition.x,
 			cameraPosition.y,
 			cameraPosition.z,
 			static_cast<unsigned>(mipLevels),
-			static_cast<unsigned>(mLights),
-			static_cast<unsigned>(index)
+			static_cast<unsigned>(mLights)
 		});
 
-		commandList->drawIndexed(meshDataInfo.IndexCount, 1,
-			meshDataInfo.StartIndexLocation,
-			meshDataInfo.StartVertexLocation,
-			0);
+		commandList->drawIndexed(drawProperty.IndexCount, 1,
+			drawProperty.StartIndexLocation, drawProperty.StartVertexLocation);
 	}
 
+	
 	mCurrentFrameIndex = (mCurrentFrameIndex + 1) % mFrameResources.size();
 }
 
@@ -494,7 +484,14 @@ void LRTR::PhysicalBasedRenderSystem::updateCamera(
 	const auto viewMatrix = cameraComponent->toScreen().matrix() *
 		camera->component<TransformWrap>()->transform().inverseMatrix();
 
-	CodeRed::ResourceHelper::updateBuffer(mViewBuffer, &viewMatrix, sizeof(Matrix4x4f));
+	Matrix4x4f views[4] = {
+		viewMatrix,
+		Transform::ortho(-1.f, 1.f, 1.f, -1.f, 0.f, 1000.0f).matrix(),
+		Matrix4x4f(0),
+		Matrix4x4f(0)
+	};
+	
+	CodeRed::ResourceHelper::updateBuffer(mViewBuffer, views, sizeof(Matrix4x4f) * 4);
 }
 
 auto LRTR::PhysicalBasedRenderSystem::getCameraPosition(const std::shared_ptr<SceneCamera>& camera) const -> Vector3f
