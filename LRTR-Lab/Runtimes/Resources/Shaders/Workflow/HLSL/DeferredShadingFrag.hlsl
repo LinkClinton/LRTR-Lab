@@ -79,12 +79,14 @@ struct Output {
     float4 BaseColorAndRoughness : SV_TARGET0;
     float4 PositionAndOcclusion  : SV_TARGET1;
     float4 EmissiveAndMetallic   : SV_TARGET2;
-    float4 Normal                : SV_TARGET3;
+    float4 ViewSpacePosition     : SV_TARGET3;
+    float4 Normal                : SV_TARGET4;
 };
 
 Output main(
 	float4 svPosition : SV_POSITION,
-	float3 position : POSITION,
+    float3 vPosition : POSITION0,
+	float3 position : POSITION1,
 	float3 texCoord : TEXCOORD,
 	float3 tangent : TANGENT,
 	float3 normal : NORMAL)
@@ -107,6 +109,7 @@ Output main(
     result.BaseColorAndRoughness = float4(material.BaseColor.rgb, material.Roughness.a);
     result.PositionAndOcclusion = float4(position, occlusion);
     result.EmissiveAndMetallic = float4(material.Emissive.rgb, material.Metallic.a);
+    result.ViewSpacePosition = float4(vPosition, occlusion);
     result.Normal = float4(normal, config.HasBlurred != 0 ? 1.0f : 0.0f);
 
     return result;

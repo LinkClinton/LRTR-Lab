@@ -5,25 +5,13 @@ struct View
 	matrix View[4];
 };
 
-struct Config
-{
-    uint HasEnvironmentLight;
-    float EyePositionX;
-    float EyePositionY;
-    float EyePositionZ;
-    uint MipLevels;
-    uint Lights;
-};
-
 struct Output
 {
 	float4 SVPosition : SV_POSITION;
 	float3 TexCoord : TEXCOORD;
 };
 
-ConstantBuffer<View> view : register(b1);
-
-[[vk::push_constant]] ConstantBuffer<Config> config : register(b0, space2);
+ConstantBuffer<View> view : register(b0);
 
 Output main(
     float3 position : POSITION,

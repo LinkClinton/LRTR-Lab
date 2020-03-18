@@ -48,7 +48,7 @@ namespace CodeRed {
 			const std::shared_ptr<GpuBuffer>& buffer,
 			const size_t count)
 			->std::shared_ptr<GpuBuffer>;
-		
+	
 		static void updateTexture(
 			const std::shared_ptr<GpuLogicalDevice>& device,
 			const std::shared_ptr<GpuCommandAllocator>& allocator,

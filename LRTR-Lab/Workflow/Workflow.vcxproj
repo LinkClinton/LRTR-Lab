@@ -165,6 +165,7 @@
     <ClCompile Include="Blur\GaussianBlurWorkflow.cpp" />
     <ClCompile Include="PBR\DeferredShadingWorkflow.cpp" />
     <ClCompile Include="PBR\ImageBasedLightingWorkflow.cpp" />
+    <ClCompile Include="PBR\ScreenSpaceAmbientOcclusionWorkflow.cpp" />
     <ClCompile Include="Shaders\CompileShaderWorkflow.cpp" />
     <ClCompile Include="Shadow\PointShadowMapWorkflow.cpp" />
     <ClCompile Include="Workflow.cpp" />
@@ -173,6 +174,7 @@
     <ClInclude Include="Blur\GaussianBlurWorkflow.hpp" />
     <ClInclude Include="PBR\DeferredShadingWorkflow.hpp" />
     <ClInclude Include="PBR\ImageBasedLightingWorkflow.hpp" />
+    <ClInclude Include="PBR\ScreenSpaceAmbientOcclusionWorkflow.hpp" />
     <ClInclude Include="Shaders\CompileShaderWorkflow.hpp" />
     <ClInclude Include="Shadow\PointShadowMapWorkflow.hpp" />
     <ClInclude Include="Workflow.hpp" />

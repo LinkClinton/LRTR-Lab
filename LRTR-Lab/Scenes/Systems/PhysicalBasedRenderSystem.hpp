@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../../Workflow/PBR/ScreenSpaceAmbientOcclusionWorkflow.hpp"
 #include "../../Workflow/Shadow/PointShadowMapWorkflow.hpp"
 #include "../../Workflow/PBR/DeferredShadingWorkflow.hpp"
 
@@ -73,6 +74,10 @@ namespace LRTR {
 
 		auto getCameraPosition(const std::shared_ptr<SceneCamera>& camera) const -> Vector3f;
 
+		auto getCameraProjectionMatrix(const std::shared_ptr<SceneCamera>& camera) const -> Matrix4x4f;
+
+		auto getCameraViewMatrix(const std::shared_ptr<SceneCamera>& camera) const -> Matrix4x4f;
+		
 		auto hasEnvironmentLight() const noexcept -> bool;
 	private:
 		std::shared_ptr<CodeRed::GpuResourceLayout> mResourceLayout;
@@ -83,6 +88,7 @@ namespace LRTR {
 
 		std::shared_ptr<PointShadowMap> mPointShadowMap;
 
+		std::shared_ptr<ScreenSpaceAmbientOcclusionWorkflow> mSSAOWorkflow;
 		std::shared_ptr<DeferredShadingWorkflow> mDeferredShadingWorkflow;
 		std::shared_ptr<PointShadowMapWorkflow> mPointShadowMapWorkflow;
 		
@@ -90,6 +96,7 @@ namespace LRTR {
 		std::vector<PhysicalBasedDrawCall> mDrawCalls;
 		std::vector<ShadowCastInfo> mShadowCastInfos;
 
+		ScreenSpaceAmbientOcclusionBuffer mSSAOBuffer;
 		DeferredShadingBuffer mDeferredShadingBuffer;
 
 		EnvironmentLight mEnvironmentLight;

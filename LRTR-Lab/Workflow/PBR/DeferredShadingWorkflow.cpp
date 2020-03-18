@@ -41,6 +41,13 @@ void LRTR::DeferredShadingBuffer::update(
 		)
 	);
 
+	ViewSpacePosition = device->createTexture(
+		CodeRed::ResourceInfo::RenderTarget(
+			width, height, CodeRed::PixelFormat::RedGreenBlueAlpha32BitFloat,
+			CodeRed::ClearValue(0, 0, 0, 0)
+		)
+	);
+
 	NormalAndBlur = device->createTexture(
 		CodeRed::ResourceInfo::RenderTarget(
 			width, height, CodeRed::PixelFormat::RedGreenBlueAlpha32BitFloat,
@@ -60,6 +67,7 @@ void LRTR::DeferredShadingBuffer::update(
 			BaseColorAndRoughness->reference(),
 			PositionAndOcclusion->reference(),
 			EmissiveAndMetallic->reference(),
+			ViewSpacePosition->reference(),
 			NormalAndBlur->reference()
 		},
 		Depth->reference()
@@ -85,7 +93,7 @@ LRTR::DeferredShadingWorkflow::DeferredShadingWorkflow(const std::shared_ptr<Cod
 	//resource 7 : normalMap texture
 	//resource 8 : emissive texture
 	//resource 9 : sampler
-	//resource 10 : hasBaseColor, HasRoughness, HasOcclusion, HasNormalMap, HasMetallic, HasEmissive, HasBlurred, index
+	//resource 10 : HasBaseColor, HasRoughness, HasOcclusion, HasNormalMap, HasMetallic, HasEmissive, HasBlurred, index
 	mResourceLayout = device->createResourceLayout(
 		{
 			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::GroupBuffer, 0),
@@ -131,10 +139,15 @@ LRTR::DeferredShadingWorkflow::DeferredShadingWorkflow(const std::shared_ptr<Cod
 	);
 
 	// because we use 4 frame buffers, so we need two blend properties
-	mPipelineInfo->setBlendState(pipelineFactory->createBlendState(4));
+	mPipelineInfo->setBlendState(pipelineFactory->createBlendState(5));
 	
 	mRenderPass = device->createRenderPass(
 		{
+			CodeRed::Attachment::RenderTarget(
+				CodeRed::PixelFormat::RedGreenBlueAlpha32BitFloat,
+			CodeRed::ResourceLayout::RenderTarget,
+			CodeRed::ResourceLayout::GeneralRead),
+
 			CodeRed::Attachment::RenderTarget(
 				CodeRed::PixelFormat::RedGreenBlueAlpha32BitFloat,
 			CodeRed::ResourceLayout::RenderTarget,
@@ -166,6 +179,7 @@ LRTR::DeferredShadingWorkflow::DeferredShadingWorkflow(const std::shared_ptr<Cod
 
 	mRenderPass->setClear(std::vector<CodeRed::ClearValue>
 	{
+		CodeRed::ClearValue(0, 0, 0, 0),
 		CodeRed::ClearValue(0, 0, 0, 0),
 		CodeRed::ClearValue(0, 0, 0, 0),
 		CodeRed::ClearValue(0, 0, 0, 0),
@@ -213,8 +227,8 @@ auto LRTR::DeferredShadingWorkflow::resourceLayout() const noexcept -> std::shar
 	return mResourceLayout;
 }
 
-auto LRTR::DeferredShadingWorkflow::work(const WorkflowStartup<DeferredShadingWorkflowInput>& startup)
-	-> DeferredShadingWorkflowOutput
+auto LRTR::DeferredShadingWorkflow::work(const WorkflowStartup<DeferredShadingInput>& startup)
+	-> DeferredShadingOutput
 {
 	const auto meshDataAssetComponent = std::static_pointer_cast<MeshDataAssetComponent>(
 		startup.InputData.Sharing->assetManager()->components().at("MeshData"));

@@ -25,7 +25,8 @@ struct Config
 struct Output
 {
 	float4 SVPosition : SV_POSITION;
-	float3 Position : POSITION;
+	float3 VPosition : POSITION0;
+	float3 Position : POSITION1;
 	float3 TexCoord : TEXCOORD;
 	float3 Tangent : TANGENT;
 	float3 Normal : NORMAL;
@@ -45,7 +46,8 @@ Output main(
 	Output result;
 	
 	result.Position = mul(float4(position, 1.0f), transforms[config.Index].Transform).xyz;
-	result.SVPosition = mul(float4(result.Position, 1.0f), view.View[0]);
+	result.VPosition = mul(float4(result.Position, 1.0f), view.View[1]).xyz;
+	result.SVPosition = mul(float4(result.VPosition, 1.0f), view.View[2]);
 	result.Normal = mul(normal, (float3x3)transforms[config.Index].Transform); //no scale transform
 	result.Tangent = mul(tangent, (float3x3)transforms[config.Index].Transform); //no scale transform
 	result.TexCoord = texCoord;

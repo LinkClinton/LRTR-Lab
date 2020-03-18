@@ -6,7 +6,6 @@
 #include "../../Runtimes/RuntimeSharing.hpp"
 #include "../Workflow.hpp"
 
-#include <string>
 #include <memory>
 
 namespace LRTR {
@@ -29,6 +28,7 @@ namespace LRTR {
 		std::shared_ptr<CodeRed::GpuTexture> BaseColorAndRoughness;
 		std::shared_ptr<CodeRed::GpuTexture> PositionAndOcclusion;
 		std::shared_ptr<CodeRed::GpuTexture> EmissiveAndMetallic;
+		std::shared_ptr<CodeRed::GpuTexture> ViewSpacePosition;
 		std::shared_ptr<CodeRed::GpuTexture> NormalAndBlur;
 
 		std::shared_ptr<CodeRed::GpuTexture> Depth;
@@ -42,7 +42,7 @@ namespace LRTR {
 			const std::shared_ptr<CodeRed::GpuFrameBuffer>& buffer);
 	};
 	
-	struct DeferredShadingWorkflowInput {
+	struct DeferredShadingInput {
 		std::vector<std::shared_ptr<CodeRed::GpuDescriptorHeap>> DescriptorHeaps;
 		std::shared_ptr<CodeRed::GpuGraphicsCommandList> CommandList;
 		
@@ -52,9 +52,9 @@ namespace LRTR {
 
 		DeferredShadingBuffer DeferredShadingBuffer;
 
-		DeferredShadingWorkflowInput() = default;
+		DeferredShadingInput() = default;
 		
-		DeferredShadingWorkflowInput(
+		DeferredShadingInput(
 			const std::vector<std::shared_ptr<CodeRed::GpuDescriptorHeap>>& descriptorHeaps,
 			const std::shared_ptr<CodeRed::GpuGraphicsCommandList>& commandList,
 			const std::shared_ptr<RuntimeSharing>& sharing,
@@ -64,12 +64,12 @@ namespace LRTR {
 			DeferredShadingBuffer(deferredShadingBuffer) {}
 	};
 
-	struct DeferredShadingWorkflowOutput {
-		DeferredShadingWorkflowOutput() = default;
+	struct DeferredShadingOutput {
+		DeferredShadingOutput() = default;
 	};
 
-	using DSInput = DeferredShadingWorkflowInput;
-	using DSOutput = DeferredShadingWorkflowOutput;
+	using DSInput = DeferredShadingInput;
+	using DSOutput = DeferredShadingOutput;
 	
 	class DeferredShadingWorkflow : public Workflow<DSInput, DSOutput, false> {
 	public:
@@ -77,7 +77,7 @@ namespace LRTR {
 
 		auto resourceLayout() const noexcept -> std::shared_ptr<CodeRed::GpuResourceLayout>;
 	protected:
-		auto work(const WorkflowStartup<DeferredShadingWorkflowInput>& startup) -> DeferredShadingWorkflowOutput override;
+		auto work(const WorkflowStartup<DeferredShadingInput>& startup) -> DeferredShadingOutput override;
 	private:
 		std::shared_ptr<CodeRed::GpuLogicalDevice> mDevice;
 

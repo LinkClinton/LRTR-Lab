@@ -17,6 +17,9 @@
     <ClCompile Include="PBR\DeferredShadingWorkflow.cpp">
       <Filter>PBR</Filter>
     </ClCompile>
+    <ClCompile Include="PBR\ScreenSpaceAmbientOcclusionWorkflow.cpp">
+      <Filter>PBR</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Workflow.hpp" />
@@ -34,6 +37,9 @@
       <Filter>Blur</Filter>
     </ClInclude>
     <ClInclude Include="PBR\DeferredShadingWorkflow.hpp">
+      <Filter>PBR</Filter>
+    </ClInclude>
+    <ClInclude Include="PBR\ScreenSpaceAmbientOcclusionWorkflow.hpp">
       <Filter>PBR</Filter>
     </ClInclude>
   </ItemGroup>

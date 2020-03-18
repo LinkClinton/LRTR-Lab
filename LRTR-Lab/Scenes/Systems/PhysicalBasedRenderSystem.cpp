@@ -212,6 +212,7 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 	// in this version, we only support 2 point light for test
 	mPointShadowMap = std::make_shared<PointShadowMap>(mDevice, 1024, 5);
 
+	mSSAOWorkflow = std::make_shared<ScreenSpaceAmbientOcclusionWorkflow>(mDevice);
 	mDeferredShadingWorkflow = std::make_shared<DeferredShadingWorkflow>(mDevice);
 	mPointShadowMapWorkflow = std::make_shared<PointShadowMapWorkflow>(mDevice);
 
@@ -371,9 +372,10 @@ void LRTR::PhysicalBasedRenderSystem::render(
 	updatePipeline(frameBuffer);
 	updateCamera(camera);
 
-	// update deferred shading buffer
+	// update deferred shading buffer and SSAO buffer
 	mDeferredShadingBuffer.update(mDevice, frameBuffer);
-
+	mSSAOBuffer.update(mDevice, frameBuffer);
+	
 	const auto descriptorHeapPool = mFrameResources[mCurrentFrameIndex]
 		.get<std::vector<std::shared_ptr<CodeRed::GpuDescriptorHeap>>>("DescriptorHeapPool");
 	
@@ -388,12 +390,22 @@ void LRTR::PhysicalBasedRenderSystem::render(
 	// pre build the deferred shading buffer(g-buffer)
 	// the SSAO buffer we do not build with it
 	mDeferredShadingWorkflow->start({
-		DeferredShadingWorkflowInput(
+		DeferredShadingInput(
 			*descriptorHeapPool,
 			commandLists[0],
 			mRuntimeSharing,
 			mDrawCalls,
 			mDeferredShadingBuffer
+		)});
+
+	mSSAOWorkflow->start({
+		ScreenSpaceAmbientOcclusionInput(
+			commandLists[0],
+			mRuntimeSharing,
+			mSSAOBuffer,
+			mDeferredShadingBuffer,
+			getCameraProjectionMatrix(camera),
+			getCameraViewMatrix(camera)
 		)});
 	
 	// bind texture and buffer to descriptor heap used for shading
@@ -481,13 +493,11 @@ void LRTR::PhysicalBasedRenderSystem::updateCamera(
 	if (camera == nullptr) return;
 
 	const auto cameraComponent = camera->component<Projective>();
-	const auto viewMatrix = cameraComponent->toScreen().matrix() *
-		camera->component<TransformWrap>()->transform().inverseMatrix();
-
+	
 	Matrix4x4f views[4] = {
-		viewMatrix,
 		Transform::ortho(-1.f, 1.f, 1.f, -1.f, 0.f, 1000.0f).matrix(),
-		Matrix4x4f(0),
+		camera->component<TransformWrap>()->transform().inverseMatrix(), // view
+		cameraComponent->toScreen().matrix(), //projection
 		Matrix4x4f(0)
 	};
 	
@@ -499,6 +509,21 @@ auto LRTR::PhysicalBasedRenderSystem::getCameraPosition(const std::shared_ptr<Sc
 	if (camera == nullptr || !camera->hasComponent<TransformWrap>()) return Vector3f(0);
 
 	return camera->component<TransformWrap>()->translation();
+}
+
+auto LRTR::PhysicalBasedRenderSystem::getCameraProjectionMatrix(const std::shared_ptr<SceneCamera>& camera) const -> Matrix4x4f
+{
+	if (camera == nullptr) return Matrix4x4f(0);
+
+	const auto cameraComponent = camera->component<Projective>();
+	return cameraComponent->toScreen().matrix();
+}
+
+auto LRTR::PhysicalBasedRenderSystem::getCameraViewMatrix(const std::shared_ptr<SceneCamera>& camera) const -> Matrix4x4f
+{
+	if (camera == nullptr) return Matrix4x4f(0);
+	
+	return camera->component<TransformWrap>()->transform().inverseMatrix();
 }
 
 auto LRTR::PhysicalBasedRenderSystem::hasEnvironmentLight() const noexcept -> bool
