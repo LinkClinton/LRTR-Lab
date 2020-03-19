@@ -256,7 +256,6 @@ auto LRTR::ScreenSpaceAmbientOcclusionWorkflow::work(const WorkflowStartup<Scree
 		startup.InputData.ViewMatrix,
 		glm::transpose(glm::inverse(startup.InputData.ViewMatrix))
 	};
-	
 	CodeRed::ResourceHelper::updateBuffer(mViewBuffer, views, sizeof(Matrix4x4f) * 4);
 	
 	// because we update the noise as texture, we need use command list to update data
@@ -290,7 +289,7 @@ auto LRTR::ScreenSpaceAmbientOcclusionWorkflow::work(const WorkflowStartup<Scree
 	
 	const auto drawProperty = meshDataAssetComponent->get("Quad");
 
-	for (size_t index = 0; index < 1; index++) {
+	for (size_t index = 0; index < 2; index++) {
 		commandList->beginRenderPass(mRenderPass, frameBuffers[index]);
 
 		commandList->setViewPort(frameBuffers[index]->fullViewPort());

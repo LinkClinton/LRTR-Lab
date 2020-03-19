@@ -43,6 +43,8 @@ float OcclusionCalculation(float2 texCoord)
     float3 normal = normalize(normalTexture.Sample(textureSampler, texCoord).xyz);
     float3 noise = normalize(noiseTexture.Sample(textureSampler, texCoord * float2(config.NoiseScaleX, config.NoiseScaleY)).xyz);
 
+    // transform the normal from world space to view space
+    // and build the TBN matrix to transform the sample to view space
     float3 N = normalize(mul(normal, (float3x3)view.View[3]));
     float3 T = normalize(noise - dot(noise, N) * N);
     float3 B = cross(N, T);
@@ -50,7 +52,6 @@ float OcclusionCalculation(float2 texCoord)
     float3x3 TBN = float3x3(T, B, N);
 
     float occlusion = 0.0;
-    float lengthViewSpacePosition = length(viewSpacePosition);
 
     for (uint index = 0; index < config.SampleCount; index++)
     {
@@ -62,15 +63,19 @@ float OcclusionCalculation(float2 texCoord)
         float4 offset = float4(sample, 1.0);
         offset = mul(offset, view.View[1]);
 
+        // notice : the space of vulkan is not same as openGl
+        // so we need negative the y of offset
+        offset.y = -offset.y;
+
         // perspective divide and transform them from [-1, 1] to [0, 1]
         offset.xyz = offset.xyz / offset.w;
         offset.xyz = offset.xyz * 0.5 + 0.5;
 
-        float sampleDepth = length(viewSpacePositionTexture.Sample(clampSampler, offset.xy).xyz);
+        float sampleDepth = viewSpacePositionTexture.Sample(clampSampler, offset.xy).z;
 
-        float rangeCheck = smoothstep(0.0, 1.0, config.SampleRadius / abs(lengthViewSpacePosition - sampleDepth));
+        float rangeCheck = smoothstep(0.0, 1.0, config.SampleRadius / abs(viewSpacePosition.z - sampleDepth));
         
-        occlusion = occlusion + (sampleDepth >= (length(sample) + config.SampleBias) ? 1.0 : 0.0) * rangeCheck;
+        occlusion = occlusion + (sampleDepth >= (sample.z + config.SampleBias) ? 1.0 : 0.0) * rangeCheck;
     }
 
     occlusion = 1.0 - (occlusion / config.SampleCount);
@@ -84,8 +89,8 @@ float BlurCalculation(float2 texCoord)
 
     float result = 0;
 
-    for (uint x = -2; x <= 2; x++){
-        for (uint y = -2; y <= 2; y++)
+    for (int x = -2; x <= 2; x++){
+        for (int y = -2; y <= 2; y++)
         {
             float2 offset = float2(x, y) * size;
             result = result + ssaoTexture.Sample(textureSampler, texCoord + offset).r;

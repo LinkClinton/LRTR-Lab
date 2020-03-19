@@ -41,9 +41,9 @@ LRTR::SceneManager::SceneManager(
 		"./Resources/Textures/HDR/newport_loft.hdr"
 	) });*/
 	
-	add(std::make_shared<Scene>("Scene", mDevice));
+	//add(std::make_shared<Scene>("Scene", mDevice));
 
-	//add(TinyGLTFLoader::loadScene(mRuntimeSharing, "Scene", "./Resources/Models/WaterBottle.glb", Transform::translate(Vector3f(0, -2, 0))));
+	add(TinyGLTFLoader::loadScene(mRuntimeSharing, "Scene", "./Resources/Models/WaterBottle.glb", Transform::translate(Vector3f(0, -2, 0))));
 	
 	const auto light0 = std::make_shared<Shape>();
 	const auto light1 = std::make_shared<Shape>();
