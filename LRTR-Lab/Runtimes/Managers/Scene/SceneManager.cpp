@@ -33,17 +33,22 @@ LRTR::SceneManager::SceneManager(
 	const std::shared_ptr<CodeRed::GpuLogicalDevice>& device) :
 	Manager(sharing), mDevice(device)
 {
-	//auto workflow = std::make_shared<ImageBasedLightingWorkflow>(mDevice);
+	auto workflow = std::make_shared<ImageBasedLightingWorkflow>(mDevice);
 
-	/*const auto output = workflow->start({ ImageBasedLightingInput(
+	const auto output = workflow->start({ ImageBasedLightingInput(
 		mRuntimeSharing->queue(),
 		mRuntimeSharing,
 		"./Resources/Textures/HDR/newport_loft.hdr"
-	) });*/
+	) });
 	
-	//add(std::make_shared<Scene>("Scene", mDevice));
+	add(std::make_shared<Scene>("Scene", mDevice));
 
-	add(TinyGLTFLoader::loadScene(mRuntimeSharing, "Scene", "./Resources/Models/WaterBottle.glb", Transform::translate(Vector3f(0, -2, 0))));
+	//add(TinyGLTFLoader::loadScene(mRuntimeSharing, "Scene", "./Resources/Models/MetalRoughSpheresNoTextures.glb",
+		//Transform::scale(Vector3f(100)) * Transform::rotate(glm::pi<float>() * 0.5f, Vector3f(1, 0, 0))));
+	
+	/*add(TinyGLTFLoader::loadScene(mRuntimeSharing, "Scene", "./Resources/Models/Sponza.glb",
+		Transform::rotate(glm::pi<float>() * 0.5f, Vector3f(1, 0, 0)) *
+		Transform::rotate(glm::pi<float>() * 1.5f, Vector3f(0, 1, 0))));*/
 	
 	const auto light0 = std::make_shared<Shape>();
 	const auto light1 = std::make_shared<Shape>();
@@ -67,7 +72,7 @@ LRTR::SceneManager::SceneManager(
 		Vector3f(1, 0, 0.5f), Vector4f(), Vector3f(1)
 		));
 	box0->addComponent(std::make_shared<PhysicalBasedMaterial>(
-		Vector4f(0.f), Vector4f(0.7f, 0.6f, 0.65f, 1.0f), Vector4f(0.5f), Vector4f(0)
+		Vector4f(0.f), Vector4f(0.7f, 0.6f, 0.65f, 1.0f), Vector4f(0.7f), Vector4f(0)
 		));
 	box0->component<CollectionLabel>()->set("Objects", "Box0");
 
@@ -76,7 +81,7 @@ LRTR::SceneManager::SceneManager(
 		Vector3f(-1, 0, 0.5f), Vector4f(), Vector3f(1)
 		));
 	box1->addComponent(std::make_shared<PhysicalBasedMaterial>(
-		Vector4f(0.33f), Vector4f(0.7f, 0.6f, 0.65f, 1.0f), Vector4f(0.6f), Vector4f(0)
+		Vector4f(0.f), Vector4f(0.7f, 0.6f, 0.65f, 1.0f), Vector4f(0.7f), Vector4f(0)
 		));
 	box1->component<CollectionLabel>()->set("Objects", "Box1");
 
@@ -85,7 +90,7 @@ LRTR::SceneManager::SceneManager(
 		Vector3f(0, 1, 0.5f), Vector4f(), Vector3f(1)
 		));
 	box2->addComponent(std::make_shared<PhysicalBasedMaterial>(
-		Vector4f(0.66f), Vector4f(0.7f, 0.6f, 0.65f, 1.0f), Vector4f(0.7f), Vector4f(0)
+		Vector4f(0.f), Vector4f(0.7f, 0.6f, 0.65f, 1.0f), Vector4f(0.7f), Vector4f(0)
 		));
 	box2->component<CollectionLabel>()->set("Objects", "Box2");
 
@@ -94,7 +99,7 @@ LRTR::SceneManager::SceneManager(
 		Vector3f(0, -1, 0.5f), Vector4f(), Vector3f(1)
 		));
 	box3->addComponent(std::make_shared<PhysicalBasedMaterial>(
-		Vector4f(1.f), Vector4f(0.7f, 0.6f, 0.65f, 1.0f), Vector4f(0.8f), Vector4f(0)
+		Vector4f(0.f), Vector4f(0.7f, 0.6f, 0.65f, 1.0f), Vector4f(0.7f), Vector4f(0)
 		));
 	box3->component<CollectionLabel>()->set("Objects", "Box3");
 
@@ -133,9 +138,9 @@ LRTR::SceneManager::SceneManager(
 	mScenes["Scene"]->add(box2);
 	mScenes["Scene"]->add(box3);
 	
-	mScenes["Scene"]->add(light0);
-	mScenes["Scene"]->add(light1);
-	mScenes["Scene"]->add(light2);
+	//mScenes["Scene"]->add(light0);
+	//mScenes["Scene"]->add(light1);
+	//mScenes["Scene"]->add(light2);
 	
 	const auto camera = std::make_shared<MotionCamera>(
 		std::make_shared<TransformWrap>(
@@ -153,15 +158,15 @@ LRTR::SceneManager::SceneManager(
 
 	camera->component<CollectionLabel>()->set("Collection", "Camera");
 
-	//mScenes["Scene"]->property()->addComponent(std::make_shared<SkyBox>(output.EnvironmentMap));
+	mScenes["Scene"]->property()->addComponent(std::make_shared<SkyBox>(output.EnvironmentMap));
 	
-	mScenes["Scene"]->property()->addComponent(std::make_shared<SkyBox>(
+	/*mScenes["Scene"]->property()->addComponent(std::make_shared<SkyBox>(
 		CodeRed::ResourceHelper::loadSkyBox(
 			sharing->device(),
 			sharing->allocator(),
 			sharing->queue(),
 			"./Resources/Textures/SkyBoxes/Sea"
-		)));
+		)));*/
 	
 	mScenes["Scene"]->add(camera);
 
@@ -173,7 +178,7 @@ LRTR::SceneManager::SceneManager(
 	mScenes["Scene"]->addSystem(std::make_shared<MotionCameraUpdateSystem>(mRuntimeSharing));
 	mScenes["Scene"]->addSystem(std::make_shared<CollectionUpdateSystem>(mRuntimeSharing));
 
-	/*for (auto& system : mScenes["Scene"]->systems()) {
+	for (auto& system : mScenes["Scene"]->systems()) {
 		if (std::dynamic_pointer_cast<PhysicalBasedRenderSystem>(system) != nullptr) {
 			auto pbrSystem = std::dynamic_pointer_cast<PhysicalBasedRenderSystem>(system);
 			
@@ -183,7 +188,7 @@ LRTR::SceneManager::SceneManager(
 				output.PreComputingBRDF
 			});
 		}
-	}*/
+	}
 }
 
 void LRTR::SceneManager::update(float delta)

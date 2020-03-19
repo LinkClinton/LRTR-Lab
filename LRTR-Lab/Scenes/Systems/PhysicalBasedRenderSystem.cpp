@@ -93,12 +93,13 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 	//resource 4 : EmissiveAndMetallic Texture
 	//resource 5 : NormalAndBlur Texture
 	//resource 6 : Depth Texture
-	//resource 7 : irradiance map
-	//resource 8 : pre filtering map
-	//resource 9 : pre computingBRDF map
-	//resource 10 : point shadow map array
-	//resource 11 : sampler
-	//resource 12 : hasEnvironmentLight, eyePosition.x, eyePosition.y, eyePosition.z, MipLevels, nLights
+	//resource 7 : SSAO Texture
+	//resource 8 : irradiance map
+	//resource 9 : pre filtering map
+	//resource 10 : pre computingBRDF map
+	//resource 11 : point shadow map array
+	//resource 12 : sampler
+	//resource 13 : hasEnvironmentLight, eyePosition.x, eyePosition.y, eyePosition.z, MipLevels, nLights
 	mResourceLayout = mDevice->createResourceLayout(
 		{
 			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::GroupBuffer, 0),
@@ -111,7 +112,8 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 7),
 			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 8),
 			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 9),
-			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 10)
+			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 10),
+			CodeRed::ResourceLayoutElement(CodeRed::ResourceType::Texture, 11)
 		}, {
 			CodeRed::SamplerLayoutElement(mSampler, 0, 1)
 		}, CodeRed::Constant32Bits(6, 0, 2));
@@ -222,7 +224,7 @@ LRTR::PhysicalBasedRenderSystem::PhysicalBasedRenderSystem(
 			CodeRed::TextureRefUsage::CubeMap,
 			CodeRed::PixelFormat::Red32BitFloat
 		)
-	), 10);
+	), 11);
 }
 
 void LRTR::PhysicalBasedRenderSystem::update(const Group<Identity, std::shared_ptr<Shape>>& shapes, float delta)
@@ -421,11 +423,13 @@ void LRTR::PhysicalBasedRenderSystem::render(
 			CodeRed::PixelFormat::Red32BitFloat
 		)
 	), 6);
+
+	mDescriptorHeap->bindTexture(mSSAOBuffer.AmbientOcclusionBlurred, 7);
 	
 	if (hasEnvironmentLight()) {
-		mDescriptorHeap->bindTexture(mEnvironmentLight.Irradiance, 7);
-		mDescriptorHeap->bindTexture(mEnvironmentLight.PreFiltering, 8);
-		mDescriptorHeap->bindTexture(mEnvironmentLight.PreComputingBRDF, 9);
+		mDescriptorHeap->bindTexture(mEnvironmentLight.Irradiance->reference(CodeRed::TextureRefUsage::CubeMap), 8);
+		mDescriptorHeap->bindTexture(mEnvironmentLight.PreFiltering->reference(CodeRed::TextureRefUsage::CubeMap), 9);
+		mDescriptorHeap->bindTexture(mEnvironmentLight.PreComputingBRDF, 10);
 	}
 
 	const auto meshDataAssetComponent = std::static_pointer_cast<MeshDataAssetComponent>(

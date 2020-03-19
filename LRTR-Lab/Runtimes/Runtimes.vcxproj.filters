@@ -263,17 +263,19 @@
     <CopyFileToFolders Include="Resources\Shaders\Workflow\HLSL\GaussianBlurFrag.hlsl">
       <Filter>Resources\Shaders\Workflow\HLSL</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Resources\Shaders\Workflow\HLSL\DeferredShadingFrag.hlsl" />
-    <CopyFileToFolders Include="Resources\Shaders\Workflow\HLSL\DeferredShadingVert.hlsl" />
-    <CopyFileToFolders Include="Resources\Shaders\Systems\HLSL\PhysicalBasedRenderSystemFrag.hlsl" />
-    <CopyFileToFolders Include="Resources\Shaders\Systems\HLSL\PhysicalBasedRenderSystemVert.hlsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="Resources\Shaders\Workflow\HLSL\ScreenSpaceAmbientOcclusionFrag.hlsl">
+    <CopyFileToFolders Include="Resources\Shaders\Workflow\HLSL\ScreenSpaceAmbientOcclusionFrag.hlsl" />
+    <CopyFileToFolders Include="Resources\Shaders\Workflow\HLSL\ScreenSpaceAmbientOcclusionVert.hlsl" />
+    <CopyFileToFolders Include="Resources\Shaders\Workflow\HLSL\DeferredShadingFrag.hlsl">
       <Filter>Resources\Shaders\Workflow\HLSL</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\Workflow\HLSL\ScreenSpaceAmbientOcclusionVert.hlsl">
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Shaders\Workflow\HLSL\DeferredShadingVert.hlsl">
       <Filter>Resources\Shaders\Workflow\HLSL</Filter>
-    </FxCompile>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Shaders\Systems\HLSL\PhysicalBasedRenderSystemVert.hlsl">
+      <Filter>Resources\Shaders\Systems\HLSL</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Shaders\Systems\HLSL\PhysicalBasedRenderSystemFrag.hlsl">
+      <Filter>Resources\Shaders\Systems\HLSL</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>

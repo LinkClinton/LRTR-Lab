@@ -149,10 +149,11 @@ Texture2D positionAndOcclusionTexture : register(t3);
 Texture2D emissiveAndMetallicTexture : register(t4);
 Texture2D normalAndBlurTexture : register(t5);
 Texture2D depthTexture : register(t6);
-TextureCube irradianceMap : register(t7);
-TextureCube preFilteringMap : register(t8);
-Texture2D preComputingBRDF : register(t9);
-TextureCubeArray pointShadowMaps : register(t10);
+Texture2D ssaoTexture : register(t7);
+TextureCube irradianceMap : register(t8);
+TextureCube preFilteringMap : register(t9);
+Texture2D preComputingBRDF : register(t10);
+TextureCubeArray pointShadowMaps : register(t11);
 
 SamplerState textureSampler : register(s0, space1);
 [[vk::push_constant]] ConstantBuffer<Config> config : register(b0, space2);
@@ -205,6 +206,7 @@ Output main(
     float4 positionAndOcclusion = positionAndOcclusionTexture.Sample(textureSampler, texCoord.xy);
     float4 emissiveAndMetallic = emissiveAndMetallicTexture.Sample(textureSampler, texCoord.xy);
     float4 normalAndBlur = normalAndBlurTexture.Sample(textureSampler, texCoord.xy);
+    float occlusion = ssaoTexture.Sample(textureSampler, texCoord.xy).r;
 
     Material material;
 
@@ -213,7 +215,6 @@ Output main(
     material.Metallic.a = emissiveAndMetallic.a;
     material.Emissive.xyz = emissiveAndMetallic.xyz;
 
-    float occlusion = positionAndOcclusion.a;
     float3 position = positionAndOcclusion.xyz;
     float3 normal = normalAndBlur.xyz;
 
@@ -259,9 +260,9 @@ Output main(
 		color = color + material.BaseColor.xyz * 0.03 * occlusion;
 	}
 	
-    color = color + material.Emissive.rgb;
+    //color = color + material.Emissive.rgb;
 	
-    color = GammaCorrect(color);
+    //color = GammaCorrect(color);
 	
 	Output result;
 
