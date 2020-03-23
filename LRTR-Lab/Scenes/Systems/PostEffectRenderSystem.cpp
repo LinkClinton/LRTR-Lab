@@ -79,7 +79,8 @@ LRTR::PostEffectRenderSystem::PostEffectRenderSystem(
 					CodeRed::BlendFactor::InvSrcAlpha,
 					CodeRed::BlendFactor::SrcAlpha,
 					CodeRed::BlendFactor::SrcAlpha
-				)
+				),
+				CodeRed::BlendProperty()
 			}
 		)
 	);

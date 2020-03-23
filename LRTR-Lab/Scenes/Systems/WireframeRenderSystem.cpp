@@ -75,6 +75,8 @@ LRTR::WireframeRenderSystem::WireframeRenderSystem(
 		)
 	);
 
+	mPipelineInfo->setBlendState(pipelineFactory->createBlendState(2));
+
 	mPipelineInfo->setResourceLayout(mResourceLayout);
 
 	CompileShaderWorkflow workflow;

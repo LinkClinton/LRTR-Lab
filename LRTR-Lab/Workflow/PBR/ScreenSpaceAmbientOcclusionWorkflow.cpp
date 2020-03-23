@@ -121,11 +121,14 @@ LRTR::ScreenSpaceAmbientOcclusionWorkflow::ScreenSpaceAmbientOcclusionWorkflow(
 		CodeRed::Constant32Bits(8, 0, 2)
 	);
 
-	mDescriptorHeap = mDevice->createDescriptorHeap(mResourceLayout);
-
-	mDescriptorHeap->bindBuffer(mViewBuffer, 0);
-	mDescriptorHeap->bindBuffer(mSampleBuffer, 1);
-	mDescriptorHeap->bindTexture(mNoiseTexture, 2);
+	mDescriptorHeaps[0] = mDevice->createDescriptorHeap(mResourceLayout);
+	mDescriptorHeaps[1] = mDevice->createDescriptorHeap(mResourceLayout);
+	
+	for (size_t index = 0; index < mDescriptorHeaps.size(); index++) {
+		mDescriptorHeaps[index]->bindBuffer(mViewBuffer, 0);
+		mDescriptorHeaps[index]->bindBuffer(mSampleBuffer, 1);
+		mDescriptorHeaps[index]->bindTexture(mNoiseTexture, 2);
+	}
 	
 	mPipelineInfo = std::make_shared<CodeRed::PipelineInfo>(mDevice);
 
@@ -245,11 +248,14 @@ auto LRTR::ScreenSpaceAmbientOcclusionWorkflow::work(const WorkflowStartup<Scree
 
 	const auto commandList = startup.InputData.CommandList;
 
-	mDescriptorHeap->bindTexture(startup.InputData.DSBuffer.PositionAndOcclusion, 3);
-	mDescriptorHeap->bindTexture(startup.InputData.DSBuffer.ViewSpacePosition, 4);
-	mDescriptorHeap->bindTexture(startup.InputData.DSBuffer.NormalAndBlur, 5);
-	mDescriptorHeap->bindTexture(startup.InputData.SSAOBuffer.AmbientOcclusion, 6);
+	for (size_t index = 0; index < mDescriptorHeaps.size(); index++) {
+		mDescriptorHeaps[index]->bindTexture(startup.InputData.DSBuffer.PositionAndOcclusion, 3);
+		mDescriptorHeaps[index]->bindTexture(startup.InputData.DSBuffer.ViewSpacePosition, 4);
+		mDescriptorHeaps[index]->bindTexture(startup.InputData.DSBuffer.NormalAndBlur, 5);
+	}
 
+	mDescriptorHeaps[1]->bindTexture(startup.InputData.SSAOBuffer.AmbientOcclusion, 6);
+	
 	Matrix4x4f views[4] = {
 		Transform::ortho(-1.f, 1.f, 1.f, -1.f, 0.f, 1000.0f).matrix(),
 		startup.InputData.ProjectionMatrix,
@@ -280,8 +286,6 @@ auto LRTR::ScreenSpaceAmbientOcclusionWorkflow::work(const WorkflowStartup<Scree
 		});
 	commandList->setIndexBuffer(meshDataAssetComponent->indices());
 
-	commandList->setDescriptorHeap(mDescriptorHeap);
-
 	const std::shared_ptr<CodeRed::GpuFrameBuffer> frameBuffers[2] = {
 		startup.InputData.SSAOBuffer.FrameBuffer,
 		startup.InputData.SSAOBuffer.FrameBufferBlurred
@@ -290,6 +294,8 @@ auto LRTR::ScreenSpaceAmbientOcclusionWorkflow::work(const WorkflowStartup<Scree
 	const auto drawProperty = meshDataAssetComponent->get("Quad");
 
 	for (size_t index = 0; index < 2; index++) {
+		commandList->setDescriptorHeap(mDescriptorHeaps[index]);
+		
 		commandList->beginRenderPass(mRenderPass, frameBuffers[index]);
 
 		commandList->setViewPort(frameBuffers[index]->fullViewPort());

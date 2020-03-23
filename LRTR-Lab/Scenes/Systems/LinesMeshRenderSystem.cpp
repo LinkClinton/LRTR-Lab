@@ -72,7 +72,7 @@ LRTR::LinesMeshRenderSystem::LinesMeshRenderSystem(
 	mPipelineInfo = std::make_shared<CodeRed::PipelineInfo>(mDevice);
 
 	const auto pipelineFactory = mPipelineInfo->pipelineFactory();
-
+	
 	mPipelineInfo->setInputAssemblyState(
 		pipelineFactory->createInputAssemblyState(
 			{
@@ -84,7 +84,9 @@ LRTR::LinesMeshRenderSystem::LinesMeshRenderSystem(
 	);
 
 	mPipelineInfo->setResourceLayout(mResourceLayout);
-
+	
+	mPipelineInfo->setBlendState(pipelineFactory->createBlendState(2));
+	
 	CompileShaderWorkflow workflow;
 
 #ifdef SHADER_SOURCE_HLSL

@@ -82,9 +82,10 @@ namespace LRTR {
 		std::shared_ptr<CodeRed::GpuSampler> mSampler;
 		
 		std::shared_ptr<CodeRed::GpuResourceLayout> mResourceLayout;
-		std::shared_ptr<CodeRed::GpuDescriptorHeap> mDescriptorHeap;
 		std::shared_ptr<CodeRed::PipelineInfo> mPipelineInfo;
 
+		std::array<std::shared_ptr<CodeRed::GpuDescriptorHeap>, 2> mDescriptorHeaps;
+		
 		std::vector<Vector4f> mNoiseVectors;
 		std::vector<Vector4f> mSamples;
 	};

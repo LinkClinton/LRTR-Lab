@@ -170,11 +170,6 @@ void CodeRed::ResourceHelper::updateTexture(
 	auto bufferPool = std::vector<std::shared_ptr<GpuTextureBuffer>>();
 
 	auto oldLayout = texture->layout();
-
-	CODE_RED_TRY_EXECUTE(
-		oldLayout == ResourceLayout::Undefined,
-		oldLayout = ResourceLayout::GeneralRead
-	);
 	
 	commandList->beginRecording();
 	commandList->layoutTransition(texture, ResourceLayout::CopyDestination);
@@ -217,11 +212,6 @@ auto CodeRed::ResourceHelper::readTexture(
 	auto bufferPool = std::vector<std::shared_ptr<GpuTextureBuffer>>();
 
 	auto oldLayout = texture->layout();
-
-	CODE_RED_TRY_EXECUTE(
-		oldLayout == ResourceLayout::Undefined,
-		oldLayout = ResourceLayout::GeneralRead
-	);
 
 	commandList->beginRecording();
 	commandList->layoutTransition(texture, ResourceLayout::CopySource);

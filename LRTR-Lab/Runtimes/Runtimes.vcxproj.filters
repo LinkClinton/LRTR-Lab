@@ -263,8 +263,6 @@
     <CopyFileToFolders Include="Resources\Shaders\Workflow\HLSL\GaussianBlurFrag.hlsl">
       <Filter>Resources\Shaders\Workflow\HLSL</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Resources\Shaders\Workflow\HLSL\ScreenSpaceAmbientOcclusionFrag.hlsl" />
-    <CopyFileToFolders Include="Resources\Shaders\Workflow\HLSL\ScreenSpaceAmbientOcclusionVert.hlsl" />
     <CopyFileToFolders Include="Resources\Shaders\Workflow\HLSL\DeferredShadingFrag.hlsl">
       <Filter>Resources\Shaders\Workflow\HLSL</Filter>
     </CopyFileToFolders>
@@ -276,6 +274,12 @@
     </CopyFileToFolders>
     <CopyFileToFolders Include="Resources\Shaders\Systems\HLSL\PhysicalBasedRenderSystemFrag.hlsl">
       <Filter>Resources\Shaders\Systems\HLSL</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Shaders\Workflow\HLSL\ScreenSpaceAmbientOcclusionFrag.hlsl">
+      <Filter>Resources\Shaders\Workflow\HLSL</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\Shaders\Workflow\HLSL\ScreenSpaceAmbientOcclusionVert.hlsl">
+      <Filter>Resources\Shaders\Workflow\HLSL</Filter>
     </CopyFileToFolders>
   </ItemGroup>
 </Project>
