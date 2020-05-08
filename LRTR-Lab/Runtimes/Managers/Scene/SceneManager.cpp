@@ -41,7 +41,7 @@ LRTR::SceneManager::SceneManager(
 		"./Resources/Textures/HDR/newport_loft.hdr"
 	) });
 	
-	add(std::make_shared<Scene>("Scene", mDevice));
+	//add(std::make_shared<Scene>("Scene", mDevice));
 
 	//add(TinyGLTFLoader::loadScene(mRuntimeSharing, "Scene", "./Resources/Models/MetalRoughSpheresNoTextures.glb",
 		//Transform::scale(Vector3f(100)) * Transform::rotate(glm::pi<float>() * 0.5f, Vector3f(1, 0, 0))));
@@ -49,6 +49,11 @@ LRTR::SceneManager::SceneManager(
 	/*add(TinyGLTFLoader::loadScene(mRuntimeSharing, "Scene", "./Resources/Models/Sponza.glb",
 		Transform::rotate(glm::pi<float>() * 0.5f, Vector3f(1, 0, 0)) *
 		Transform::rotate(glm::pi<float>() * 1.5f, Vector3f(0, 1, 0))));*/
+
+	add(TinyGLTFLoader::loadScene(mRuntimeSharing, "Scene", "./Resources/Models/dragon.glb",
+		Transform::translate(Vector3f(0, 0, 0.8f)) * 
+		Transform::scale(Vector3f(0.02f)) *
+		Transform::rotate(glm::radians(-53.f), Vector3f(0, 1, 0))));
 	
 	const auto light0 = std::make_shared<Shape>();
 	const auto light1 = std::make_shared<Shape>();
@@ -133,10 +138,10 @@ LRTR::SceneManager::SceneManager(
 		));
 
 	mScenes["Scene"]->add(quad);
-	mScenes["Scene"]->add(box0);
-	mScenes["Scene"]->add(box1);
-	mScenes["Scene"]->add(box2);
-	mScenes["Scene"]->add(box3);
+	//mScenes["Scene"]->add(box0);
+	//mScenes["Scene"]->add(box1);
+	//mScenes["Scene"]->add(box2);
+	//mScenes["Scene"]->add(box3);
 	
 	//mScenes["Scene"]->add(light0);
 	//mScenes["Scene"]->add(light1);

@@ -313,6 +313,8 @@ auto LRTR::ImageBasedLightingWorkflow::work(
 	commandList->setVertexBuffers({ meshDataAssetComponent->positions(), meshDataAssetComponent->texCoords() });
 	commandList->setIndexBuffer(meshDataAssetComponent->indices());
 
+	std::vector<std::shared_ptr<CodeRed::GpuFrameBuffer>> frameBuffers;
+	
 	// generate Environment Map with mip levels
 	for (size_t arraySlice = 0; arraySlice < 6; arraySlice++) {
 		for (size_t mipSlice = 0; mipSlice < startup.InputData.EnvironmentMipLevels; mipSlice++) {
@@ -339,6 +341,8 @@ auto LRTR::ImageBasedLightingWorkflow::work(
 				drawProperty.StartIndexLocation, drawProperty.StartVertexLocation);
 
 			commandList->endRenderPass();
+
+			frameBuffers.push_back(frameBuffer);
 		}
 	}
 
@@ -368,6 +372,8 @@ auto LRTR::ImageBasedLightingWorkflow::work(
 			drawProperty.StartIndexLocation, drawProperty.StartVertexLocation);
 
 		commandList->endRenderPass();
+
+		frameBuffers.push_back(frameBuffer);
 	}
 
 	//generate pre-filter map for ambient specular light
@@ -398,6 +404,8 @@ auto LRTR::ImageBasedLightingWorkflow::work(
 				drawProperty.StartIndexLocation, drawProperty.StartVertexLocation);
 
 			commandList->endRenderPass();
+
+			frameBuffers.push_back(frameBuffer);
 		}
 	}
 
@@ -422,6 +430,8 @@ auto LRTR::ImageBasedLightingWorkflow::work(
 			drawProperty.StartIndexLocation, drawProperty.StartVertexLocation);
 
 		commandList->endRenderPass();
+
+		frameBuffers.push_back(frameBuffer);
 	}
 	
 	commandList->endRecording();

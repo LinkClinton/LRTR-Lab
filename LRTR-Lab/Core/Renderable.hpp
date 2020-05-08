@@ -8,7 +8,7 @@ namespace LRTR {
 
 		virtual ~Renderable() = default;
 
-		bool IsRendered;
+		bool IsRendered = true;
 	};
 	
 }

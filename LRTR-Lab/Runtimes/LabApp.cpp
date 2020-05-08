@@ -13,7 +13,7 @@
 
 #include <chrono>
 
-//#define __DIRECTX12__MODE__
+#define __DIRECTX12__MODE__
 #ifndef __DIRECTX12__MODE__
 #define __VULKAN__MODE__
 #endif
